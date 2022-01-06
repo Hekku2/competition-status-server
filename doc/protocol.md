@@ -31,14 +31,20 @@ Fields:
 * **divisions** text value describing currently ongoing divisions that the
 competitor
 is competing in.
-* **attempt** text value describing attempt number, or otherwise giving
+* **attempt** A text value describing attempt number, or otherwise giving
 identifying information if there are multiple attempts per competitor. This
 field may be null if not used.
-* **competitors** an array containing the competitors currently competing.
-This array should contain one or more competitors.
-  * **name** Name of the competitors, starting with last name and separated by
-  comma.
-  * **team** Name of the team. This is not required.
+* **category** A text value describing which category is performed by
+competitor. This field may be null if not used.
+* **target** A text value describing the target for the attempt. This
+field may be empty if there is no target specified.
+* **current-place** A number containg current place for competitor. This field
+may be null if competitor doesn't have a placement yet.
+* **competitors** an array containing [Competitors](objects.md#Competitor)
+currently competing. This array should contain one or more competitors.
+* **previous-results** an array containing previous results for for categories.
+This array may be empty if not used or if no previous results exists. See
+[Single category result](objects.md#Single-category-result) for specification
 
 Example
 ```json
@@ -47,25 +53,36 @@ Example
     "type": "current-competitor",
     "content": {
         "divisions": "senior women",
+        "category": "hauling",
+        "target": "120kg",
         "attempt": "3",
+        "current-place": 3,
         "competitors": [
             {
                 "name": "last name, first name",
                 "team": "sport team here",
+                "competitor-id": "123"
             },
             {
                 "name": "last name, first name",
                 "team": "sport team here",
+                "competitor-id": "124"
             }
         ],
-        
+        "previous-results": [
+            {
+                "category": "hauling",
+                "attempt": "3",
+                "result": "See objects.md#VahvinSM and Otevoima result"
+            }
+        ]
     }
 }
 ```
 
 ### performance-results
 
-This is sent when performance has endend and results has been calculated. This
+This is sent when performance has ended and results has been calculated. This
 may or may not be for the previous competitor, depending on the way that the
 event has been organized.
 
@@ -76,11 +93,14 @@ competitor is competing in.
 * **attempt** text value describing attempt number, or otherwise giving
 identifying information if there are multiple attempts per competitor. This
 field may be null if not used.
-* **competitors** an array containing the competitors currently competing.
-This array should contain one or more competitors.
-  * **name** Name of the competitors, starting with last name and separated by
-  comma.
-  * **team** Name of the team. This is not required.
+* **category** A text value describing which category is performed by
+competitor. This field may be null if not used.
+* **target** A text value describing the target for the attempt. This
+field may be empty if there is no target specified.
+* **current-place** A number containg current place for competitor. This field
+may be null if competitor doesn't have a placement yet.
+* **competitors** an array containing [Competitors](objects.md#Competitor)
+currently competing. This array should contain one or more competitors.
 * **results** an object containing results. Actual content differs between
 different events and should be agreed before event.
 
@@ -92,14 +112,19 @@ Example
     "content": {
         "divisions": "senior women",
         "attempt": "3",
+        "category": "hauling",
+        "target": "120kg",
+        "current-place": 3,
         "competitors": [
             {
                 "name": "last name, first name",
                 "team": "sport team here",
+                "competitor-id": "123"
             },
             {
                 "name": "last name, first name",
                 "team": "sport team here",
+                "competitor-id": "124"
             }
         ],
         "results": {
