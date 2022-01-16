@@ -6,7 +6,7 @@ using RestSharp;
 
 namespace AcceptanceTests
 {
-    public class MinimumTets
+    public class MinimumTests
     {
         private RestClient _client;
 
