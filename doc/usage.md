@@ -4,12 +4,20 @@ This document describes how to run the software.
 
 Requirements:
 
-* Dotnet SDK
+* Docker
 
-Usage (from src/ folder)
+Recommended when developing
+
+* Dotnet SDK
+* Powershell
+
+Usage (from project root)
+
+This command will initialize the project environment and execute tests.
 
 ```bash
-dotnet run --project Api
+docker-compose build; docker-compose up
 ```
 
-And navigate to https://localhost:5001/swagger/
+Navigate to https://localhost:5001/swagger/ to see API endpoints
+
