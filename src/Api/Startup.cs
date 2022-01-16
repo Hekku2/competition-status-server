@@ -1,3 +1,5 @@
+using Api.Services.Implementations;
+using Api.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +32,8 @@ namespace Api
                     Version = "v1"
                 });
             });
+
+            services.AddSingleton<ICompetitionStatusService, CompetitionStatusService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
