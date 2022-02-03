@@ -34,6 +34,7 @@ namespace Api
             });
 
             services.AddSingleton<ICompetitionStatusService, CompetitionStatusService>();
+            services.AddSingleton<ICompetitionService, CompetitionService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,9 +44,11 @@ namespace Api
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));
-            }
 
-            app.UseHttpsRedirection();
+            }
+            app.UseHttpLogging();
+
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
 WORKDIR /source
 
 COPY Api/. ./Api/
@@ -8,7 +8,7 @@ WORKDIR /source/Api
 RUN dotnet publish -c release -o /app
 
 # final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine
 
 # Fix https://github.com/dotnet/SqlClient/issues/220 Globalization Invariant Mode is not supported
 RUN apk add icu-libs
