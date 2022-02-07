@@ -48,11 +48,42 @@ namespace Api.Controllers
             _competitionService.UploadCompetition(entity);
         }
 
-        public DivisionEntity CreateDivisionEntity(DivisionFileModel model)
+        private DivisionEntity CreateDivisionEntity(DivisionFileModel model)
         {
             return new DivisionEntity()
             {
                 Name = model.Name,
+                CompetitionOrder = model.Items.Select(CreateCompetitionOrderEntity).ToArray()
+            };
+        }
+
+        private CompetitionOrderEntity CreateCompetitionOrderEntity(CompetitorPositionFileModel model)
+        {
+            return new CompetitionOrderEntity
+            {
+                Competitors = model.Competitors.Select(CreateCompetitorEntity).ToArray(),
+                Forfeit = model.Forfeit,
+                Result = model.Results != null ? CreatePoleDanceResultEntity(model.Results) : null
+            };
+        }
+
+        private static PoleDanceResultEntity CreatePoleDanceResultEntity(PoleResultFileModel model)
+        {
+            return new PoleDanceResultEntity
+            {
+                ArtisticScore = model.ArtisticScore,
+                DifficultyScore = model.DifficultyScore,
+                ExecutionScore = model.ExecutionScore,
+                HeadJudgePenalty = model.HeadJudgePenalty
+            };
+        }
+
+        private static CompetitorEntity CreateCompetitorEntity(CompetitorFileModel model)
+        {
+            return new CompetitorEntity
+            {
+                Name = model.Name,
+                Team = model.Team
             };
         }
 
@@ -84,7 +115,8 @@ namespace Api.Controllers
             {
                 Division = "test division",
                 Attempt = "1",
-                Competitors = entity.Competitors.Select(CreateCompetitorModel).ToArray()
+                Competitors = entity.Competitors.Select(CreateCompetitorModel).ToArray(),
+                PreviousResults = Array.Empty<object>()
             };
         }
 
@@ -107,7 +139,8 @@ namespace Api.Controllers
         {
             return new ResultRowModel
             {
-
+                Competitors = Array.Empty<CompetitorModel>(),
+                Result = null
             };
         }
 

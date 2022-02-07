@@ -17,7 +17,7 @@ namespace Api.Models
         public string Name { get; set; } = null!;
 
         [Required]
-        public CompetitorPositionFileModel[] Order { get; set; } = null!;
+        public CompetitorPositionFileModel[] Items { get; set; } = null!;
     }
 
     public class CompetitorPositionFileModel

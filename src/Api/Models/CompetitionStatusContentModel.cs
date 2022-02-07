@@ -28,8 +28,7 @@ namespace Api.Models
         [Required]
         public CompetitorModel[] Competitors { get; set; } = null!;
 
-        [Required]
-        public PoleSportResultModel Result { get; set; } = null!;
+        public PoleSportResultModel? Result { get; set; }
     }
 
     public class PoleSportResultModel

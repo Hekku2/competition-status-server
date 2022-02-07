@@ -60,11 +60,56 @@ namespace AcceptanceTests
                     new DivisionFileModel
                     {
                         Name = "Senior Women",
-                        Order = Array.Empty<CompetitorPositionFileModel>()
+                        Items = new []
+                        {
+                            new CompetitorPositionFileModel
+                            {
+                                Competitors = CreateSingleCompetitor("I should not be on list", "my team"),
+                                Results = null,
+                                Forfeit = true
+                            },
+                            new CompetitorPositionFileModel
+                            {
+                                Competitors = CreateSingleCompetitor("I should be second", "my team"),
+                                Results = new PoleResultFileModel
+                                {
+                                    ArtisticScore = 100,
+                                    DifficultyScore = 10,
+                                    ExecutionScore = 60,
+                                    HeadJudgePenalty = 0
+                                },
+                                Forfeit = false
+                            },
+                            new CompetitorPositionFileModel
+                            {
+                                Competitors = CreateSingleCompetitor("I should be first", "my team"),
+                                Results = new PoleResultFileModel
+                                {
+                                    ArtisticScore = 100,
+                                    DifficultyScore = 10,
+                                    ExecutionScore = 90,
+                                    HeadJudgePenalty = 0
+                                },
+                                Forfeit = false
+                            },
+                            new CompetitorPositionFileModel
+                            {
+                                Competitors = CreateSingleCompetitor("I also forfeited, my resuylt should not be shown", "my team"),
+                                Results = new PoleResultFileModel
+                                {
+                                    ArtisticScore = 900,
+                                    DifficultyScore = 10,
+                                    ExecutionScore = 990,
+                                    HeadJudgePenalty = 0
+                                },
+                                Forfeit = true
+                            },
+                        }
                     }
                 }
             };
-            await _client.PostJsonAsync("upload-competition", model, CancellationToken.None);
+            var result = await _client.PostJsonAsync("upload-competition", model, CancellationToken.None);
+            result.Should().Be(System.Net.HttpStatusCode.OK);
 
             var response = await _client.GetJsonAsync<CompetitionStatusEnvelopeModel>("competition-status", CancellationToken.None);
 

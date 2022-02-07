@@ -5,7 +5,7 @@ namespace DataAccess.Entity
     /// </summary>
     public class CompetitionOrderEntity
     {
-        public int[] CompetitorIds { get; set; } = null!;
+        public CompetitorEntity[] Competitors { get; set; } = null!;
 
         /// <summary>
         /// If true, competitor should be shown as forfeit
