@@ -18,7 +18,6 @@ namespace AcceptanceTests
         public void Setup()
         {
             var uri = Environment.GetEnvironmentVariable("APP_URI");
-            //var uri = "http://localhost:5000/";
             _client = new RestClient($"{uri}{ApiName}");
         }
 
@@ -94,7 +93,7 @@ namespace AcceptanceTests
                             },
                             new CompetitorPositionFileModel
                             {
-                                Competitors = CreateSingleCompetitor("I also forfeited, my resuylt should not be shown", "my team"),
+                                Competitors = CreateSingleCompetitor("I also forfeited, my result should not be shown", "my team"),
                                 Results = new PoleResultFileModel
                                 {
                                     ArtisticScore = 900,
@@ -119,6 +118,11 @@ namespace AcceptanceTests
             responseDivision.Name.Should().Be(model.Divisions[0].Name);
 
             responseDivision.Results.Length.Should().Be(2);
+            responseDivision.Results[0].Competitors.Length.Should().Be(1);
+            responseDivision.Results[0].Competitors[0].Name.Should().Be("I should be first");
+            responseDivision.Results[1].Competitors.Length.Should().Be(1);
+            responseDivision.Results[1].Competitors[0].Name.Should().Be("I should be second");
+
         }
 
         private static CompetitorFileModel[] CreateSingleCompetitor(string name, string team)

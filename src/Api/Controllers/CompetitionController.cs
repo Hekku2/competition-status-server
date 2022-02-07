@@ -126,6 +126,7 @@ namespace Api.Controllers
                 .CompetitionOrder
                 .Where(item => !item.Forfeit && item.Result is not null)
                 .Select(CreateResultRowModel)
+                .OrderByDescending(item => item.Result?.Total)
                 .ToArray();
 
             return new DivisionStatusModel
@@ -139,8 +140,20 @@ namespace Api.Controllers
         {
             return new ResultRowModel
             {
-                Competitors = Array.Empty<CompetitorModel>(),
-                Result = null
+                Competitors = resultRow.Competitors.Select(CreateCompetitorModel).ToArray(),
+                Result = resultRow.Result != null ? CreatePoleDanceResultEntity(resultRow.Result) : null
+            };
+        }
+
+        private static PoleSportResultModel CreatePoleDanceResultEntity(PoleDanceResultEntity model)
+        {
+            return new PoleSportResultModel
+            {
+                ArtisticScore = model.ArtisticScore,
+                DifficultyScore = model.DifficultyScore,
+                ExecutionScore = model.ExecutionScore,
+                HeadJudgePenalty = model.HeadJudgePenalty,
+                Total = model.ArtisticScore + model.DifficultyScore + model.ExecutionScore - model.HeadJudgePenalty
             };
         }
 

@@ -1,4 +1,3 @@
-using Api.Controllers;
 using Api.Models;
 using Api.Services.Interfaces;
 using DataAccess.Entity;
@@ -7,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Api.Tests;
+namespace Api.Controllers.Tests;
 
 public class CompetitionControllerTests
 {
@@ -23,6 +22,113 @@ public class CompetitionControllerTests
         _mockCompetitionStatusService = Substitute.For<ICompetitionStatusService>();
         _mockCompetitionService = Substitute.For<ICompetitionService>();
         _controller = new CompetitionController(logger, _mockCompetitionStatusService, _mockCompetitionService);
+    }
+
+    [Test]
+    public void GetCompetitionStatus_SetsOrderCorrectly()
+    {
+        var expectedCompetition = new CompetitionEntity
+        {
+            Name = "Name of competition",
+            Divisions = new[]
+            {
+                new DivisionEntity
+                {
+                    Name = "Name of division",
+                    CompetitionOrder = new []
+                    {
+                        new CompetitionOrderEntity
+                        {
+                            Competitors = CompetitorEntity("second", "team 1"),
+                            Result = new PoleDanceResultEntity
+                            {
+                                ArtisticScore = 1,
+                                DifficultyScore = 10,
+                                ExecutionScore = 100,
+                                HeadJudgePenalty = 5
+                            }
+                        },
+                        new CompetitionOrderEntity
+                        {
+                            Competitors = CompetitorEntity("first", "team 1"),
+                            Result = new PoleDanceResultEntity
+                            {
+                                ArtisticScore = 100,
+                                DifficultyScore = 10,
+                                ExecutionScore = 100,
+                                HeadJudgePenalty = 5
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        _mockCompetitionService.GetCurrentState().Returns(expectedCompetition);
+
+        var actualCompetitionEnvelope = _controller.GetCompetitionStatus();
+        actualCompetitionEnvelope.Content.Divisions[0].Results[0].Competitors[0].Name.Should().Be("first");
+        actualCompetitionEnvelope.Content.Divisions[0].Results[0].Result.Total.Should().Be(205);
+        actualCompetitionEnvelope.Content.Divisions[0].Results[1].Competitors[0].Name.Should().Be("second");
+        actualCompetitionEnvelope.Content.Divisions[0].Results[1].Result.Total.Should().Be(106);
+    }
+
+    [Test]
+    public void GetCompetitionStatus_MapsEntityCorrectly()
+    {
+        var expectedCompetition = new CompetitionEntity
+        {
+            Name = "Name of competition",
+            Divisions = new[]
+            {
+                new DivisionEntity
+                {
+                    Name = "Name of division",
+                    CompetitionOrder = new []
+                    {
+                        new CompetitionOrderEntity
+                        {   // I don't have results
+                            Competitors = CompetitorEntity("wrong", "team wrong"),
+                        },
+                        new CompetitionOrderEntity
+                        {   // I have forfeited
+                            Competitors = CompetitorEntity("wrong", "team wrong"),
+                            Forfeit = true,
+                            Result = new PoleDanceResultEntity
+                            {
+                                ArtisticScore = 123,
+                                DifficultyScore = 554,
+                                ExecutionScore = 333,
+                                HeadJudgePenalty = 34
+                            }
+                        },
+                        new CompetitionOrderEntity
+                        {
+                            Competitors = CompetitorEntity("name 1", "team 1"),
+                            Result = new PoleDanceResultEntity
+                            {
+                                ArtisticScore = 123,
+                                DifficultyScore = 554,
+                                ExecutionScore = 333,
+                                HeadJudgePenalty = 34
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        _mockCompetitionService.GetCurrentState().Returns(expectedCompetition);
+    }
+
+    private static CompetitorEntity[] CompetitorEntity(string name, string team)
+    {
+        return new[]
+        {
+            new CompetitorEntity
+            {
+                Name = name,
+                Team = team
+            }
+        };
     }
 
     [Test]
