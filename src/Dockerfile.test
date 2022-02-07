@@ -1,0 +1,10 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
+WORKDIR /source
+
+COPY Api/. ./Api/
+COPY DataAccess/. ./DataAccess/
+COPY AcceptanceTests/. ./AcceptanceTests/
+
+WORKDIR /source/
+
+CMD ["dotnet", "test", "-c", "Release", "./AcceptanceTests/"]

@@ -12,6 +12,24 @@ competitors etc) when requested.
 
 Protocol planning is in [protocol.md](doc/protocol.md)
 
+Project structure
+
+* **doc** Documentation
+* **src** Source files
+
+## Usage
+
+See [usage documentation](doc/usage.md). This will be updated to describe the
+current way to execute the software and test it.
+
+## Automatic tests
+
+Execute `Build.ps1`
+
+```bash
+pwsh Build.ps1
+```
+
 ## License
 
-See [LICENSE]
+See [LICENSE](LICENSE)
