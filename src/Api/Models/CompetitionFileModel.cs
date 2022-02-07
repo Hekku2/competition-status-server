@@ -2,58 +2,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Api.Models
 {
-    public class CurrentCompetitorSetModel
-    {
-        public int? Id { get; set; }
-    }
-
+    /// <summary>
+    /// Describes the filemodel that is used to save current status of
+    /// competition. This model should hold all information of the competition
+    /// that can be saved to file.
+    /// </summary>
     public class CompetitionFileModel
     {
-        [Required]
-        public string Name { get; set; } = null!;
-
-        [Required]
-        public DivisionFileModel[] Divisions { get; set; } = null!;
-    }
-
-    public class DivisionFileModel
-    {
-        [Required]
-        public string Name { get; set; } = null!;
-
-        [Required]
-        public CompetitorPositionFileModel[] Items { get; set; } = null!;
-    }
-
-    public class CompetitorPositionFileModel
-    {
         /// <summary>
-        /// Unique ID for these competitors.
+        /// Name of the whole competition. Example: "National finals 2022"
         /// </summary>
         [Required]
-        public int Id { get; set; }
-
-        [Required]
-        public CompetitorFileModel[] Competitors { get; set; } = null!;
-
-        [Required]
-        public bool Forfeit { get; set; }
-
-        public PoleResultFileModel? Results { get; set; }
-    }
-
-    public class CompetitorFileModel
-    {
-        [Required]
         public string Name { get; set; } = null!;
-        public string? Team { get; set; }
-    }
 
-    public class PoleResultFileModel
-    {
-        public decimal ArtisticScore { get; set; }
-        public decimal ExecutionScore { get; set; }
-        public decimal DifficultyScore { get; set; }
-        public decimal HeadJudgePenalty { get; set; }
+        /// <summary>
+        /// Divisions for this competition.
+        /// </summary>
+        [Required]
+        public DivisionFileModel[] Divisions { get; set; } = null!;
     }
 }

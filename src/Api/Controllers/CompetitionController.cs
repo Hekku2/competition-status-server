@@ -121,8 +121,7 @@ namespace Api.Controllers
             return new CurrentCompetitorContentModel
             {
                 Division = entity.Division,
-                Competitors = entity.Competitors.Select(CreateCompetitorModel).ToArray(),
-                PreviousResults = Array.Empty<object>()
+                Competitors = entity.Competitors.Select(CreateCompetitorModel).ToArray()
             };
         }
 
@@ -184,7 +183,6 @@ namespace Api.Controllers
         {
             return new CompetitorModel
             {
-                CompetitorId = entity.CompetitorId,
                 Name = entity.Name,
                 Team = entity.Team
             };

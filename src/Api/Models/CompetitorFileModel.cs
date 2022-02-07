@@ -1,17 +1,20 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Api.Models
 {
     /// <summary>
-    /// Represents a single competitor.
+    /// Represents a single competitor. May be a part of team.
     /// </summary>
-    public class CompetitorModel
+    public class CompetitorFileModel
     {
         /// <summary>
-        /// Name of competitor
+        /// Name of the competitor
         /// </summary>
+        [Required]
         public string Name { get; set; } = null!;
 
         /// <summary>
-        /// Team of competitor
+        /// Team, if given.
         /// </summary>
         public string? Team { get; set; }
     }

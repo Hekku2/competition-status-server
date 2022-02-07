@@ -3,16 +3,15 @@ using System.ComponentModel.DataAnnotations;
 namespace Api.Models
 {
     /// <summary>
-    /// Represents current competitor who is performing or performing next
-    /// when no other competitor is not active.
+    /// Represents an upcoming competitor.
     /// </summary>
-    public class CurrentCompetitorContentModel
+    public class UpcomingCompetitorModel
     {
         /// <summary>
-        /// Division of competitor(s). Example: "Senior Women"
+        /// Unique ID for these competitors
         /// </summary>
         [Required]
-        public string Division { get; set; } = null!;
+        public int Id { get; set; }
 
         /// <summary>
         /// Competitor(s)
