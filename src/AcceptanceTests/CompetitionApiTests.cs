@@ -103,6 +103,18 @@ namespace AcceptanceTests
                                 },
                                 Forfeit = true
                             },
+                            new CompetitorPositionFileModel
+                            {
+                                Competitors = CreateSingleCompetitor("I'm upcoming 1", "my team"),
+                                Results = null,
+                                Forfeit = false
+                            },
+                            new CompetitorPositionFileModel
+                            {
+                                Competitors = CreateSingleCompetitor("I'm upcoming 2", "my team"),
+                                Results = null,
+                                Forfeit = false
+                            },
                         }
                     }
                 }
@@ -123,6 +135,9 @@ namespace AcceptanceTests
             responseDivision.Results[1].Competitors.Length.Should().Be(1);
             responseDivision.Results[1].Competitors[0].Name.Should().Be("I should be second");
 
+            responseDivision.UpcomingCompetitorModels.Length.Should().Be(2);
+            responseDivision.UpcomingCompetitorModels[0].Competitors[0].Name.Should().Be("I'm upcoming 1");
+            responseDivision.UpcomingCompetitorModels[1].Competitors[0].Name.Should().Be("I'm upcoming 2");
         }
 
         private static CompetitorFileModel[] CreateSingleCompetitor(string name, string team)

@@ -48,6 +48,17 @@ namespace Api.Controllers
             _competitionService.UploadCompetition(entity);
         }
 
+        [HttpGet]
+        [Route("competition-status")]
+        public CompetitionStatusEnvelopeModel GetCompetitionStatus()
+        {
+            var entity = _competitionService.GetCurrentState();
+            return new CompetitionStatusEnvelopeModel
+            {
+                Content = entity != null ? CreateCompetitionStatusContentModel(entity) : null
+            };
+        }
+
         private DivisionEntity CreateDivisionEntity(DivisionFileModel model)
         {
             return new DivisionEntity()
@@ -87,17 +98,6 @@ namespace Api.Controllers
             };
         }
 
-        [HttpGet]
-        [Route("competition-status")]
-        public CompetitionStatusEnvelopeModel GetCompetitionStatus()
-        {
-            var entity = _competitionService.GetCurrentState();
-            return new CompetitionStatusEnvelopeModel
-            {
-                Content = entity != null ? CreateCompetitionStatusContentModel(entity) : null
-            };
-        }
-
         private static CompetitionStatusContentModel CreateCompetitionStatusContentModel(CompetitionEntity entity)
         {
             return new CompetitionStatusContentModel
@@ -107,7 +107,6 @@ namespace Api.Controllers
                 Divisions = entity.Divisions.Select(CreateDivisionStatusModel).ToArray()
             };
         }
-
 
         private static CurrentCompetitorContentModel CreateCurrentCompetitorContentModel(CurrentCompetitorsEntity entity)
         {
@@ -129,10 +128,25 @@ namespace Api.Controllers
                 .OrderByDescending(item => item.Result?.Total)
                 .ToArray();
 
+            var upcoming = entity
+                .CompetitionOrder
+                .Where(item => !item.Forfeit && item.Result is null)
+                .Select(CreateUpcomingCompetitorModel)
+                .ToArray();
+
             return new DivisionStatusModel
             {
                 Name = entity.Name,
-                Results = results
+                Results = results,
+                UpcomingCompetitorModels = upcoming
+            };
+        }
+
+        private static UpcomingCompetitorModel CreateUpcomingCompetitorModel(CompetitionOrderEntity entity)
+        {
+            return new UpcomingCompetitorModel
+            {
+                Competitors = entity.Competitors.Select(CreateCompetitorModel).ToArray()
             };
         }
 
