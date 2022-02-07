@@ -5,6 +5,10 @@ namespace DataAccess.Entity
     /// </summary>
     public class CompetitionOrderEntity
     {
+        /// <summary>
+        /// Unique identifier for these comeptitors in this division.
+        /// </summary>
+        public int Id { get; set; }
         public CompetitorEntity[] Competitors { get; set; } = null!;
 
         /// <summary>

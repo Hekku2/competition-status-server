@@ -22,15 +22,6 @@ namespace AcceptanceTests
         }
 
         [Test]
-        public async Task CurrentCompetitor_IsNullAtStart()
-        {
-            var response = await _client.GetJsonAsync<CurrentCompetitorEnvelopeModel>("current-competitor", CancellationToken.None);
-            response.Type.Should().Be("current-competitor");
-            response.Version.Should().Be("1");
-            response.Content.Should().BeNull();
-        }
-
-        [Test]
         public async Task CreateCompetition_MinimalValues()
         {
             var model = new CompetitionFileModel
@@ -138,6 +129,58 @@ namespace AcceptanceTests
             responseDivision.UpcomingCompetitorModels.Length.Should().Be(2);
             responseDivision.UpcomingCompetitorModels[0].Competitors[0].Name.Should().Be("I'm upcoming 1");
             responseDivision.UpcomingCompetitorModels[1].Competitors[0].Name.Should().Be("I'm upcoming 2");
+        }
+
+        [Test]
+        public async Task SetCurrentCompetitor_Normal()
+        {
+            var model = new CompetitionFileModel
+            {
+                Name = "New competition",
+                Divisions = new[]
+                {
+                    new DivisionFileModel
+                    {
+                        Name = "Senior Women",
+                        Items = new []
+                        {
+                            new CompetitorPositionFileModel
+                            {
+                                Id = 1,
+                                Competitors = CreateSingleCompetitor("I should not be selected", "my team"),
+                            },
+                            new CompetitorPositionFileModel
+                            {
+                                Id = 2,
+                                Competitors = CreateSingleCompetitor("I should be shown first", "my team"),
+                            },
+                            new CompetitorPositionFileModel
+                            {
+                                Id = 3,
+                                Competitors = CreateSingleCompetitor("I should be shown second", "my team")
+                            }
+                        }
+                    }
+                }
+            };
+            await _client.PostJsonAsync("upload-competition", model, CancellationToken.None);
+
+            var shoudlBeNull = await _client.GetJsonAsync<CurrentCompetitorEnvelopeModel>("current-competitor", CancellationToken.None);
+            shoudlBeNull.Content.Should().BeNull();
+
+            await _client.PostJsonAsync("set-current-competitor", new CurrentCompetitorSetModel { Id = 2 }, CancellationToken.None);
+
+            var first = await _client.GetJsonAsync<CurrentCompetitorEnvelopeModel>("current-competitor", CancellationToken.None);
+            first.Content.Should().NotBeNull();
+            first.Content.Division.Should().Be("Senior Women");
+            first.Content.Competitors[0].Name.Should().Be("I should be shown first");
+
+            await _client.PostJsonAsync("set-current-competitor", new CurrentCompetitorSetModel { Id = 3 }, CancellationToken.None);
+
+            var second = await _client.GetJsonAsync<CurrentCompetitorEnvelopeModel>("current-competitor", CancellationToken.None);
+            second.Content.Should().NotBeNull();
+            second.Content.Division.Should().Be("Senior Women");
+            second.Content.Competitors[0].Name.Should().Be("I should be shown second");
         }
 
         private static CompetitorFileModel[] CreateSingleCompetitor(string name, string team)

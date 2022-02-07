@@ -29,11 +29,15 @@ namespace Api.Models
     public class UpcomingCompetitorModel
     {
         [Required]
+        public int Id { get; set; }
+        [Required]
         public CompetitorModel[] Competitors { get; set; } = null!;
     }
 
     public class ResultRowModel
     {
+        [Required]
+        public int Id { get; set; }
         [Required]
         public CompetitorModel[] Competitors { get; set; } = null!;
 

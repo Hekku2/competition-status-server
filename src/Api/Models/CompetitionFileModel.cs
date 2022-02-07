@@ -2,6 +2,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Api.Models
 {
+    public class CurrentCompetitorSetModel
+    {
+        public int? Id { get; set; }
+    }
+
     public class CompetitionFileModel
     {
         [Required]
@@ -22,6 +27,12 @@ namespace Api.Models
 
     public class CompetitorPositionFileModel
     {
+        /// <summary>
+        /// Unique ID for these competitors.
+        /// </summary>
+        [Required]
+        public int Id { get; set; }
+
         [Required]
         public CompetitorFileModel[] Competitors { get; set; } = null!;
 

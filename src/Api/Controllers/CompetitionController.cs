@@ -36,6 +36,13 @@ namespace Api.Controllers
         }
 
         [HttpPost]
+        [Route("set-current-competitor")]
+        public void SetCurrentCompetitor(CurrentCompetitorSetModel model)
+        {
+            _competitionStatusService.UpdateCurrentCompetitor(model.Id);
+        }
+
+        [HttpPost]
         [Route("upload-competition")]
         public void UploadCompetition(CompetitionFileModel fileModel)
         {
@@ -72,6 +79,7 @@ namespace Api.Controllers
         {
             return new CompetitionOrderEntity
             {
+                Id = model.Id,
                 Competitors = model.Competitors.Select(CreateCompetitorEntity).ToArray(),
                 Forfeit = model.Forfeit,
                 Result = model.Results != null ? CreatePoleDanceResultEntity(model.Results) : null
@@ -112,8 +120,7 @@ namespace Api.Controllers
         {
             return new CurrentCompetitorContentModel
             {
-                Division = "test division",
-                Attempt = "1",
+                Division = entity.Division,
                 Competitors = entity.Competitors.Select(CreateCompetitorModel).ToArray(),
                 PreviousResults = Array.Empty<object>()
             };
@@ -146,16 +153,18 @@ namespace Api.Controllers
         {
             return new UpcomingCompetitorModel
             {
+                Id = entity.Id,
                 Competitors = entity.Competitors.Select(CreateCompetitorModel).ToArray()
             };
         }
 
-        private static ResultRowModel CreateResultRowModel(CompetitionOrderEntity resultRow)
+        private static ResultRowModel CreateResultRowModel(CompetitionOrderEntity entity)
         {
             return new ResultRowModel
             {
-                Competitors = resultRow.Competitors.Select(CreateCompetitorModel).ToArray(),
-                Result = resultRow.Result != null ? CreatePoleDanceResultEntity(resultRow.Result) : null
+                Id = entity.Id,
+                Competitors = entity.Competitors.Select(CreateCompetitorModel).ToArray(),
+                Result = entity.Result != null ? CreatePoleDanceResultEntity(entity.Result) : null
             };
         }
 

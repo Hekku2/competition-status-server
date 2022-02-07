@@ -6,6 +6,7 @@ namespace DataAccess.Entity
     public class CompetitionEntity
     {
         public string Name { get; set; } = null!;
+        public CurrentCompetitorsEntity? CurrentCompetitor { get; set; }
         public DivisionEntity[] Divisions { get; set; } = null!;
     }
 }

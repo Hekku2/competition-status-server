@@ -33,8 +33,9 @@ namespace Api
                 });
             });
 
-            services.AddSingleton<ICompetitionStatusService, CompetitionStatusService>();
-            services.AddSingleton<ICompetitionService, CompetitionService>();
+            services.AddSingleton<CompetitionService>();
+            services.AddTransient<ICompetitionService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
+            services.AddTransient<ICompetitionStatusService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

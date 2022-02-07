@@ -19,9 +19,15 @@ namespace Api.Services.Interfaces
         CurrentCompetitorsEntity? GetCurrentCompetitor();
 
         /// <summary>
-        /// Sets current competitors
+        /// Sets current competitors. Should only be used to override database.
         /// </summary>
         /// <param name="competitor">Current competitors</param>
         void UpdateCurrentCompetitor(CurrentCompetitorsEntity? competitor);
+
+        /// <summary>
+        /// Sets current competitor
+        /// </summary>
+        /// <param name="id">ID of current competitor</param>
+        void UpdateCurrentCompetitor(int? id);
     }
 }

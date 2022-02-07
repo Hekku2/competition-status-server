@@ -25,6 +25,16 @@ public class CompetitionControllerTests
     }
 
     [Test]
+    public void SetCurrentCompetitor_CallsService()
+    {
+        var id = 123;
+
+        _controller.SetCurrentCompetitor(id);
+
+        _mockCompetitionStatusService.Received().UpdateCurrentCompetitor(id);
+    }
+
+    [Test]
     public void GetCompetitionStatus_SetsResultsCorrectly()
     {
         var expectedCompetition = new CompetitionEntity
@@ -39,6 +49,7 @@ public class CompetitionControllerTests
                     {
                         new CompetitionOrderEntity
                         {
+                            Id = 3,
                             Competitors = CompetitorEntity("second", "team 1"),
                             Result = new PoleDanceResultEntity
                             {
@@ -50,6 +61,7 @@ public class CompetitionControllerTests
                         },
                         new CompetitionOrderEntity
                         {
+                            Id = 45,
                             Competitors = CompetitorEntity("first", "team 1"),
                             Result = new PoleDanceResultEntity
                             {
@@ -66,8 +78,10 @@ public class CompetitionControllerTests
         _mockCompetitionService.GetCurrentState().Returns(expectedCompetition);
 
         var actualCompetitionEnvelope = _controller.GetCompetitionStatus();
+        actualCompetitionEnvelope.Content.Divisions[0].Results[0].Id.Should().Be(45);
         actualCompetitionEnvelope.Content.Divisions[0].Results[0].Competitors[0].Name.Should().Be("first");
         actualCompetitionEnvelope.Content.Divisions[0].Results[0].Result.Total.Should().Be(205);
+        actualCompetitionEnvelope.Content.Divisions[0].Results[1].Id.Should().Be(3);
         actualCompetitionEnvelope.Content.Divisions[0].Results[1].Competitors[0].Name.Should().Be("second");
         actualCompetitionEnvelope.Content.Divisions[0].Results[1].Result.Total.Should().Be(106);
     }
@@ -103,10 +117,12 @@ public class CompetitionControllerTests
                         },
                         new CompetitionOrderEntity
                         {
+                            Id = 5,
                             Competitors = CompetitorEntity("first", "team 1"),
                         },
                         new CompetitionOrderEntity
                         {
+                            Id = 7,
                             Competitors = CompetitorEntity("second", "team 1"),
                         }
                     }
@@ -117,7 +133,9 @@ public class CompetitionControllerTests
 
         var actualCompetitionEnvelope = _controller.GetCompetitionStatus();
         actualCompetitionEnvelope.Content.Divisions[0].UpcomingCompetitorModels.Length.Should().Be(2);
+        actualCompetitionEnvelope.Content.Divisions[0].UpcomingCompetitorModels[0].Id.Should().Be(5);
         actualCompetitionEnvelope.Content.Divisions[0].UpcomingCompetitorModels[0].Competitors[0].Name.Should().Be("first");
+        actualCompetitionEnvelope.Content.Divisions[0].UpcomingCompetitorModels[1].Id.Should().Be(7);
         actualCompetitionEnvelope.Content.Divisions[0].UpcomingCompetitorModels[1].Competitors[0].Name.Should().Be("second");
     }
 
@@ -136,10 +154,12 @@ public class CompetitionControllerTests
                     {
                         new CompetitionOrderEntity
                         {   // I don't have results
+                            Id = 1,
                             Competitors = CompetitorEntity("wrong", "team wrong"),
                         },
                         new CompetitionOrderEntity
                         {   // I have forfeited
+                            Id = 2,
                             Competitors = CompetitorEntity("wrong", "team wrong"),
                             Forfeit = true,
                             Result = new PoleDanceResultEntity
@@ -152,6 +172,7 @@ public class CompetitionControllerTests
                         },
                         new CompetitionOrderEntity
                         {
+                            Id = 3,
                             Competitors = CompetitorEntity("name 1", "team 1"),
                             Result = new PoleDanceResultEntity
                             {
@@ -166,6 +187,16 @@ public class CompetitionControllerTests
             }
         };
         _mockCompetitionService.GetCurrentState().Returns(expectedCompetition);
+
+        var actualStatusEnvelope = _controller.GetCompetitionStatus();
+
+        actualStatusEnvelope.Type.Should().Be("competition-status");
+        actualStatusEnvelope.Version.Should().Be("1");
+        actualStatusEnvelope.Content.Should().NotBeNull();
+
+        actualStatusEnvelope.Content.EventName.Should().Be(expectedCompetition.Name);
+        actualStatusEnvelope.Content.Divisions.Length.Should().Be(1);
+
     }
 
     private static CompetitorEntity[] CompetitorEntity(string name, string team)
@@ -190,6 +221,7 @@ public class CompetitionControllerTests
             {
                 new CompetitorPositionFileModel
                 {
+                    Id = 2,
                     Competitors = new CompetitorFileModel[]
                     {
                         new CompetitorFileModel
@@ -203,6 +235,7 @@ public class CompetitionControllerTests
                 },
                 new CompetitorPositionFileModel
                 {
+                    Id = 3,
                     Competitors = new CompetitorFileModel[]
                     {
                         new CompetitorFileModel
@@ -227,6 +260,7 @@ public class CompetitionControllerTests
                 },
                 new CompetitorPositionFileModel
                 {
+                    Id = 7,
                     Competitors = new CompetitorFileModel[]
                     {
                         new CompetitorFileModel
@@ -272,6 +306,7 @@ public class CompetitionControllerTests
 
         var expectedFirst = expectedDivision.Items[0];
         var actualFirst = actualDivision.CompetitionOrder[0];
+        actualFirst.Id.Should().Be(2);
         actualFirst.Forfeit.Should().BeTrue();
         actualFirst.Result.Should().BeNull();
         actualFirst.Competitors.Length.Should().Be(expectedFirst.Competitors.Length);
@@ -281,6 +316,7 @@ public class CompetitionControllerTests
         var expectedSecond = expectedDivision.Items[1];
         var actualSecond = actualDivision.CompetitionOrder[1];
 
+        actualSecond.Id.Should().Be(3);
         actualSecond.Forfeit.Should().BeFalse();
         actualSecond.Result.Should().NotBeNull();
         actualSecond.Result.ArtisticScore.Should().Be(expectedSecond.Results.ArtisticScore);
