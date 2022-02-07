@@ -18,6 +18,11 @@ namespace AcceptanceTests
         public void Setup()
         {
             var uri = Environment.GetEnvironmentVariable("APP_URI");
+            if (string.IsNullOrWhiteSpace(uri))
+            {
+                Assert.Inconclusive("URI not set. Unable to execute acceptance tests.");
+            }
+
             _client = new RestClient($"{uri}{ApiName}");
         }
 

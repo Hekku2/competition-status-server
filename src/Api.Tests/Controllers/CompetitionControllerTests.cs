@@ -28,8 +28,12 @@ public class CompetitionControllerTests
     public void SetCurrentCompetitor_CallsService()
     {
         var id = 123;
+        var model = new CurrentCompetitorSetModel
+        {
+            Id = id
+        };
 
-        _controller.SetCurrentCompetitor(id);
+        _controller.SetCurrentCompetitor(model);
 
         _mockCompetitionStatusService.Received().UpdateCurrentCompetitor(id);
     }
