@@ -65,8 +65,21 @@ public class CompetitionControllerTests
                         },
                         new CompetitionOrderEntity
                         {
+                            Id = 9,
+                            Competitors = CompetitorEntity("last with no score", "team 2"),
+                            Result = new PoleDanceResultEntity
+                            {
+                                ArtisticScore = 100,
+                                DifficultyScore = 10,
+                                ExecutionScore = 100,
+                                HeadJudgePenalty = 5
+                            },
+                            Forfeit = true,
+                        },
+                        new CompetitionOrderEntity
+                        {
                             Id = 45,
-                            Competitors = CompetitorEntity("first", "team 1"),
+                            Competitors = CompetitorEntity("first", "team 3"),
                             Result = new PoleDanceResultEntity
                             {
                                 ArtisticScore = 100,
@@ -85,9 +98,17 @@ public class CompetitionControllerTests
         actualCompetitionEnvelope.Content.Divisions[0].Results[0].Id.Should().Be(45);
         actualCompetitionEnvelope.Content.Divisions[0].Results[0].Competitors[0].Name.Should().Be("first");
         actualCompetitionEnvelope.Content.Divisions[0].Results[0].Result.Total.Should().Be(205);
+        actualCompetitionEnvelope.Content.Divisions[0].Results[0].Forfeit.Should().BeFalse();
+
         actualCompetitionEnvelope.Content.Divisions[0].Results[1].Id.Should().Be(3);
         actualCompetitionEnvelope.Content.Divisions[0].Results[1].Competitors[0].Name.Should().Be("second");
         actualCompetitionEnvelope.Content.Divisions[0].Results[1].Result.Total.Should().Be(106);
+        actualCompetitionEnvelope.Content.Divisions[0].Results[1].Forfeit.Should().BeFalse();
+
+        actualCompetitionEnvelope.Content.Divisions[0].Results[2].Id.Should().Be(9);
+        actualCompetitionEnvelope.Content.Divisions[0].Results[2].Competitors[0].Name.Should().Be("last with no score");
+        actualCompetitionEnvelope.Content.Divisions[0].Results[2].Result.Should().BeNull();
+        actualCompetitionEnvelope.Content.Divisions[0].Results[2].Forfeit.Should().BeTrue();
     }
 
     [Test]

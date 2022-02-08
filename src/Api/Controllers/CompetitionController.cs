@@ -130,9 +130,8 @@ namespace Api.Controllers
         {
             var results = entity
                 .CompetitionOrder
-                .Where(item => !item.Forfeit && item.Result is not null)
                 .Select(CreateResultRowModel)
-                .OrderByDescending(item => item.Result?.Total)
+                .OrderByDescending(item => (item.Forfeit || item.Result is null) ? -9999 : item.Result.Total)
                 .ToArray();
 
             var upcoming = entity
@@ -164,7 +163,8 @@ namespace Api.Controllers
             {
                 Id = entity.Id,
                 Competitors = entity.Competitors.Select(CreateCompetitorModel).ToArray(),
-                Result = entity.Result != null ? CreatePoleDanceResultEntity(entity.Result) : null
+                Result = entity.Result != null && !entity.Forfeit ? CreatePoleDanceResultEntity(entity.Result) : null,
+                Forfeit = entity.Forfeit
             };
         }
 
