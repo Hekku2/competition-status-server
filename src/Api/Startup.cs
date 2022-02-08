@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Api.Hubs;
 using Api.Services.Implementations;
 using Api.Services.Interfaces;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Api
 {
@@ -31,6 +34,17 @@ namespace Api
                     Description = @"API which provides status information for sports competition.
                         See https://github.com/Hekku2/competition-status-server/ for more information.",
                     Version = "v1"
+                });
+
+                foreach (var name in Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.AllDirectories))
+                {
+                    c.IncludeXmlComments(filePath: name);
+                }
+
+                c.CustomOperationIds(e =>
+                {
+                    e.TryGetMethodInfo(out var methodInfo);
+                    return $"{e.ActionDescriptor.RouteValues["controller"]}{methodInfo.Name}";
                 });
             });
 
