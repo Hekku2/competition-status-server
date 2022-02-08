@@ -46,7 +46,7 @@ namespace AcceptanceTests
         [TearDown]
         public void TearDown()
         {
-            _source.Cancel();
+            _source?.Cancel();
         }
 
 
@@ -76,68 +76,68 @@ namespace AcceptanceTests
                 Name = "New competition",
                 Divisions = new[]
                 {
-                            new DivisionFileModel
+                    new DivisionFileModel
+                    {
+                        Name = "Senior Women",
+                        Items = new []
+                        {
+                            new CompetitorPositionFileModel
                             {
-                                Name = "Senior Women",
-                                Items = new []
+                                Competitors = CreateSingleCompetitor("I should be last or second last", "my team"),
+                                Results = null,
+                                Forfeit = true
+                            },
+                            new CompetitorPositionFileModel
+                            {
+                                Competitors = CreateSingleCompetitor("I should be second", "my team"),
+                                Results = new PoleResultFileModel
                                 {
-                                    new CompetitorPositionFileModel
-                                    {
-                                        Competitors = CreateSingleCompetitor("I should not be on list", "my team"),
-                                        Results = null,
-                                        Forfeit = true
-                                    },
-                                    new CompetitorPositionFileModel
-                                    {
-                                        Competitors = CreateSingleCompetitor("I should be second", "my team"),
-                                        Results = new PoleResultFileModel
-                                        {
-                                            ArtisticScore = 100,
-                                            DifficultyScore = 10,
-                                            ExecutionScore = 60,
-                                            HeadJudgePenalty = 0
-                                        },
-                                        Forfeit = false
-                                    },
-                                    new CompetitorPositionFileModel
-                                    {
-                                        Competitors = CreateSingleCompetitor("I should be first", "my team"),
-                                        Results = new PoleResultFileModel
-                                        {
-                                            ArtisticScore = 100,
-                                            DifficultyScore = 10,
-                                            ExecutionScore = 90,
-                                            HeadJudgePenalty = 0
-                                        },
-                                        Forfeit = false
-                                    },
-                                    new CompetitorPositionFileModel
-                                    {
-                                        Competitors = CreateSingleCompetitor("I also forfeited, my result should not be shown", "my team"),
-                                        Results = new PoleResultFileModel
-                                        {
-                                            ArtisticScore = 900,
-                                            DifficultyScore = 10,
-                                            ExecutionScore = 990,
-                                            HeadJudgePenalty = 0
-                                        },
-                                        Forfeit = true
-                                    },
-                                    new CompetitorPositionFileModel
-                                    {
-                                        Competitors = CreateSingleCompetitor("I'm upcoming 1", "my team"),
-                                        Results = null,
-                                        Forfeit = false
-                                    },
-                                    new CompetitorPositionFileModel
-                                    {
-                                        Competitors = CreateSingleCompetitor("I'm upcoming 2", "my team"),
-                                        Results = null,
-                                        Forfeit = false
-                                    },
-                                }
-                            }
+                                    ArtisticScore = 100,
+                                    DifficultyScore = 10,
+                                    ExecutionScore = 60,
+                                    HeadJudgePenalty = 0
+                                },
+                                Forfeit = false
+                            },
+                            new CompetitorPositionFileModel
+                            {
+                                Competitors = CreateSingleCompetitor("I should be first", "my team"),
+                                Results = new PoleResultFileModel
+                                {
+                                    ArtisticScore = 100,
+                                    DifficultyScore = 10,
+                                    ExecutionScore = 90,
+                                    HeadJudgePenalty = 0
+                                },
+                                Forfeit = false
+                            },
+                            new CompetitorPositionFileModel
+                            {
+                                Competitors = CreateSingleCompetitor("I also forfeited, my result should not be shown", "my team"),
+                                Results = new PoleResultFileModel
+                                {
+                                    ArtisticScore = 900,
+                                    DifficultyScore = 10,
+                                    ExecutionScore = 990,
+                                    HeadJudgePenalty = 0
+                                },
+                                Forfeit = true
+                            },
+                            new CompetitorPositionFileModel
+                            {
+                                Competitors = CreateSingleCompetitor("I'm upcoming 1", "my team"),
+                                Results = null,
+                                Forfeit = false
+                            },
+                            new CompetitorPositionFileModel
+                            {
+                                Competitors = CreateSingleCompetitor("I'm upcoming 2", "my team"),
+                                Results = null,
+                                Forfeit = false
+                            },
                         }
+                    }
+                }
             };
             var result = await _client.PostJsonAsync("upload-competition", model, CancellationToken.None);
             result.Should().Be(System.Net.HttpStatusCode.OK);
@@ -149,11 +149,19 @@ namespace AcceptanceTests
             var responseDivision = response.Content.Divisions.First();
             responseDivision.Name.Should().Be(model.Divisions[0].Name);
 
-            responseDivision.Results.Length.Should().Be(2);
+            responseDivision.Results.Length.Should().Be(4);
             responseDivision.Results[0].Competitors.Length.Should().Be(1);
             responseDivision.Results[0].Competitors[0].Name.Should().Be("I should be first");
+            responseDivision.Results[0].Forfeit.Should().BeFalse();
             responseDivision.Results[1].Competitors.Length.Should().Be(1);
             responseDivision.Results[1].Competitors[0].Name.Should().Be("I should be second");
+            responseDivision.Results[1].Forfeit.Should().BeFalse();
+            responseDivision.Results[2].Competitors.Length.Should().Be(1);
+            responseDivision.Results[2].Competitors[0].Name.Should().Be("I should be last or second last");
+            responseDivision.Results[2].Forfeit.Should().BeTrue();
+            responseDivision.Results[3].Competitors.Length.Should().Be(1);
+            responseDivision.Results[3].Competitors[0].Name.Should().Be("I also forfeited, my result should not be shown");
+            responseDivision.Results[3].Forfeit.Should().BeTrue();
 
             responseDivision.UpcomingCompetitorModels.Length.Should().Be(2);
             responseDivision.UpcomingCompetitorModels[0].Competitors[0].Name.Should().Be("I'm upcoming 1");
