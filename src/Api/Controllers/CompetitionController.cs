@@ -24,6 +24,10 @@ namespace Api.Controllers
             _competitionService = competitionService;
         }
 
+        /// <summary>
+        /// Current competitor information
+        /// </summary>
+        /// <returns>CurrentCompetitorEnvelopeModel</returns>
         [HttpGet]
         [Route("current-competitor")]
         public CurrentCompetitorEnvelopeModel GetCurrentCompetitor()
@@ -35,6 +39,10 @@ namespace Api.Controllers
             };
         }
 
+        /// <summary>
+        /// Sets current competitor or remove current competitor.
+        /// </summary>
+        /// <param name="model">Competitor ID</param>
         [HttpPost]
         [Route("set-current-competitor")]
         public void SetCurrentCompetitor(CurrentCompetitorSetModel model)
@@ -56,6 +64,10 @@ namespace Api.Controllers
             _competitionService.UploadCompetition(entity);
         }
 
+        /// <summary>
+        /// Returns current status for the whole competition
+        /// </summary>
+        /// <returns>CompetitionStatusEnvelopeModel</returns>
         [HttpGet]
         [Route("competition-status")]
         public CompetitionStatusEnvelopeModel GetCompetitionStatus()
