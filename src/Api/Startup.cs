@@ -1,3 +1,4 @@
+using Api.Hubs;
 using Api.Services.Implementations;
 using Api.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -33,6 +34,7 @@ namespace Api
                 });
             });
 
+            services.AddSignalR();
             services.AddSingleton<CompetitionService>();
             services.AddTransient<ICompetitionService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
             services.AddTransient<ICompetitionStatusService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
@@ -57,6 +59,7 @@ namespace Api
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<CompetitionStatusHub>("/competition-hub");
                 endpoints.MapControllers();
             });
         }
