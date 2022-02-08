@@ -130,8 +130,9 @@ namespace Api.Controllers
         {
             var results = entity
                 .CompetitionOrder
+                .Where(item => item.Forfeit || item.Result is not null)
                 .Select(CreateResultRowModel)
-                .OrderByDescending(item => (item.Forfeit || item.Result is null) ? -9999 : item.Result.Total)
+                .OrderByDescending(item => item.Forfeit ? -9999 : item.Result?.Total)
                 .ToArray();
 
             var upcoming = entity

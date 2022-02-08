@@ -22,7 +22,7 @@ namespace Api.Models
         public CompetitorModel[] Competitors { get; set; } = null!;
 
         /// <summary>
-        /// Result for the comeptitors. This can be missing if competitor
+        /// Result for the competitors. This can be missing if competitor
         /// has not yet received it, or if competitor has forfeited.
         /// </summary>
         public PoleSportResultModel? Result { get; set; }
