@@ -39,6 +39,7 @@ namespace Api.Controllers
         [Route("set-current-competitor")]
         public void SetCurrentCompetitor(CurrentCompetitorSetModel model)
         {
+            _logger.LogInformation("Current competitor set to #{Id}", model.Id);
             _competitionStatusService.UpdateCurrentCompetitor(model.Id);
         }
 
@@ -46,7 +47,7 @@ namespace Api.Controllers
         [Route("upload-competition")]
         public void UploadCompetition(CompetitionFileModel fileModel)
         {
-            // Create competition from given model
+            _logger.LogInformation("Competition data uploaded");
             var entity = new CompetitionEntity
             {
                 Name = fileModel.Name,
