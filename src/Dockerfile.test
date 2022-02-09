@@ -8,4 +8,4 @@ COPY AcceptanceTests/. ./AcceptanceTests/
 
 WORKDIR /source/
 
-CMD ["dotnet", "test", "-c", "Release", "./AcceptanceTests/"]
+CMD ["dotnet", "test", "./AcceptanceTests/"]

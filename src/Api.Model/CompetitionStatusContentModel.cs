@@ -24,5 +24,10 @@ namespace Api.Models
         /// </summary>
         [Required]
         public DivisionStatusModel[] Divisions { get; set; } = null!;
+
+        /// <summary>
+        /// Current competitor. May be null if not set.
+        /// </summary>
+        public CurrentCompetitorContentModel? CurrentCompetitor { get; set; }
     }
 }

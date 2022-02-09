@@ -59,7 +59,8 @@ namespace Api.Controllers
             var entity = new CompetitionEntity
             {
                 Name = fileModel.Name,
-                Divisions = fileModel.Divisions.Select(CreateDivisionEntity).ToArray()
+                Divisions = fileModel.Divisions.Select(CreateDivisionEntity).ToArray(),
+                CurrentCompetitor = fileModel.CurrentCompetitor != null ? CreateCurrentCompetitorsEntity(fileModel.CurrentCompetitor) : null
             };
             _competitionService.UploadCompetition(entity);
         }
@@ -76,6 +77,16 @@ namespace Api.Controllers
             return new CompetitionStatusEnvelopeModel
             {
                 Content = entity != null ? CreateCompetitionStatusContentModel(entity) : null
+            };
+        }
+
+        private static CurrentCompetitorsEntity CreateCurrentCompetitorsEntity(CurrentCompetitorFileModel model)
+        {
+            return new CurrentCompetitorsEntity
+            {
+                Competitors = model.Competitors.Select(CreateCompetitorEntity).ToArray(),
+                Division = model.Division,
+                Id = model.Id
             };
         }
 
@@ -125,7 +136,8 @@ namespace Api.Controllers
             {
                 EventName = entity.Name,
                 CreatedAt = DateTime.UtcNow.ToString(),
-                Divisions = entity.Divisions.Select(CreateDivisionStatusModel).ToArray()
+                Divisions = entity.Divisions.Select(CreateDivisionStatusModel).ToArray(),
+                CurrentCompetitor = entity.CurrentCompetitor != null ? CreateCurrentCompetitorContentModel(entity.CurrentCompetitor) : null
             };
         }
 
