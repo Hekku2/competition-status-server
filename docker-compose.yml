@@ -20,6 +20,7 @@ services:
       dockerfile: Dockerfile.console
     environment:
       - SignalRSettings__BaseUrl=http://api:80/
+      - SimulatorSettings__Enabled=${SIMULATORSETTINGS__ENABLED}
     depends_on:
       - api
 
