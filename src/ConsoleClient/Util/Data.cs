@@ -18,6 +18,10 @@ public static class Data
             {10, Create(57.166m, 70.000m, 13.900m, 0)}, //8
             {11, Create(59.766m, 66.833m, 12.800m, 0)}, //9
             {2, Create(56.666m, 69.500m, 10.900m, 2.00m)}, //10
+
+            {22, Create(63.966m, 68.333m, 15.600m, 0)}, //1
+            {21, Create(61.933m, 65.333m, 9.700m, 0)}, //2
+            {20, Create(62.666m, 62.833m, 10.300m, 0)}, //3
         };
     }
 
@@ -63,7 +67,7 @@ public static class Data
                         new CompetitorPositionFileModel
                         {
                             Id = 6,
-                            Competitors = CreateSingleCompetitor("Fifth Person, I forfeit in middle", "my team"),
+                            Competitors = CreateSingleCompetitor("Fifth Person", "my team"),
                         },
                         new CompetitorPositionFileModel
                         {

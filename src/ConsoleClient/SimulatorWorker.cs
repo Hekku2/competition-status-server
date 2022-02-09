@@ -3,6 +3,13 @@ using ConsoleClient.Util;
 
 namespace ConsoleClient;
 
+/// <summary>
+/// This performs a simulated competition (on faster schedule).
+/// 
+/// Important: Loops etc are avoided here to make it easier to edit the
+/// competition steps and order on the fly (and to make it easier to add
+/// exceptions, like forfeits etc.)
+/// </summary>
 public class SimulatorWorker : BackgroundService
 {
     private readonly ILogger<SimulatorWorker> _logger;
@@ -28,52 +35,56 @@ public class SimulatorWorker : BackgroundService
         await _apiWrapper.UploadCompetition(_data, token);
         await Task.Delay(5000, token);
 
-        var division = _data.Divisions[0];
-        await SetActiveCompetitor(division.Name, division.Items[1], token);
-
-        //No results are set here. This is on purpose, because second competitor usually starts before results are received.
-
-        await SetActiveCompetitor(division.Name, division.Items[2], token);
-
-        await SetResults(division.Items[1], token);
-
-        await SetActiveCompetitor(division.Name, division.Items[3], token);
-
-        await SetResults(division.Items[2], token);
-
-        await SetActiveCompetitor(division.Name, division.Items[4], token);
-
-        await SetResults(division.Items[3], token);
-
-        await SetActiveCompetitor(division.Name, division.Items[5], token);
-
-        await SetResults(division.Items[4], token);
-
-        await SetActiveCompetitor(division.Name, division.Items[6], token);
-
-        await SetResults(division.Items[5], token);
-
-        await SetActiveCompetitor(division.Name, division.Items[7], token);
-
-        await SetResults(division.Items[6], token);
-
-        await SetActiveCompetitor(division.Name, division.Items[8], token);
-
-        await SetResults(division.Items[7], token);
-
-        await SetActiveCompetitor(division.Name, division.Items[9], token);
-
-        await SetResults(division.Items[8], token);
-
-        await SetActiveCompetitor(division.Name, division.Items[10], token);
-
-        await SetResults(division.Items[9], token);
-
-        await SetActiveCompetitor(division.Name, null, token);
-
-        await SetResults(division.Items[10], token);
+        await ExecuteFirstDivision(token);
+        await ExecuteSecondDivision(token);
 
         _logger.LogInformation("Simulator has finished.");
+    }
+
+    private async Task ExecuteFirstDivision(CancellationToken token)
+    {
+        var division = _data.Divisions[0];
+        using (_logger.BeginScope("Executing division: {Division}", division.Name))
+        {
+            await SetActiveCompetitor(division.Name, division.Items[1], token);
+            //No results are set here. This is on purpose, because second competitor usually starts before results are received.
+            await SetActiveCompetitor(division.Name, division.Items[2], token);
+            await SetResults(division.Items[1], token);
+            await SetActiveCompetitor(division.Name, division.Items[3], token);
+            await SetResults(division.Items[2], token);
+            await SetActiveCompetitor(division.Name, division.Items[4], token);
+            await SetResults(division.Items[3], token);
+            await SetActiveCompetitor(division.Name, division.Items[5], token);
+            await SetResults(division.Items[4], token);
+            await SetActiveCompetitor(division.Name, division.Items[6], token);
+            await SetResults(division.Items[5], token);
+            await SetActiveCompetitor(division.Name, division.Items[7], token);
+            await SetResults(division.Items[6], token);
+            await SetActiveCompetitor(division.Name, division.Items[8], token);
+            await SetResults(division.Items[7], token);
+            await SetActiveCompetitor(division.Name, division.Items[9], token);
+            await SetResults(division.Items[8], token);
+            await SetActiveCompetitor(division.Name, division.Items[10], token);
+            await SetResults(division.Items[9], token);
+            await SetActiveCompetitor(division.Name, null, token);
+            await SetResults(division.Items[10], token);
+        }
+    }
+
+    private async Task ExecuteSecondDivision(CancellationToken token)
+    {
+        var division = _data.Divisions[1];
+        using (_logger.BeginScope("Executing division: {Division}", division.Name))
+        {
+            await SetActiveCompetitor(division.Name, division.Items[0], token);
+            //No results are set here. This is on purpose, because second competitor usually starts before results are received.
+            await SetActiveCompetitor(division.Name, division.Items[1], token);
+            await SetResults(division.Items[0], token);
+            await SetActiveCompetitor(division.Name, division.Items[2], token);
+            await SetResults(division.Items[1], token);
+            await SetActiveCompetitor(division.Name, null, token);
+            await SetResults(division.Items[2], token);
+        }
     }
 
     private async Task SetActiveCompetitor(string division, CompetitorPositionFileModel? competitor, CancellationToken token)
@@ -122,6 +133,4 @@ public static class CompetitorPositionFileModelExtensions
             Results = results[model.Id]
         };
     }
-
-
 }
