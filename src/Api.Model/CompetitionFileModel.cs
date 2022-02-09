@@ -20,5 +20,10 @@ namespace Api.Models
         /// </summary>
         [Required]
         public DivisionFileModel[] Divisions { get; set; } = null!;
+
+        /// <summary>
+        /// Current competitor
+        /// </summary>
+        public CurrentCompetitorFileModel? CurrentCompetitor { get; set; }
     }
 }

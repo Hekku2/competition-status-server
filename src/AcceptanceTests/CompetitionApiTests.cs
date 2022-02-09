@@ -66,6 +66,7 @@ namespace AcceptanceTests
             response.Content.Should().NotBeNull();
 
             response.Content.EventName.Should().Be(model.Name);
+            response.Content.CurrentCompetitor.Should().BeNull();
         }
 
         [Test]
@@ -74,6 +75,12 @@ namespace AcceptanceTests
             var model = new CompetitionFileModel
             {
                 Name = "New competition",
+                CurrentCompetitor = new CurrentCompetitorFileModel
+                {
+                    Id = 5,
+                    Competitors = CreateSingleCompetitor("Different 1", "my team"),
+                    Division = "Masters +40 Women"
+                },
                 Divisions = new[]
                 {
                     new DivisionFileModel
@@ -83,12 +90,14 @@ namespace AcceptanceTests
                         {
                             new CompetitorPositionFileModel
                             {
+                                Id = 1,
                                 Competitors = CreateSingleCompetitor("I should be last or second last", "my team"),
                                 Results = null,
                                 Forfeit = true
                             },
                             new CompetitorPositionFileModel
                             {
+                                Id = 2,
                                 Competitors = CreateSingleCompetitor("I should be second", "my team"),
                                 Results = new PoleResultFileModel
                                 {
@@ -101,6 +110,7 @@ namespace AcceptanceTests
                             },
                             new CompetitorPositionFileModel
                             {
+                                Id = 3,
                                 Competitors = CreateSingleCompetitor("I should be first", "my team"),
                                 Results = new PoleResultFileModel
                                 {
@@ -113,6 +123,7 @@ namespace AcceptanceTests
                             },
                             new CompetitorPositionFileModel
                             {
+                                Id = 4,
                                 Competitors = CreateSingleCompetitor("I also forfeited, my result should not be shown", "my team"),
                                 Results = new PoleResultFileModel
                                 {
@@ -125,12 +136,14 @@ namespace AcceptanceTests
                             },
                             new CompetitorPositionFileModel
                             {
+                                Id = 5,
                                 Competitors = CreateSingleCompetitor("I'm upcoming 1", "my team"),
                                 Results = null,
                                 Forfeit = false
                             },
                             new CompetitorPositionFileModel
                             {
+                                Id = 6,
                                 Competitors = CreateSingleCompetitor("I'm upcoming 2", "my team"),
                                 Results = null,
                                 Forfeit = false
@@ -145,6 +158,11 @@ namespace AcceptanceTests
             var response = await _client.GetJsonAsync<CompetitionStatusEnvelopeModel>("competition-status", CancellationToken.None);
 
             response.Content.EventName.Should().Be(model.Name);
+            response.Content.CurrentCompetitor.Should().NotBeNull("CurrentCompetitor should be defined");
+            response.Content.CurrentCompetitor.Division.Should().Be("Masters +40 Women");
+            response.Content.CurrentCompetitor.Competitors.Length.Should().Be(1);
+            response.Content.CurrentCompetitor.Competitors[0].Name.Should().Be("Different 1");
+
             response.Content.Divisions.Length.Should().Be(1);
             var responseDivision = response.Content.Divisions.First();
             responseDivision.Name.Should().Be(model.Divisions[0].Name);
