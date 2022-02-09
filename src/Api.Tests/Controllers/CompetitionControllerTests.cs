@@ -39,6 +39,42 @@ public class CompetitionControllerTests
     }
 
     [Test]
+    public void SetResult_CallsService_WithValues()
+    {
+        var model = new CompetitorResultModel
+        {
+            Id = 123,
+            Results = new PoleResultFileModel
+            {
+                ArtisticScore = 1,
+                DifficultyScore = 2,
+                ExecutionScore = 3,
+                HeadJudgePenalty = 4
+            }
+        };
+        _controller.SetResult(model);
+
+        _mockCompetitionStatusService.Received().UpdateResults(model.Id, Arg.Is<PoleDanceResultEntity>(actual =>
+            actual.ArtisticScore == model.Results.ArtisticScore &&
+            actual.DifficultyScore == model.Results.DifficultyScore &&
+            actual.ExecutionScore == model.Results.ExecutionScore &&
+            actual.HeadJudgePenalty == model.Results.HeadJudgePenalty));
+    }
+
+    [Test]
+    public void SetResult_CallsService_WithNull()
+    {
+        var model = new CompetitorResultModel
+        {
+            Id = 123,
+            Results = null
+        };
+        _controller.SetResult(model);
+
+        _mockCompetitionStatusService.Received().UpdateResults(model.Id, null);
+    }
+
+    [Test]
     public void GetCompetitionStatus_SetsResultsCorrectly()
     {
         var expectedCompetition = new CompetitionEntity

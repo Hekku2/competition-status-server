@@ -5,12 +5,12 @@ using Microsoft.Extensions.Options;
 
 namespace ConsoleClient;
 
-public class Worker : BackgroundService
+public class SignalRWorker : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<SignalRWorker> _logger;
     private readonly HubConnection _connection;
 
-    public Worker(ILogger<Worker> logger, IOptions<SignalRSettings> config)
+    public SignalRWorker(ILogger<SignalRWorker> logger, IOptions<SignalRSettings> config)
     {
         _logger = logger;
         _connection = new HubConnectionBuilder()

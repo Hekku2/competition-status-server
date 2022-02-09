@@ -30,6 +30,22 @@ Execute `Build.ps1`
 pwsh Build.ps1
 ```
 
+## Simulator
+
+Simulator can be used to thest how the integrations work when competition is
+running. By default, simulator waits 5 seconds between each action to simulate
+each wait times (performances, other maintenance pauses, etc). In normal
+compettition, the would obviosly be a lot longer.
+
+To start the simulator, execute `Simulator.ps1`
+```
+pwsh Simulator.ps1
+```
+
+Simulator logs are printed to console-container. Simulator data is stored in
+`ConsoleClient.Util.Data`-class and the actual execution is done by
+`ConsoleClient.SimulatorWorker`.
+
 ## License
 
 See [LICENSE](LICENSE)

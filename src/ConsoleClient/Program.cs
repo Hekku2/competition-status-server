@@ -4,8 +4,11 @@ var builder = Host.CreateDefaultBuilder(args);
 var host = builder
     .ConfigureServices((context, services) =>
     {
-        services.AddHostedService<Worker>();
+        services.AddHostedService<SimulatorWorker>();
+        services.AddSingleton<ApiWrapper>();
+        services.AddHostedService<SignalRWorker>();
         services.Configure<SignalRSettings>(context.Configuration.GetSection("SignalRSettings"));
+        services.Configure<SimulatorSettings>(context.Configuration.GetSection("SimulatorSettings"));
     })
     .Build();
 
