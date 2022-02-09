@@ -62,6 +62,21 @@ namespace Api.Services.Implementations
             UpdateCurrentCompetitor(entity);
         }
 
+        public void UpdateResults(int id, PoleDanceResultEntity? results)
+        {
+            var competition = GetCurrentState() ?? throw new InvalidOperationException("No competition set!");
+            foreach (var division in competition.Divisions)
+            {
+                foreach (var competitionOrder in division.CompetitionOrder)
+                {
+                    if (competitionOrder.Id == id)
+                    {
+                        competitionOrder.Result = results;
+                    }
+                }
+            }
+        }
+
         private static (DivisionEntity, CompetitionOrderEntity) GetForCurrentCompetitorsEntity(CompetitionEntity competition, int id)
         {
             var matches =

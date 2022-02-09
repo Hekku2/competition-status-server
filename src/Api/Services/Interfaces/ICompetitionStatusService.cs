@@ -29,5 +29,12 @@ namespace Api.Services.Interfaces
         /// </summary>
         /// <param name="id">ID of current competitor</param>
         void UpdateCurrentCompetitor(int? id);
+
+        /// <summary>
+        /// Updates results for given competitor
+        /// </summary>
+        /// <param name="id">ID of comeptitor</param>
+        /// <param name="results">Results. If null, results are removed.</param>
+        void UpdateResults(int id, PoleDanceResultEntity? results);
     }
 }

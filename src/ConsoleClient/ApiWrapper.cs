@@ -24,6 +24,11 @@ public class ApiWrapper : IDisposable
         await _client.PostJsonAsync("set-current-competitor", model, token);
     }
 
+    public async Task SetResults(CompetitorResultModel model, CancellationToken token)
+    {
+        await _client.PostJsonAsync("set-result", model, token);
+    }
+
     public void Dispose()
     {
         _client?.Dispose();

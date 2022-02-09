@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Api.Controllers
 {
-
     [ApiController]
     [Route("[controller]")]
     public class CompetitionController : ControllerBase
@@ -50,6 +49,22 @@ namespace Api.Controllers
             _competitionStatusService.UpdateCurrentCompetitor(model.Id);
         }
 
+        /// <summary>
+        /// Set result for competitor
+        /// </summary>
+        /// <param name="model"></param>
+        [HttpPost]
+        [Route("set-result")]
+        public void SetResult(CompetitorResultModel model)
+        {
+            _logger.LogInformation("Setting results fro comeptitor #{Id}", model.Id);
+            _competitionStatusService.UpdateResults(model.Id, model.Results?.ToPoleDanceResultEntity());
+        }
+
+        /// <summary>
+        /// Upload compettion data. This overrides all data
+        /// </summary>
+        /// <param name="fileModel">model representing the json file</param>
         [HttpPost]
         [Route("upload-competition")]
         public void UploadCompetition(CompetitionFileModel fileModel)
