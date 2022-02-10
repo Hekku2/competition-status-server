@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Api.Models;
 using Api.Services.Interfaces;
 using DataAccess.Entity;
@@ -92,6 +93,18 @@ namespace Api.Controllers
             {
                 Content = entity?.ToCompetitionStatusContentModel()
             };
+        }
+
+        /// <summary>
+        /// Returns competition status in file model.
+        /// </summary>
+        /// <returns>CompetitionFileModel</returns>
+        [HttpGet]
+        [Route("download-competition")]
+        public CompetitionFileModel DownloadCompetition()
+        {
+            var entity = _competitionService.GetCurrentState() ?? throw new InvalidOperationException("No competition in progress");
+            return entity.ToCompetitionFileModel();
         }
     }
 }
