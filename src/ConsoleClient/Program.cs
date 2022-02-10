@@ -10,6 +10,10 @@ var host = builder
         services.Configure<SignalRSettings>(context.Configuration.GetSection("SignalRSettings"));
         services.Configure<SimulatorSettings>(context.Configuration.GetSection("SimulatorSettings"));
     })
+    .ConfigureLogging(loggingBuilder =>
+    {
+        loggingBuilder.AddSimpleConsole();
+    })
     .Build();
 
 await host.RunAsync();

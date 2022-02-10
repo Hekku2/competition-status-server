@@ -1,14 +1,13 @@
-namespace Api.Models
+namespace Api.Models;
+
+/// <summary>
+/// Envelope for current competitor
+/// </summary>
+public class CurrentCompetitorEnvelopeModel : BaseEnvelopeModel<CurrentCompetitorContentModel>
 {
-    /// <summary>
-    /// Envelope for current competitor
-    /// </summary>
-    public class CurrentCompetitorEnvelopeModel : BaseEnvelopeModel<CurrentCompetitorContentModel>
+    public CurrentCompetitorEnvelopeModel()
     {
-        public CurrentCompetitorEnvelopeModel()
-        {
-            Version = "1";
-            Type = "current-competitor";
-        }
+        Version = "1";
+        Type = "current-competitor";
     }
 }

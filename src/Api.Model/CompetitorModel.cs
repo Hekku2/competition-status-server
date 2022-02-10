@@ -1,18 +1,17 @@
-namespace Api.Models
+namespace Api.Models;
+
+/// <summary>
+/// Represents a single competitor.
+/// </summary>
+public class CompetitorModel
 {
     /// <summary>
-    /// Represents a single competitor.
+    /// Name of competitor
     /// </summary>
-    public class CompetitorModel
-    {
-        /// <summary>
-        /// Name of competitor
-        /// </summary>
-        public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-        /// <summary>
-        /// Team of competitor
-        /// </summary>
-        public string? Team { get; set; }
-    }
+    /// <summary>
+    /// Team of competitor
+    /// </summary>
+    public string? Team { get; set; }
 }

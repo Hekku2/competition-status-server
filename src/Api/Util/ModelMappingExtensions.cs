@@ -2,7 +2,7 @@ using System.Linq;
 using Api.Models;
 using DataAccess.Entity;
 
-namespace Api.Controllers;
+namespace Api.Util;
 
 public static class ModelMappingExtensions
 {
