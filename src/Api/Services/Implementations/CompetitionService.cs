@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reactive.Subjects;
 using Api.Services.Interfaces;
+using Api.Util;
 using DataAccess.Entity;
 
 namespace Api.Services.Implementations
@@ -85,7 +86,8 @@ namespace Api.Services.Implementations
                             {
                                 Division = division.Name,
                                 Result = results,
-                                Competitors = competitionOrder.Competitors
+                                Competitors = competitionOrder.Competitors,
+                                CurrentPlace = CompetitionOrderUtil.CalculatePlacement(division.CompetitionOrder, id)
                             });
                         }
                     }
