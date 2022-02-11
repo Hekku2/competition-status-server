@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\Api.Model\Api.Model.csproj" />
+    <ProjectReference Include="..\Api.Models\Api.Models.csproj" />
   </ItemGroup>
 
 </Project>
