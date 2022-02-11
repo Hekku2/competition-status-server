@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading;
-using System.Threading.Channels;
 using System.Threading.Tasks;
+using AcceptanceTests.Util;
 using Api.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -14,7 +14,6 @@ namespace AcceptanceTests
     public class CompetitionApiTests
     {
         private RestClient _client;
-        private ChannelReader<CurrentCompetitorEnvelopeModel> _channel;
 
         private CurrentCompetitorEnvelopeModel _latestMessage;
         private CancellationTokenSource _source;
@@ -35,10 +34,12 @@ namespace AcceptanceTests
                 .Build();
 
             await connection.StartAsync();
-            _channel = await connection.StreamAsChannelAsync<CurrentCompetitorEnvelopeModel>("StreamCompetitors");
-
+            var channel = await connection.StreamAsChannelAsync<CurrentCompetitorEnvelopeModel>("StreamCompetitors");
             _source = new CancellationTokenSource();
-            var x = ReadEventsToQueue(_source.Token);
+            _ = channel.ReadUntilStopped((item) =>
+            {
+                _latestMessage = item;
+            }, _source.Token);
 
             _client = new RestClient($"{uri}{ApiName}");
         }
@@ -78,7 +79,7 @@ namespace AcceptanceTests
                 CurrentCompetitor = new CurrentCompetitorFileModel
                 {
                     Id = 5,
-                    Competitors = CreateSingleCompetitor("Different 1", "my team"),
+                    Competitors = TestUtil.CreateSingleCompetitor("Different 1", "my team"),
                     Division = "Masters +40 Women"
                 },
                 Divisions = new[]
@@ -91,14 +92,14 @@ namespace AcceptanceTests
                             new CompetitorPositionFileModel
                             {
                                 Id = 1,
-                                Competitors = CreateSingleCompetitor("I should be last or second last", "my team"),
+                                Competitors = TestUtil.CreateSingleCompetitor("I should be last or second last", "my team"),
                                 Results = null,
                                 Forfeit = true
                             },
                             new CompetitorPositionFileModel
                             {
                                 Id = 2,
-                                Competitors = CreateSingleCompetitor("I should be second", "my team"),
+                                Competitors = TestUtil.CreateSingleCompetitor("I should be second", "my team"),
                                 Results = new PoleResultFileModel
                                 {
                                     ArtisticScore = 100,
@@ -111,7 +112,7 @@ namespace AcceptanceTests
                             new CompetitorPositionFileModel
                             {
                                 Id = 3,
-                                Competitors = CreateSingleCompetitor("I should be first", "my team"),
+                                Competitors = TestUtil.CreateSingleCompetitor("I should be first", "my team"),
                                 Results = new PoleResultFileModel
                                 {
                                     ArtisticScore = 100,
@@ -124,7 +125,7 @@ namespace AcceptanceTests
                             new CompetitorPositionFileModel
                             {
                                 Id = 4,
-                                Competitors = CreateSingleCompetitor("I also forfeited, my result should not be shown", "my team"),
+                                Competitors = TestUtil.CreateSingleCompetitor("I also forfeited, my result should not be shown", "my team"),
                                 Results = new PoleResultFileModel
                                 {
                                     ArtisticScore = 900,
@@ -137,14 +138,14 @@ namespace AcceptanceTests
                             new CompetitorPositionFileModel
                             {
                                 Id = 5,
-                                Competitors = CreateSingleCompetitor("I'm upcoming 1", "my team"),
+                                Competitors = TestUtil.CreateSingleCompetitor("I'm upcoming 1", "my team"),
                                 Results = null,
                                 Forfeit = false
                             },
                             new CompetitorPositionFileModel
                             {
                                 Id = 6,
-                                Competitors = CreateSingleCompetitor("I'm upcoming 2", "my team"),
+                                Competitors = TestUtil.CreateSingleCompetitor("I'm upcoming 2", "my team"),
                                 Results = null,
                                 Forfeit = false
                             },
@@ -202,17 +203,17 @@ namespace AcceptanceTests
                             new CompetitorPositionFileModel
                             {
                                 Id = 1,
-                                Competitors = CreateSingleCompetitor("I should not be selected", "my team"),
+                                Competitors = TestUtil.CreateSingleCompetitor("I should not be selected", "my team"),
                             },
                             new CompetitorPositionFileModel
                             {
                                 Id = 2,
-                                Competitors = CreateSingleCompetitor("I should be shown first", "my team"),
+                                Competitors = TestUtil.CreateSingleCompetitor("I should be shown first", "my team"),
                             },
                             new CompetitorPositionFileModel
                             {
                                 Id = 3,
-                                Competitors = CreateSingleCompetitor("I should be shown second", "my team")
+                                Competitors = TestUtil.CreateSingleCompetitor("I should be shown second", "my team")
                             }
                         }
                     }
@@ -241,29 +242,6 @@ namespace AcceptanceTests
             second.Content.Should().NotBeNull();
             second.Content.Division.Should().Be("Senior Women");
             second.Content.Competitors[0].Name.Should().Be("I should be shown second");
-        }
-
-        private static CompetitorFileModel[] CreateSingleCompetitor(string name, string team)
-        {
-            return new CompetitorFileModel[]
-            {
-                new CompetitorFileModel
-                {
-                    Name = name,
-                    Team = team
-                }
-            };
-        }
-
-        private async Task ReadEventsToQueue(CancellationToken token)
-        {
-            while (await _channel.WaitToReadAsync(token))
-            {
-                while (_channel.TryRead(out var receivedEvent))
-                {
-                    _latestMessage = receivedEvent;
-                }
-            }
         }
     }
 }

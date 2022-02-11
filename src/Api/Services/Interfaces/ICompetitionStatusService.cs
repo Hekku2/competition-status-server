@@ -13,6 +13,12 @@ namespace Api.Services.Interfaces
         IObservable<CurrentCompetitorsEntity?> GetCurrentCompetitorObservable();
 
         /// <summary>
+        /// Returns peformance results.
+        /// </summary>
+        /// <returns>Observable of performance results</returns>
+        IObservable<PerformanceResultsEntity> GetPerformanceResultsObservable();
+
+        /// <summary>
         /// Current competitors and series, or null.
         /// </summary>
         /// <returns>Current competitor, or null.</returns>

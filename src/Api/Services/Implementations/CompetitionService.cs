@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reactive.Subjects;
 using Api.Services.Interfaces;
+using Api.Util;
 using DataAccess.Entity;
 
 namespace Api.Services.Implementations
@@ -12,6 +13,7 @@ namespace Api.Services.Implementations
     public class CompetitionService : ICompetitionService, ICompetitionStatusService
     {
         private readonly BehaviorSubject<CurrentCompetitorsEntity?> _currentCompetitor = new(null);
+        private readonly Subject<PerformanceResultsEntity> _performanceResults = new();
 
         private CompetitionEntity? _competitionEntity;
 
@@ -29,6 +31,11 @@ namespace Api.Services.Implementations
         public CurrentCompetitorsEntity? GetCurrentCompetitor()
         {
             return _currentCompetitor.Value;
+        }
+
+        public IObservable<PerformanceResultsEntity> GetPerformanceResultsObservable()
+        {
+            return _performanceResults;
         }
 
         public IObservable<CurrentCompetitorsEntity?> GetCurrentCompetitorObservable()
@@ -72,6 +79,17 @@ namespace Api.Services.Implementations
                     if (competitionOrder.Id == id)
                     {
                         competitionOrder.Result = results;
+
+                        if (results is not null)
+                        {
+                            _performanceResults.OnNext(new PerformanceResultsEntity
+                            {
+                                Division = division.Name,
+                                Result = results,
+                                Competitors = competitionOrder.Competitors,
+                                CurrentPlace = CompetitionOrderUtil.CalculatePlacement(division.CompetitionOrder, id)
+                            });
+                        }
                     }
                 }
             }
