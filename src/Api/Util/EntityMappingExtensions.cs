@@ -57,16 +57,19 @@ public static class EntityMappingExtensions
     public static DivisionStatusModel ToDivisionStatusModel(this DivisionEntity entity) => new()
     {
         Name = entity.Name,
-        Results = entity
-            .CompetitionOrder
-            .Where(item => item.Forfeit || item.Result is not null)
+        Results = CompetitionOrderUtil.CalculateOrder(entity
+            .CompetitionOrder)
             .Select(ToResultRowModel)
-            .OrderByDescending(item => item.Forfeit ? -9999 : item.Result?.Total)
             .ToArray(),
         UpcomingCompetitorModels = entity
             .CompetitionOrder
             .Where(item => !item.Forfeit && item.Result is null)
             .Select(ToUpcomingCompetitorModel)
+            .ToArray(),
+        Forfeited = entity
+            .CompetitionOrder
+            .Where(item => item.Forfeit)
+            .Select(ToResultRowModel)
             .ToArray()
     };
 
@@ -88,7 +91,7 @@ public static class EntityMappingExtensions
         DifficultyScore = entity.DifficultyScore,
         ExecutionScore = entity.ExecutionScore,
         HeadJudgePenalty = entity.HeadJudgePenalty,
-        Total = entity.ArtisticScore + entity.DifficultyScore + entity.ExecutionScore - entity.HeadJudgePenalty
+        Total = entity.Total()
     };
 
     public static PoleResultFileModel ToPoleResultFileModel(this PoleDanceResultEntity entity) => new()

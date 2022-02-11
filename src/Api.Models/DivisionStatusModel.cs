@@ -15,11 +15,16 @@ namespace Api.Models
         public string Name { get; set; } = null!;
 
         /// <summary>
-        /// Current results in order.
+        /// Current results in order. Forfeited are not yet listed
         /// </summary>
         [Required]
         public ResultRowModel[] Results { get; set; } = null!;
 
+        /// <summary>
+        /// Forfeited competitors. Is empty if no one has forfeited.
+        /// </summary>
+        [Required]
+        public ResultRowModel[] Forfeited { get; set; } = null!;
 
         /// <summary>
         /// Upcoming competitors. First is in zero index.
