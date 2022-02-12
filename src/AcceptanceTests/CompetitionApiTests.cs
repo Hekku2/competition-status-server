@@ -176,13 +176,15 @@ namespace AcceptanceTests
             responseDivision.Results[1].Competitors[0].Name.Should().Be("I should be second");
             responseDivision.Results[1].Forfeit.Should().BeFalse();
 
-
+            responseDivision.Forfeited.Length.Should().Be(2);
             responseDivision.Forfeited[0].Competitors.Length.Should().Be(1);
             responseDivision.Forfeited[0].Competitors[0].Name.Should().Be("I should be last or second last");
             responseDivision.Forfeited[0].Forfeit.Should().BeTrue();
+            responseDivision.Forfeited[0].Result.Should().BeNull();
             responseDivision.Forfeited[1].Competitors.Length.Should().Be(1);
             responseDivision.Forfeited[1].Competitors[0].Name.Should().Be("I also forfeited, my result should not be shown");
             responseDivision.Forfeited[1].Forfeit.Should().BeTrue();
+            responseDivision.Forfeited[1].Result.Should().BeNull();
 
             responseDivision.UpcomingCompetitorModels.Length.Should().Be(2);
             responseDivision.UpcomingCompetitorModels[0].Competitors[0].Name.Should().Be("I'm upcoming 1");
