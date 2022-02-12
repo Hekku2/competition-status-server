@@ -1,6 +1,18 @@
 version: '3.7'
 
 services:
+  frontend:
+    container_name: frontend
+    image: node:16-alpine3.15
+    command: sh -c 'yarn && yarn start'
+    working_dir: /app
+    volumes:
+      - ./frontend/:/app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - 'api'
+
   api:
     container_name: api
     build:
