@@ -2,6 +2,7 @@ import { Alert, CircularProgress } from "@mui/material";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../components/hooks";
 import { fetchCompetitionStatus } from "../../store/competition/competitionSlice";
+import { CompetitorCard } from "./CompetitorCard";
 
 export const MainView = () => {
   const state = useAppSelector(state => state.competitionSlice)
@@ -17,7 +18,9 @@ export const MainView = () => {
       {state.isLoadingCompetitionStatus ?
         <CircularProgress />
         :
-        <>This page should shown the status of current competition</>}
+        <>
+          {state.competitionStatus?.currentCompetitor && <CompetitorCard header={"Current"} competitor={state.competitionStatus?.currentCompetitor} />}
+        </>}
     </>
   );
 }
