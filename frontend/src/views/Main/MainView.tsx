@@ -1,6 +1,6 @@
-import { Alert, Box, Card, CardContent, CardHeader, CircularProgress, List } from "@mui/material";
+import { Alert, Box, CircularProgress } from "@mui/material";
 import { useEffect } from "react";
-import { CompetitorCard, DivisionResultsCard, UpcomingCompetitorListItem } from ".";
+import { CompetitorCard, DivisionIncomingCard, DivisionResultsCard } from ".";
 import { useAppDispatch, useAppSelector } from "../../components/hooks";
 import { fetchCompetitionStatus } from "../../store/competition/competitionSlice";
 
@@ -28,14 +28,7 @@ export const MainView = () => {
             {state.competitionStatus?.divisions.map(division =>
               <>
                 <DivisionResultsCard key={division.name} division={division} />
-                <Card key={division.name}>
-                  <CardHeader title={division.name} subheader={"Upcoming"}></CardHeader>
-                  <CardContent>
-                    <List>
-                      {division.upcomingCompetitorModels.map(item => <UpcomingCompetitorListItem key={item.id} competitor={item} />)}
-                    </List>
-                  </CardContent>
-                </Card>
+                <DivisionIncomingCard key={division.name} division={division} />
               </>
             )}
           </Box>
