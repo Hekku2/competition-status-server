@@ -3,6 +3,7 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import { MainView } from "../views";
 import { NavigationBar } from "./NavigationBar";
 
 const MainRouter = () => {
@@ -11,7 +12,7 @@ const MainRouter = () => {
       <NavigationBar />
 
       <Routes>
-        <Route path="/" element={<></>} />
+        <Route path="/" element={<MainView />} />
       </Routes>
     </BrowserRouter>
   )

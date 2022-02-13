@@ -1,5 +1,4 @@
 import { Card } from "@mui/material"
-import { useLocation } from "react-router-dom"
 import { TopNavLink } from "."
 
 type ContentBarProps = {
@@ -24,8 +23,8 @@ export const NavigationBar = () => {
   return (
     <ContentBar>
       <TopNavLink to="/" text="Main" />
-      <TopNavLink to="/games" text="Division" />
-      <TopNavLink to="/tasks" text="Competitors" />
+      <TopNavLink to="/divisions" text="Divisions" />
+      <TopNavLink to="/competitors" text="Competitors" />
     </ContentBar>
   )
 }
