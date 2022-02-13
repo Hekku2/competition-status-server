@@ -72,7 +72,8 @@ public class Startup
         {
             builder.AllowAnyOrigin()
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
 
         app.UseAuthorization();

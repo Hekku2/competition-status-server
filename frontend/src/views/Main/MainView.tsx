@@ -26,10 +26,10 @@ export const MainView = () => {
             marginTop: "1vh"
           }}>
             {state.competitionStatus?.divisions.map(division =>
-              <>
-                <DivisionResultsCard key={division.name} division={division} />
-                <DivisionIncomingCard key={division.name} division={division} />
-              </>
+              <Box key={division.name}>
+                <DivisionResultsCard division={division} />
+                <DivisionIncomingCard division={division} />
+              </Box>
             )}
           </Box>
 

@@ -4,7 +4,7 @@ import { ConfigService } from './services/configService';
 import { OpenAPI } from './services/openapi';
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
-import { theme } from './util';
+import { HubConnectionProvider, theme } from './util';
 import MainRouter from './components/MainRouter';
 
 const App = () => {
@@ -20,8 +20,10 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {isLoading ? <></> : <MainRouter />}
+      <HubConnectionProvider>
+        <CssBaseline />
+        {isLoading ? <></> : <MainRouter />}
+      </HubConnectionProvider>
 
     </ThemeProvider>
   );
