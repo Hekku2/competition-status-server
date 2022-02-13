@@ -21,18 +21,11 @@ const ContentBar = ({ children }: ContentBarProps) => {
 }
 
 export const NavigationBar = () => {
-  const hideNav = useLocation().pathname === '/'
-
   return (
-    <>
-      {hideNav ?
-        <ContentBar>
-        </ContentBar> :
-        <ContentBar>
-          <TopNavLink to="/" text="Main" />
-          <TopNavLink to="/games" text="Divsion" />
-          <TopNavLink to="/tasks" text="Competitors" />
-        </ContentBar>}
-    </>
+    <ContentBar>
+      <TopNavLink to="/" text="Main" />
+      <TopNavLink to="/games" text="Division" />
+      <TopNavLink to="/tasks" text="Competitors" />
+    </ContentBar>
   )
 }

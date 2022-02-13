@@ -1,25 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import { ConfigService } from './services/configService';
+import { OpenAPI } from './services/openapi';
+import { ThemeProvider } from '@emotion/react';
+import { CssBaseline } from '@mui/material';
+import { theme } from './util';
+import MainRouter from './components/MainRouter';
 
-function App() {
+const App = () => {
+  const [isLoading, setLoading] = useState<boolean>(true)
+
+  useEffect(function () {
+    ConfigService.getConfig().then((config) => {
+      OpenAPI.BASE = config.baseUrl || ""
+
+      setLoading(false)
+    })
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {isLoading ? <></> : <MainRouter />}
+
+    </ThemeProvider>
   );
 }
 
