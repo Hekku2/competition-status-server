@@ -23,7 +23,6 @@ export const NavigationBar = () => {
   return (
     <ContentBar>
       <TopNavLink to="/" text="Main" />
-      <TopNavLink to="/divisions" text="Divisions" />
       <TopNavLink to="/competitors" text="Competitors" />
     </ContentBar>
   )
