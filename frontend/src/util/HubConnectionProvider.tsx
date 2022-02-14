@@ -1,43 +1,51 @@
-import { HubConnection, HubConnectionBuilder, IStreamSubscriber } from "@microsoft/signalr";
-import { Card, CardContent, CardHeader, List } from "@mui/material";
-import { createNextState } from "@reduxjs/toolkit";
+import { HubConnection, HubConnectionBuilder, IStreamSubscriber, ISubscription } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
 import { CurrentCompetitorEnvelopeModel } from "../services/openapi";
+import { useAppDispatch } from "../store";
+import { setCurrentCompetitor } from "../store/competition/competitionSlice";
 
 export interface HubConnectionProviderProps {
+  baseUrl: string,
   children?: React.ReactNode
 }
 
-export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) => {
+export const HubConnectionProvider = ({ children, baseUrl }: HubConnectionProviderProps) => {
+  const dispatch = useAppDispatch()
   const [connection, setConnection] = useState<HubConnection | undefined>(undefined);
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl('http://localhost:5000/competition-hub')
+      .withUrl(`${baseUrl}/competition-hub`)
       .withAutomaticReconnect()
       .build();
 
     setConnection(newConnection);
   }, []);
 
-  const x: IStreamSubscriber<CurrentCompetitorEnvelopeModel> = {
-    next: (value) => { console.log(value) },
-    complete: () => { },
-    error: () => { },
+  const competitorHandler: IStreamSubscriber<CurrentCompetitorEnvelopeModel> = {
+    next: (value) => {
+      dispatch(setCurrentCompetitor(value.content))
+    },
+    complete: () => { console.log('Finished') },
+    error: () => { console.log('Error') },
     closed: false
   }
 
   useEffect(() => {
+    let sub: ISubscription<CurrentCompetitorEnvelopeModel>;
     if (connection) {
       connection.start()
         .then(() => {
           console.log('Connected!');
 
-          connection.stream<CurrentCompetitorEnvelopeModel>('StreamCompetitors').subscribe(x);
+          sub = connection.stream<CurrentCompetitorEnvelopeModel>('StreamCompetitors').subscribe(competitorHandler);
         })
         .catch((e: any) => console.log('Connection failed: ', e));
     }
-  }, [connection]);
+    return () => {
+      sub?.dispose()
+    }
+  }, [connection, competitorHandler]);
 
   return (
     <>

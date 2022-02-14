@@ -19,7 +19,7 @@ export const MainView = () => {
         <CircularProgress />
         :
         <>
-          {state.competitionStatus?.currentCompetitor && <CompetitorCard header={"Current"} competitor={state.competitionStatus?.currentCompetitor} />}
+          {state.currentCompetitor && <CompetitorCard header={"Current"} competitor={state.currentCompetitor} />}
 
           <Box sx={{
             display: "flex",

@@ -9,21 +9,24 @@ import MainRouter from './components/MainRouter';
 
 const App = () => {
   const [isLoading, setLoading] = useState<boolean>(true)
+  const [baseUrl, setBaseUrl] = useState<string>('')
 
   useEffect(function () {
     ConfigService.getConfig().then((config) => {
-      OpenAPI.BASE = config.baseUrl || ""
-
+      OpenAPI.BASE = config.baseUrl
+      setBaseUrl(config.baseUrl)
       setLoading(false)
     })
   }, [])
 
   return (
     <ThemeProvider theme={theme}>
-      <HubConnectionProvider>
-        <CssBaseline />
-        {isLoading ? <></> : <MainRouter />}
-      </HubConnectionProvider>
+      <CssBaseline />
+      {!isLoading &&
+        <HubConnectionProvider baseUrl={baseUrl}>
+          <MainRouter />
+        </HubConnectionProvider>
+      }
 
     </ThemeProvider>
   );
