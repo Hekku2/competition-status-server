@@ -40,6 +40,18 @@ namespace Api.Controllers
         }
 
         /// <summary>
+        /// Returns history of reported results. This is mainly used for debugging purposes
+        /// and should not be used for reporting.
+        /// </summary>
+        /// <returns>List of of results in report order.</returns>
+        [HttpGet]
+        [Route("result-history")]
+        public PerformanceResultsEnvelopeModel[] GetResults()
+        {
+            return _competitionStatusService.GetReportedResults().Select(CreatePerformanceResultsEnvelopeModel).ToArray();
+        }
+
+        /// <summary>
         /// Sets current competitor or remove current competitor.
         /// </summary>
         /// <param name="model">Competitor ID</param>
@@ -106,6 +118,14 @@ namespace Api.Controllers
         {
             var entity = _competitionService.GetCurrentState() ?? throw new InvalidOperationException("No competition in progress");
             return entity.ToCompetitionFileModel();
+        }
+
+        private PerformanceResultsEnvelopeModel CreatePerformanceResultsEnvelopeModel(PerformanceResultsEntity entity)
+        {
+            return new PerformanceResultsEnvelopeModel
+            {
+                Content = entity.ToPerformanceResultsContentModel()
+            };
         }
     }
 }

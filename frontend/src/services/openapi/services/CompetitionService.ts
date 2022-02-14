@@ -25,13 +25,15 @@ export class CompetitionService {
     }
 
     /**
+     * Returns history of reported results. This is mainly used for debugging purposes
+     * and should not be used for reporting.
      * @returns PerformanceResultsEnvelopeModel Success
      * @throws ApiError
      */
-    public static async competitionGetResults(): Promise<PerformanceResultsEnvelopeModel> {
+    public static async competitionGetResults(): Promise<Array<PerformanceResultsEnvelopeModel>> {
         const result = await __request({
             method: 'GET',
-            path: `/Competition/results`,
+            path: `/Competition/result-history`,
         });
         return result.body;
     }
