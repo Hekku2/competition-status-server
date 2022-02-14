@@ -19,6 +19,7 @@ export type { CurrentCompetitorsEntity } from './models/CurrentCompetitorsEntity
 export type { CurrentCompetitorSetModel } from './models/CurrentCompetitorSetModel';
 export type { DivisionFileModel } from './models/DivisionFileModel';
 export type { DivisionStatusModel } from './models/DivisionStatusModel';
+export type { ParticipationModel } from './models/ParticipationModel';
 export type { PerformanceResultsContentModel } from './models/PerformanceResultsContentModel';
 export type { PerformanceResultsEnvelopeModel } from './models/PerformanceResultsEnvelopeModel';
 export type { PoleResultFileModel } from './models/PoleResultFileModel';
@@ -27,5 +28,6 @@ export type { ResultRowModel } from './models/ResultRowModel';
 export type { UpcomingCompetitorModel } from './models/UpcomingCompetitorModel';
 
 export { CompetitionService } from './services/CompetitionService';
+export { CompetitorService } from './services/CompetitorService';
 export { StatusService } from './services/StatusService';
 export { TestService } from './services/TestService';

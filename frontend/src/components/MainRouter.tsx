@@ -4,6 +4,7 @@ import {
   Route
 } from "react-router-dom";
 import { MainView } from "../views";
+import { CompetitorsView } from "../views/Competitors";
 import { NavigationBar } from "./NavigationBar";
 
 const MainRouter = () => {
@@ -13,6 +14,8 @@ const MainRouter = () => {
 
       <Routes>
         <Route path="/" element={<MainView />} />
+        <Route path="/competitors" element={<CompetitorsView />} />
+
       </Routes>
     </BrowserRouter>
   )
