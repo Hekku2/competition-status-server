@@ -1,6 +1,6 @@
 import { Alert, Box, CircularProgress } from "@mui/material";
 import { useEffect } from "react";
-import { CompetitorCard, DivisionIncomingCard, DivisionResultsCard } from ".";
+import { CompetitorCard, DivisionIncomingCard, DivisionResultsCard, ResultCard } from ".";
 import { useAppDispatch, useAppSelector } from "../../components/hooks";
 import { fetchCompetitionStatus } from "../../store/competition/competitionSlice";
 
@@ -19,7 +19,13 @@ export const MainView = () => {
         <CircularProgress />
         :
         <>
-          {state.currentCompetitor && <CompetitorCard header={"Current"} competitor={state.currentCompetitor} />}
+          <Box sx={{
+            display: "flex",
+            marginTop: "1vh"
+          }}>
+            {state.currentCompetitor && <CompetitorCard header={"Current"} competitor={state.currentCompetitor} />}
+            {state.latestResults && <ResultCard results={state.latestResults} />}
+          </Box>
 
           <Box sx={{
             display: "flex",

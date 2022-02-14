@@ -19,6 +19,8 @@ export type { CurrentCompetitorsEntity } from './models/CurrentCompetitorsEntity
 export type { CurrentCompetitorSetModel } from './models/CurrentCompetitorSetModel';
 export type { DivisionFileModel } from './models/DivisionFileModel';
 export type { DivisionStatusModel } from './models/DivisionStatusModel';
+export type { PerformanceResultsContentModel } from './models/PerformanceResultsContentModel';
+export type { PerformanceResultsEnvelopeModel } from './models/PerformanceResultsEnvelopeModel';
 export type { PoleResultFileModel } from './models/PoleResultFileModel';
 export type { PoleSportResultModel } from './models/PoleSportResultModel';
 export type { ResultRowModel } from './models/ResultRowModel';

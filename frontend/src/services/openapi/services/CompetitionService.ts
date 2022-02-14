@@ -6,6 +6,7 @@ import type { CompetitionStatusEnvelopeModel } from '../models/CompetitionStatus
 import type { CompetitorResultModel } from '../models/CompetitorResultModel';
 import type { CurrentCompetitorEnvelopeModel } from '../models/CurrentCompetitorEnvelopeModel';
 import type { CurrentCompetitorSetModel } from '../models/CurrentCompetitorSetModel';
+import type { PerformanceResultsEnvelopeModel } from '../models/PerformanceResultsEnvelopeModel';
 import { request as __request } from '../core/request';
 
 export class CompetitionService {
@@ -19,6 +20,18 @@ export class CompetitionService {
         const result = await __request({
             method: 'GET',
             path: `/Competition/current-competitor`,
+        });
+        return result.body;
+    }
+
+    /**
+     * @returns PerformanceResultsEnvelopeModel Success
+     * @throws ApiError
+     */
+    public static async competitionGetResults(): Promise<PerformanceResultsEnvelopeModel> {
+        const result = await __request({
+            method: 'GET',
+            path: `/Competition/results`,
         });
         return result.body;
     }

@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit'
-import { CompetitionService, CompetitionStatusContentModel, CurrentCompetitorContentModel } from '../../services/openapi'
+import { CompetitionService, CompetitionStatusContentModel, CurrentCompetitorContentModel, PerformanceResultsContentModel } from '../../services/openapi'
 import { RootState } from '../store'
 
 export interface CompetitionState {
-  isLoadingCompetitionStatus: boolean,
-  competitionStatus: CompetitionStatusContentModel | undefined,
+  isLoadingCompetitionStatus: boolean
+  competitionStatus: CompetitionStatusContentModel | undefined
   currentCompetitor: CurrentCompetitorContentModel | undefined
+  latestResults: PerformanceResultsContentModel | undefined
   error: SerializedError | undefined
 }
 
@@ -13,6 +14,7 @@ export const initialState: CompetitionState = {
   isLoadingCompetitionStatus: false,
   competitionStatus: undefined,
   currentCompetitor: undefined,
+  latestResults: undefined,
   error: undefined
 }
 
@@ -26,6 +28,9 @@ export const competitionSlice = createSlice({
   reducers: {
     setCurrentCompetitor(state, action: PayloadAction<CurrentCompetitorContentModel | undefined>) {
       state.currentCompetitor = action.payload
+    },
+    setLatestResults(state, action: PayloadAction<PerformanceResultsContentModel | undefined>) {
+      state.latestResults = action.payload
     }
   },
   extraReducers: builder => {
@@ -46,5 +51,5 @@ export const competitionSlice = createSlice({
 })
 
 export const competitionSelector = (state: RootState) => state.competitionSlice
-export const { setCurrentCompetitor } = competitionSlice.actions
+export const { setCurrentCompetitor, setLatestResults } = competitionSlice.actions
 export default competitionSlice.reducer

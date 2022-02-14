@@ -1,8 +1,8 @@
 import { HubConnection, HubConnectionBuilder, IStreamSubscriber, ISubscription } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
-import { CurrentCompetitorEnvelopeModel } from "../services/openapi";
+import { CurrentCompetitorEnvelopeModel, PerformanceResultsEnvelopeModel } from "../services/openapi";
 import { useAppDispatch } from "../store";
-import { setCurrentCompetitor } from "../store/competition/competitionSlice";
+import { setCurrentCompetitor, setLatestResults } from "../store/competition/competitionSlice";
 
 export interface HubConnectionProviderProps {
   baseUrl: string,
@@ -20,32 +20,46 @@ export const HubConnectionProvider = ({ children, baseUrl }: HubConnectionProvid
       .build();
 
     setConnection(newConnection);
-  }, []);
-
-  const competitorHandler: IStreamSubscriber<CurrentCompetitorEnvelopeModel> = {
-    next: (value) => {
-      dispatch(setCurrentCompetitor(value.content))
-    },
-    complete: () => { console.log('Finished') },
-    error: () => { console.log('Error') },
-    closed: false
-  }
+    return () => {
+      newConnection.stop()
+    }
+  }, [baseUrl]);
 
   useEffect(() => {
-    let sub: ISubscription<CurrentCompetitorEnvelopeModel>;
+    const competitorHandler: IStreamSubscriber<CurrentCompetitorEnvelopeModel> = {
+      next: (value) => {
+        dispatch(setCurrentCompetitor(value.content))
+      },
+      complete: () => { console.log('Finished') },
+      error: () => { console.log('Error') },
+      closed: false
+    }
+    const performanceResultsHandler: IStreamSubscriber<PerformanceResultsEnvelopeModel> = {
+      next: (value: PerformanceResultsEnvelopeModel) => {
+        dispatch(setLatestResults(value.content))
+      },
+      complete: () => { console.log('Finished') },
+      error: () => { console.log('Error') },
+      closed: false
+    }
+
+    let currentCompetitorSub: ISubscription<CurrentCompetitorEnvelopeModel>;
+    let performanceResultSub: ISubscription<PerformanceResultsEnvelopeModel>;
     if (connection) {
       connection.start()
         .then(() => {
           console.log('Connected!');
 
-          sub = connection.stream<CurrentCompetitorEnvelopeModel>('StreamCompetitors').subscribe(competitorHandler);
+          currentCompetitorSub = connection.stream<CurrentCompetitorEnvelopeModel>('StreamCompetitors').subscribe(competitorHandler);
+          performanceResultSub = connection.stream<PerformanceResultsEnvelopeModel>('StreamPerformanceResults').subscribe(performanceResultsHandler);
         })
         .catch((e: any) => console.log('Connection failed: ', e));
     }
     return () => {
-      sub?.dispose()
+      currentCompetitorSub?.dispose()
+      performanceResultSub?.dispose()
     }
-  }, [connection, competitorHandler]);
+  }, [connection, dispatch]);
 
   return (
     <>
