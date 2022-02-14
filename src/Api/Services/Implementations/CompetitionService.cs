@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Reactive.Subjects;
 using Api.Services.Interfaces;
@@ -14,6 +15,8 @@ namespace Api.Services.Implementations
     {
         private readonly BehaviorSubject<CurrentCompetitorsEntity?> _currentCompetitor = new(null);
         private readonly Subject<PerformanceResultsEntity> _performanceResults = new();
+
+        private readonly ConcurrentQueue<PerformanceResultsEntity> _concurrentQueue = new();
 
         private CompetitionEntity? _competitionEntity;
 
@@ -31,6 +34,11 @@ namespace Api.Services.Implementations
         public CurrentCompetitorsEntity? GetCurrentCompetitor()
         {
             return _currentCompetitor.Value;
+        }
+
+        public PerformanceResultsEntity[] GetReportedResults()
+        {
+            return _concurrentQueue.ToArray();
         }
 
         public IObservable<PerformanceResultsEntity> GetPerformanceResultsObservable()
@@ -82,13 +90,15 @@ namespace Api.Services.Implementations
 
                         if (results is not null)
                         {
-                            _performanceResults.OnNext(new PerformanceResultsEntity
+                            var entity = new PerformanceResultsEntity
                             {
                                 Division = division.Name,
                                 Result = results,
                                 Competitors = competitionOrder.Competitors,
                                 CurrentPlace = CompetitionOrderUtil.CalculatePlacement(division.CompetitionOrder, id)
-                            });
+                            };
+                            _concurrentQueue.Enqueue(entity);
+                            _performanceResults.OnNext(entity);
                         }
                     }
                 }

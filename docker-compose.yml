@@ -1,8 +1,35 @@
 version: '3.7'
 
 services:
+  frontend:
+    container_name: competition-status-frontend
+    image: node:16-alpine3.15
+    command: sh -c 'yarn && yarn start'
+    working_dir: /app
+    volumes:
+      - ./frontend/:/app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - 'api'
+
+  frontend-prod:
+    container_name: competition-status-frontend-prod
+    build:
+      context: frontend/.
+      dockerfile: Dockerfile
+    ports:
+      - '3001:80'
+    environment:
+      - CONFIG_JSON_PATH=/usr/share/nginx/html/config.json
+      - FRONTEND_backendUrl=http://localhost:5000
+    volumes:
+      - ./frontend/:/app
+    depends_on:
+      - 'api'
+
   api:
-    container_name: api
+    container_name: competition-status-api
     build:
       context: src/.
       dockerfile: Dockerfile.api
@@ -14,7 +41,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
 
   console-client:
-    container_name: console
+    container_name:  competition-statusconsole
     build:
       context: src/.
       dockerfile: Dockerfile.console
@@ -23,9 +50,10 @@ services:
       - SimulatorSettings__Enabled=${SIMULATORSETTINGS__ENABLED}
     depends_on:
       - api
+      - frontend
 
   test:
-    container_name: test
+    container_name:  competition-status-test
     build:
       context: src/.
       dockerfile: Dockerfile.test
@@ -33,3 +61,4 @@ services:
       - APP_URI=http://api:80/
     depends_on:
       - api
+      - frontend

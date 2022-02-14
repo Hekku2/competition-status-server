@@ -19,6 +19,12 @@ namespace Api.Services.Interfaces
         IObservable<PerformanceResultsEntity> GetPerformanceResultsObservable();
 
         /// <summary>
+        /// Returns all reported results in order they were reported.
+        /// </summary>
+        /// <returns>Array of results in report order</returns>
+        PerformanceResultsEntity[] GetReportedResults();
+
+        /// <summary>
         /// Current competitors and series, or null.
         /// </summary>
         /// <returns>Current competitor, or null.</returns>

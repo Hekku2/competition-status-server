@@ -3,6 +3,7 @@ using System.IO;
 using Api.Hubs;
 using Api.Services.Implementations;
 using Api.Services.Interfaces;
+using Api.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -67,6 +68,15 @@ public class Startup
         //app.UseHttpsRedirection();
 
         app.UseRouting();
+
+        app.UseCors(builder =>
+        {
+            var cors = Configuration.GetSection("Cors").Get<CorsSettings>();
+            builder.WithOrigins(cors.AllowedOrigins.ToArray())
+                .AllowAnyHeader()
+                .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .AllowCredentials();
+        });
 
         app.UseAuthorization();
 
