@@ -41,7 +41,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
 
   console-client:
-    container_name:  competition-statusconsole
+    container_name: competition-statusconsole
     build:
       context: src/.
       dockerfile: Dockerfile.console
@@ -62,3 +62,11 @@ services:
     depends_on:
       - api
       - frontend
+
+  doc:
+    container_name: competition-status-doc-generator
+    build:
+      context: tools/.
+      dockerfile: Dockerfile.doc
+    volumes:
+      - ./:/project
