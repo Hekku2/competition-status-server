@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { ResultRowModel } from './ResultRowModel';
+import type { ParticipationRowModel } from './ParticipationRowModel';
 import type { UpcomingCompetitorModel } from './UpcomingCompetitorModel';
 
 /**
@@ -17,11 +17,12 @@ export type DivisionStatusModel = {
     /**
      * Current results in order. Forfeited are not yet listed
      */
-    results: Array<ResultRowModel>;
+    results: Array<ParticipationRowModel>;
     /**
-     * Forfeited competitors. Is empty if no one has forfeited.
+     * Forfeited competitors. Is empty if no one has forfeited. These are
+     * not returned in any special order.
      */
-    forfeited: Array<ResultRowModel>;
+    forfeited: Array<ParticipationRowModel>;
     /**
      * Upcoming competitors. First is in zero index.
      * This can be empty, if no competitors are remaining.

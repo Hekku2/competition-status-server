@@ -13,7 +13,7 @@ export type UpcomingCompetitorModel = {
      */
     id: number;
     /**
-     * Competitor(s)
+     * Competitor(s). Contains at least one entity.
      */
     competitors: Array<CompetitorModel>;
 }

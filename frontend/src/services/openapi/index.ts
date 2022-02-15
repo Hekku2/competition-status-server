@@ -20,11 +20,11 @@ export type { CurrentCompetitorSetModel } from './models/CurrentCompetitorSetMod
 export type { DivisionFileModel } from './models/DivisionFileModel';
 export type { DivisionStatusModel } from './models/DivisionStatusModel';
 export type { ParticipationModel } from './models/ParticipationModel';
+export type { ParticipationRowModel } from './models/ParticipationRowModel';
 export type { PerformanceResultsContentModel } from './models/PerformanceResultsContentModel';
 export type { PerformanceResultsEnvelopeModel } from './models/PerformanceResultsEnvelopeModel';
 export type { PoleResultFileModel } from './models/PoleResultFileModel';
 export type { PoleSportResultModel } from './models/PoleSportResultModel';
-export type { ResultRowModel } from './models/ResultRowModel';
 export type { UpcomingCompetitorModel } from './models/UpcomingCompetitorModel';
 
 export { CompetitionService } from './services/CompetitionService';

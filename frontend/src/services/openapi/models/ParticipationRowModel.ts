@@ -2,25 +2,24 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { CompetitorFileModel } from './CompetitorFileModel';
-import type { PoleResultFileModel } from './PoleResultFileModel';
+import type { CompetitorModel } from './CompetitorModel';
+import type { PoleSportResultModel } from './PoleSportResultModel';
 
 /**
- * Represents a competitor or competitors (if doubles or other team
- * activity) who participate in division. This class describes what is the
- * status of their participation in the division.
+ * This represents a finished or or otherwise resolved performance result.
+ * Result might be missing, if performance has been finished but has not been
+ * graded yet or if the competitor has forfeited.
  */
-export type CompetitorPositionFileModel = {
+export type ParticipationRowModel = {
     /**
-     * Unique ID for these competitors. This is asystem ID, which is used
-     * to set the competitor(s) as active competitor.
-     * NOTE: This is not the same as a jersey number etc.
+     * Unique ID for these comeptitors
      */
     id: number;
     /**
-     * Competitors, should have at least one entity.
+     * Competitors
      */
-    competitors: Array<CompetitorFileModel>;
+    competitors: Array<CompetitorModel>;
+    result?: PoleSportResultModel;
     /**
      * If true, competitors are shown as forfeited for this division.
      *
@@ -39,5 +38,4 @@ export type CompetitorPositionFileModel = {
      * listing.
      */
     forfeit: boolean;
-    results?: PoleResultFileModel;
 }

@@ -10,7 +10,7 @@ public static class EntityMappingExtensions
     public static CompetitionStatusContentModel ToCompetitionStatusContentModel(this CompetitionEntity entity) => new()
     {
         EventName = entity.Name,
-        CreatedAt = DateTime.UtcNow.ToString(),
+        CreatedAt = DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"),
         Divisions = entity.Divisions.Select(ToDivisionStatusModel).ToArray(),
         CurrentCompetitor = entity.CurrentCompetitor?.ToCurrentCompetitorContentModel()
     };
@@ -102,7 +102,7 @@ public static class EntityMappingExtensions
         HeadJudgePenalty = entity.HeadJudgePenalty,
     };
 
-    public static ResultRowModel ToResultRowModel(this CompetitionOrderEntity entity) => new()
+    public static ParticipationRowModel ToResultRowModel(this CompetitionOrderEntity entity) => new()
     {
         Id = entity.Id,
         Competitors = entity.Competitors.Select(ToCompetitorModel).ToArray(),

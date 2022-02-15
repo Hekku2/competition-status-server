@@ -7,7 +7,7 @@ namespace Api.Models;
 /// Result might be missing, if performance has been finished but has not been
 /// graded yet or if the competitor has forfeited.
 /// </summary>
-public class ResultRowModel
+public class ParticipationRowModel
 {
     /// <summary>
     /// Unique ID for these comeptitors
@@ -28,8 +28,24 @@ public class ResultRowModel
     public PoleSportResultModel? Result { get; set; }
 
     /// <summary>
-    /// If true, this competitor has forfeited and should not have a result
+    /// If true, competitors are shown as forfeited for this division.
+    /// 
+    /// In this context, forfeit can happen if:
+    /// a) Competitor doesn't show up for competition
+    /// b) Competitor gets injured and is unable to continue
+    /// c) Competitor is disqualified
+    /// 
+    /// This doesn't care if it's competitor's fault or not, this just
+    /// means that competitors score is not shown.
+    /// 
+    /// This means following:
+    /// a) Results are not shown, if given.
+    /// b) These competitors are not shown schedule.
+    /// c) When listed, competitors are shown in the bottom part of the
+    /// listing.
     /// </summary>
+    /// <example>true</example>
+    /// <example>false</example>
     [Required]
     public bool Forfeit { get; set; }
 }

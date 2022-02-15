@@ -9,15 +9,21 @@ namespace Api.Models;
 public class PerformanceResultsContentModel
 {
     /// <summary>
-    /// Name of the division. Example: Senior women
+    /// Name of the division. Should match some division in currenlty active
+    /// competition.
     /// </summary>
+    /// <example>Senior Women</example>
+    /// <example>Mixed doubles</example>
     [Required]
     public string Division { get; set; } = null!;
 
     /// <summary>
     /// Placement that the competitor(s) received with this result. This is null
     /// If current place couldn't be calculated.
+    /// Starts from 1.
     /// </summary>
+    /// <example>1</example>
+    /// <example>13</example>
     public int? CurrentPlace { get; set; }
 
     /// <summary>

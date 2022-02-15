@@ -45,7 +45,7 @@ Accept: text/plain
 > 200 Response
 
 ```
-{"version":"string","type":"string","content":{"division":"string","competitors":[{"name":"string","team":"string"}]}}
+{"version":"string","type":"string","content":{"division":"Senior Women","competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}}
 ```
 
 ```json
@@ -53,11 +53,11 @@ Accept: text/plain
   "version": "string",
   "type": "string",
   "content": {
-    "division": "string",
+    "division": "Senior Women",
     "competitors": [
       {
-        "name": "string",
-        "team": "string"
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
       }
     ]
   }
@@ -97,7 +97,7 @@ and should not be used for reporting.*
 > 200 Response
 
 ```
-[{"version":"string","type":"string","content":{"division":"string","currentPlace":0,"competitors":[{"name":"string","team":"string"}],"result":{"total":0,"artisticScore":0,"executionScore":0,"difficultyScore":0,"headJudgePenalty":0}}}]
+[{"version":"string","type":"string","content":{"division":"Senior Women","currentPlace":1,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}}}]
 ```
 
 ```json
@@ -106,19 +106,19 @@ and should not be used for reporting.*
     "version": "string",
     "type": "string",
     "content": {
-      "division": "string",
-      "currentPlace": 0,
+      "division": "Senior Women",
+      "currentPlace": 1,
       "competitors": [
         {
-          "name": "string",
-          "team": "string"
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
         }
       ],
       "result": {
-        "total": 0,
-        "artisticScore": 0,
-        "executionScore": 0,
-        "difficultyScore": 0,
+        "total": 127.266,
+        "artisticScore": 59.266,
+        "executionScore": 70.333,
+        "difficultyScore": 12.8,
         "headJudgePenalty": 0
       }
     }
@@ -138,12 +138,12 @@ Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[[PerformanceResultsEnvelopeModel](#schemaperformanceresultsenvelopemodel)]|false|none|none|
-|» version|string¦null|false|read-only|none|
-|» type|string¦null|false|read-only|none|
+|*anonymous*|[[PerformanceResultsEnvelopeModel](#schemaperformanceresultsenvelopemodel)]|false|none|[Message containing performance results]|
+|» version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|» type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |» content|[PerformanceResultsContentModel](#schemaperformanceresultscontentmodel)|false|none|Describes a result for competitor(s) in for a single performance and what<br>place it did achieve, if any.|
-|»» division|string|true|none|Name of the division. Example: Senior women|
-|»» currentPlace|integer(int32)¦null|false|none|Placement that the competitor(s) received with this result. This is null<br>If current place couldn't be calculated.|
+|»» division|string|true|none|Name of the division. Should match some division in currenlty active<br>competition.|
+|»» currentPlace|integer(int32)¦null|false|none|Placement that the competitor(s) received with this result. This is null<br>If current place couldn't be calculated.<br>Starts from 1.|
 |»» competitors|[[CompetitorModel](#schemacompetitormodel)]|true|none|Competitors that did the performance. This should contain at least one<br>item.|
 |»»» name|string¦null|false|none|Name of competitor|
 |»»» team|string¦null|false|none|Team of competitor|
@@ -179,7 +179,7 @@ Content-Type: application/json
 
 ```json
 {
-  "id": 0
+  "id": 123
 }
 ```
 
@@ -220,11 +220,11 @@ Content-Type: application/json
 
 ```json
 {
-  "id": 0,
+  "id": 2,
   "results": {
-    "artisticScore": 0,
-    "executionScore": 0,
-    "difficultyScore": 0,
+    "artisticScore": 59.266,
+    "executionScore": 70.333,
+    "difficultyScore": 12.8,
     "headJudgePenalty": 0
   }
 }
@@ -267,24 +267,24 @@ Content-Type: application/json
 
 ```json
 {
-  "name": "string",
+  "name": "National finals 2022",
   "divisions": [
     {
-      "name": "string",
+      "name": "Senior Women",
       "items": [
         {
-          "id": 0,
+          "id": 123,
           "competitors": [
             {
-              "name": "string",
-              "team": "string"
+              "name": "Matt Smith",
+              "team": "Team Pole Queens"
             }
           ],
           "forfeit": true,
           "results": {
-            "artisticScore": 0,
-            "executionScore": 0,
-            "difficultyScore": 0,
+            "artisticScore": 59.266,
+            "executionScore": 70.333,
+            "difficultyScore": 12.8,
             "headJudgePenalty": 0
           }
         }
@@ -292,12 +292,12 @@ Content-Type: application/json
     }
   ],
   "currentCompetitor": {
-    "id": 0,
-    "division": "string",
+    "id": 25,
+    "division": "Senior Women",
     "competitors": [
       {
-        "name": "string",
-        "team": "string"
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
       }
     ]
   }
@@ -342,7 +342,7 @@ Accept: text/plain
 > 200 Response
 
 ```
-{"version":"string","type":"string","content":{"eventName":"string","createdAt":"string","divisions":[{"name":"string","results":[{"id":0,"competitors":[{"name":"string","team":"string"}],"result":{"total":0,"artisticScore":0,"executionScore":0,"difficultyScore":0,"headJudgePenalty":0},"forfeit":true}],"forfeited":[{"id":0,"competitors":[{"name":"string","team":"string"}],"result":{"total":0,"artisticScore":0,"executionScore":0,"difficultyScore":0,"headJudgePenalty":0},"forfeit":true}],"upcomingCompetitorModels":[{"id":0,"competitors":[{"name":"string","team":"string"}]}]}],"currentCompetitor":{"division":"string","competitors":[{"name":"string","team":"string"}]}}}
+{"version":"string","type":"string","content":{"eventName":"National finals 2022","createdAt":"2022-02-15T19:14:25.004Z","divisions":[{"name":"Senior women","results":[{"id":0,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0},"forfeit":true}],"forfeited":[{"id":0,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0},"forfeit":true}],"upcomingCompetitorModels":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}]}],"currentCompetitor":{"division":"Senior Women","competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}}}
 ```
 
 ```json
@@ -350,25 +350,25 @@ Accept: text/plain
   "version": "string",
   "type": "string",
   "content": {
-    "eventName": "string",
-    "createdAt": "string",
+    "eventName": "National finals 2022",
+    "createdAt": "2022-02-15T19:14:25.004Z",
     "divisions": [
       {
-        "name": "string",
+        "name": "Senior women",
         "results": [
           {
             "id": 0,
             "competitors": [
               {
-                "name": "string",
-                "team": "string"
+                "name": "Matt Smith",
+                "team": "Team Pole Queens"
               }
             ],
             "result": {
-              "total": 0,
-              "artisticScore": 0,
-              "executionScore": 0,
-              "difficultyScore": 0,
+              "total": 127.266,
+              "artisticScore": 59.266,
+              "executionScore": 70.333,
+              "difficultyScore": 12.8,
               "headJudgePenalty": 0
             },
             "forfeit": true
@@ -379,15 +379,15 @@ Accept: text/plain
             "id": 0,
             "competitors": [
               {
-                "name": "string",
-                "team": "string"
+                "name": "Matt Smith",
+                "team": "Team Pole Queens"
               }
             ],
             "result": {
-              "total": 0,
-              "artisticScore": 0,
-              "executionScore": 0,
-              "difficultyScore": 0,
+              "total": 127.266,
+              "artisticScore": 59.266,
+              "executionScore": 70.333,
+              "difficultyScore": 12.8,
               "headJudgePenalty": 0
             },
             "forfeit": true
@@ -395,11 +395,11 @@ Accept: text/plain
         ],
         "upcomingCompetitorModels": [
           {
-            "id": 0,
+            "id": 123,
             "competitors": [
               {
-                "name": "string",
-                "team": "string"
+                "name": "Matt Smith",
+                "team": "Team Pole Queens"
               }
             ]
           }
@@ -407,11 +407,11 @@ Accept: text/plain
       }
     ],
     "currentCompetitor": {
-      "division": "string",
+      "division": "Senior Women",
       "competitors": [
         {
-          "name": "string",
-          "team": "string"
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
         }
       ]
     }
@@ -451,29 +451,29 @@ Accept: text/plain
 > 200 Response
 
 ```
-{"name":"string","divisions":[{"name":"string","items":[{"id":0,"competitors":[{"name":"string","team":"string"}],"forfeit":true,"results":{"artisticScore":0,"executionScore":0,"difficultyScore":0,"headJudgePenalty":0}}]}],"currentCompetitor":{"id":0,"division":"string","competitors":[{"name":"string","team":"string"}]}}
+{"name":"National finals 2022","divisions":[{"name":"Senior Women","items":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"forfeit":true,"results":{"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}}]}],"currentCompetitor":{"id":25,"division":"Senior Women","competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}}
 ```
 
 ```json
 {
-  "name": "string",
+  "name": "National finals 2022",
   "divisions": [
     {
-      "name": "string",
+      "name": "Senior Women",
       "items": [
         {
-          "id": 0,
+          "id": 123,
           "competitors": [
             {
-              "name": "string",
-              "team": "string"
+              "name": "Matt Smith",
+              "team": "Team Pole Queens"
             }
           ],
           "forfeit": true,
           "results": {
-            "artisticScore": 0,
-            "executionScore": 0,
-            "difficultyScore": 0,
+            "artisticScore": 59.266,
+            "executionScore": 70.333,
+            "difficultyScore": 12.8,
             "headJudgePenalty": 0
           }
         }
@@ -481,12 +481,12 @@ Accept: text/plain
     }
   ],
   "currentCompetitor": {
-    "id": 0,
-    "division": "string",
+    "id": 25,
+    "division": "Senior Women",
     "competitors": [
       {
-        "name": "string",
-        "team": "string"
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
       }
     ]
   }
@@ -525,25 +525,25 @@ Accept: text/plain
 > 200 Response
 
 ```
-[{"division":"string","id":0,"competitors":[{"name":"string","team":"string"}],"result":{"total":0,"artisticScore":0,"executionScore":0,"difficultyScore":0,"headJudgePenalty":0},"forfeit":true}]
+[{"division":"Senior Women","id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0},"forfeit":true}]
 ```
 
 ```json
 [
   {
-    "division": "string",
-    "id": 0,
+    "division": "Senior Women",
+    "id": 123,
     "competitors": [
       {
-        "name": "string",
-        "team": "string"
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
       }
     ],
     "result": {
-      "total": 0,
-      "artisticScore": 0,
-      "executionScore": 0,
-      "difficultyScore": 0,
+      "total": 127.266,
+      "artisticScore": 59.266,
+      "executionScore": 70.333,
+      "difficultyScore": 12.8,
       "headJudgePenalty": 0
     },
     "forfeit": true
@@ -564,7 +564,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[ParticipationModel](#schemaparticipationmodel)]|false|none|[Represents a participation in division by one or multiple competitors.]|
-|» division|string|true|none|Division name|
+|» division|string|true|none|Division name. Should match some division in currently active<br>competition|
 |» id|integer(int32)|true|none|Unique ID for these comeptitors|
 |» competitors|[[CompetitorModel](#schemacompetitormodel)]|true|none|Competitors|
 |»» name|string¦null|false|none|Name of competitor|
@@ -575,7 +575,7 @@ Status Code **200**
 |»» executionScore|number(double)|true|none|Execution score (E)|
 |»» difficultyScore|number(double)|true|none|Difficulty score (D)|
 |»» headJudgePenalty|number(double)|true|none|Head judge penalty (HJ). This is subtracted from the total.|
-|» forfeit|boolean|true|none|If true, this competitor has forfeited and should not have a result|
+|» forfeit|boolean|true|none|If true, competitors are shown as forfeited for this division.<br><br>In this context, forfeit can happen if:<br>a) Competitor doesn't show up for competition<br>b) Competitor gets injured and is unable to continue<br>c) Competitor is disqualified<br><br>This doesn't care if it's competitor's fault or not, this just<br>means that competitors score is not shown.<br><br>This means following:<br>a) Results are not shown, if given.<br>b) These competitors are not shown schedule.<br>c) When listed, competitors are shown in the bottom part of the<br>listing.|
 
 <aside class="success">
 This operation does not require authentication
@@ -665,24 +665,24 @@ This operation does not require authentication
 
 ```json
 {
-  "name": "string",
+  "name": "National finals 2022",
   "divisions": [
     {
-      "name": "string",
+      "name": "Senior Women",
       "items": [
         {
-          "id": 0,
+          "id": 123,
           "competitors": [
             {
-              "name": "string",
-              "team": "string"
+              "name": "Matt Smith",
+              "team": "Team Pole Queens"
             }
           ],
           "forfeit": true,
           "results": {
-            "artisticScore": 0,
-            "executionScore": 0,
-            "difficultyScore": 0,
+            "artisticScore": 59.266,
+            "executionScore": 70.333,
+            "difficultyScore": 12.8,
             "headJudgePenalty": 0
           }
         }
@@ -690,12 +690,12 @@ This operation does not require authentication
     }
   ],
   "currentCompetitor": {
-    "id": 0,
-    "division": "string",
+    "id": 25,
+    "division": "Senior Women",
     "competitors": [
       {
-        "name": "string",
-        "team": "string"
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
       }
     ]
   }
@@ -711,7 +711,7 @@ that can be saved to file.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|string|true|none|Name of the whole competition. Example: National finals 2022|
+|name|string|true|none|Name of the whole competition.|
 |divisions|[[DivisionFileModel](#schemadivisionfilemodel)]|true|none|Divisions for this competition.|
 |currentCompetitor|[CurrentCompetitorFileModel](#schemacurrentcompetitorfilemodel)|false|none|Represents file model of current competitor performing or performing next<br>when no other competitor is not active.|
 
@@ -724,25 +724,25 @@ that can be saved to file.
 
 ```json
 {
-  "eventName": "string",
-  "createdAt": "string",
+  "eventName": "National finals 2022",
+  "createdAt": "2022-02-15T19:14:25.004Z",
   "divisions": [
     {
-      "name": "string",
+      "name": "Senior women",
       "results": [
         {
           "id": 0,
           "competitors": [
             {
-              "name": "string",
-              "team": "string"
+              "name": "Matt Smith",
+              "team": "Team Pole Queens"
             }
           ],
           "result": {
-            "total": 0,
-            "artisticScore": 0,
-            "executionScore": 0,
-            "difficultyScore": 0,
+            "total": 127.266,
+            "artisticScore": 59.266,
+            "executionScore": 70.333,
+            "difficultyScore": 12.8,
             "headJudgePenalty": 0
           },
           "forfeit": true
@@ -753,15 +753,15 @@ that can be saved to file.
           "id": 0,
           "competitors": [
             {
-              "name": "string",
-              "team": "string"
+              "name": "Matt Smith",
+              "team": "Team Pole Queens"
             }
           ],
           "result": {
-            "total": 0,
-            "artisticScore": 0,
-            "executionScore": 0,
-            "difficultyScore": 0,
+            "total": 127.266,
+            "artisticScore": 59.266,
+            "executionScore": 70.333,
+            "difficultyScore": 12.8,
             "headJudgePenalty": 0
           },
           "forfeit": true
@@ -769,11 +769,11 @@ that can be saved to file.
       ],
       "upcomingCompetitorModels": [
         {
-          "id": 0,
+          "id": 123,
           "competitors": [
             {
-              "name": "string",
-              "team": "string"
+              "name": "Matt Smith",
+              "team": "Team Pole Queens"
             }
           ]
         }
@@ -781,11 +781,11 @@ that can be saved to file.
     }
   ],
   "currentCompetitor": {
-    "division": "string",
+    "division": "Senior Women",
     "competitors": [
       {
-        "name": "string",
-        "team": "string"
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
       }
     ]
   }
@@ -800,7 +800,7 @@ Current status of the competition.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |eventName|string|true|none|Name of the event. Example: National finals 2022|
-|createdAt|string|true|none|Timestamp indicating when this status was generated|
+|createdAt|string|true|none|Timestamp indicating when this status was generated.<br>This is always In UTC<br>Format "yyyy-MM-ddTHH:mm:ss.fffZ"|
 |divisions|[[DivisionStatusModel](#schemadivisionstatusmodel)]|true|none|Current status of divisions|
 |currentCompetitor|[CurrentCompetitorContentModel](#schemacurrentcompetitorcontentmodel)|false|none|Represents current competitor who is performing or performing next<br>when no other competitor is not active.|
 
@@ -816,25 +816,25 @@ Current status of the competition.
   "version": "string",
   "type": "string",
   "content": {
-    "eventName": "string",
-    "createdAt": "string",
+    "eventName": "National finals 2022",
+    "createdAt": "2022-02-15T19:14:25.004Z",
     "divisions": [
       {
-        "name": "string",
+        "name": "Senior women",
         "results": [
           {
             "id": 0,
             "competitors": [
               {
-                "name": "string",
-                "team": "string"
+                "name": "Matt Smith",
+                "team": "Team Pole Queens"
               }
             ],
             "result": {
-              "total": 0,
-              "artisticScore": 0,
-              "executionScore": 0,
-              "difficultyScore": 0,
+              "total": 127.266,
+              "artisticScore": 59.266,
+              "executionScore": 70.333,
+              "difficultyScore": 12.8,
               "headJudgePenalty": 0
             },
             "forfeit": true
@@ -845,15 +845,15 @@ Current status of the competition.
             "id": 0,
             "competitors": [
               {
-                "name": "string",
-                "team": "string"
+                "name": "Matt Smith",
+                "team": "Team Pole Queens"
               }
             ],
             "result": {
-              "total": 0,
-              "artisticScore": 0,
-              "executionScore": 0,
-              "difficultyScore": 0,
+              "total": 127.266,
+              "artisticScore": 59.266,
+              "executionScore": 70.333,
+              "difficultyScore": 12.8,
               "headJudgePenalty": 0
             },
             "forfeit": true
@@ -861,11 +861,11 @@ Current status of the competition.
         ],
         "upcomingCompetitorModels": [
           {
-            "id": 0,
+            "id": 123,
             "competitors": [
               {
-                "name": "string",
-                "team": "string"
+                "name": "Matt Smith",
+                "team": "Team Pole Queens"
               }
             ]
           }
@@ -873,11 +873,11 @@ Current status of the competition.
       }
     ],
     "currentCompetitor": {
-      "division": "string",
+      "division": "Senior Women",
       "competitors": [
         {
-          "name": "string",
-          "team": "string"
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
         }
       ]
     }
@@ -886,12 +886,15 @@ Current status of the competition.
 
 ```
 
+Contains current status of competition, of competition is active.
+If competition is not active, Content can be null.
+
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|version|string¦null|false|read-only|none|
-|type|string¦null|false|read-only|none|
+|version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |content|[CompetitionStatusContentModel](#schemacompetitionstatuscontentmodel)|false|none|Current status of the competition.|
 
 <h2 id="tocS_CompetitorEntity">CompetitorEntity</h2>
@@ -925,13 +928,13 @@ Current status of the competition.
 
 ```json
 {
-  "name": "string",
-  "team": "string"
+  "name": "Matt Smith",
+  "team": "Team Pole Queens"
 }
 
 ```
 
-Represents a single competitor. May be a part of team.
+Represents a single competitor in file. May be a part of team.
 
 ### Properties
 
@@ -949,8 +952,8 @@ Represents a single competitor. May be a part of team.
 
 ```json
 {
-  "name": "string",
-  "team": "string"
+  "name": "Matt Smith",
+  "team": "Team Pole Queens"
 }
 
 ```
@@ -973,18 +976,18 @@ Represents a single competitor.
 
 ```json
 {
-  "id": 0,
+  "id": 123,
   "competitors": [
     {
-      "name": "string",
-      "team": "string"
+      "name": "Matt Smith",
+      "team": "Team Pole Queens"
     }
   ],
   "forfeit": true,
   "results": {
-    "artisticScore": 0,
-    "executionScore": 0,
-    "difficultyScore": 0,
+    "artisticScore": 59.266,
+    "executionScore": 70.333,
+    "difficultyScore": 12.8,
     "headJudgePenalty": 0
   }
 }
@@ -1001,7 +1004,7 @@ status of their participation in the division.
 |---|---|---|---|---|
 |id|integer(int32)|true|none|Unique ID for these competitors. This is asystem ID, which is used<br>to set the competitor(s) as active competitor.<br>NOTE: This is not the same as a jersey number etc.|
 |competitors|[[CompetitorFileModel](#schemacompetitorfilemodel)]|true|none|Competitors, should have at least one entity.|
-|forfeit|boolean|true|none|If true, competitors are shown as forfeited for this division.<br>This means following:<br>a) Results are not shown, if given.<br>b) These competitors are not shown schedule.<br>c) When listed, competitors are shown in the bottom part of the<br>listing.|
+|forfeit|boolean|true|none|If true, competitors are shown as forfeited for this division.<br><br>In this context, forfeit can happen if:<br>a) Competitor doesn't show up for competition<br>b) Competitor gets injured and is unable to continue<br>c) Competitor is disqualified<br><br>This doesn't care if it's competitor's fault or not, this just<br>means that competitors score is not shown.<br><br>This means following:<br>a) Results are not shown, if given.<br>b) These competitors are not shown schedule.<br>c) When listed, competitors are shown in the bottom part of the<br>listing.|
 |results|[PoleResultFileModel](#schemapoleresultfilemodel)|false|none|Represents a score in Pole Dance Sport series|
 
 <h2 id="tocS_CompetitorResultModel">CompetitorResultModel</h2>
@@ -1013,11 +1016,11 @@ status of their participation in the division.
 
 ```json
 {
-  "id": 0,
+  "id": 2,
   "results": {
-    "artisticScore": 0,
-    "executionScore": 0,
-    "difficultyScore": 0,
+    "artisticScore": 59.266,
+    "executionScore": 70.333,
+    "difficultyScore": 12.8,
     "headJudgePenalty": 0
   }
 }
@@ -1040,11 +1043,11 @@ status of their participation in the division.
 
 ```json
 {
-  "division": "string",
+  "division": "Senior Women",
   "competitors": [
     {
-      "name": "string",
-      "team": "string"
+      "name": "Matt Smith",
+      "team": "Team Pole Queens"
     }
   ]
 }
@@ -1058,8 +1061,8 @@ when no other competitor is not active.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|division|string|true|none|Division of competitor(s). Example: "Senior Women"|
-|competitors|[[CompetitorModel](#schemacompetitormodel)]|true|none|Competitor(s)|
+|division|string|true|none|Division of competitor(s). This should match some division in active<br>competition|
+|competitors|[[CompetitorModel](#schemacompetitormodel)]|true|none|Competitor(s). This should have at least one value, but may have<br>multiple values if there are multiple persons performing for single<br>performance.|
 
 <h2 id="tocS_CurrentCompetitorEnvelopeModel">CurrentCompetitorEnvelopeModel</h2>
 <!-- backwards compatibility -->
@@ -1073,11 +1076,11 @@ when no other competitor is not active.
   "version": "string",
   "type": "string",
   "content": {
-    "division": "string",
+    "division": "Senior Women",
     "competitors": [
       {
-        "name": "string",
-        "team": "string"
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
       }
     ]
   }
@@ -1085,14 +1088,15 @@ when no other competitor is not active.
 
 ```
 
-Envelope for current competitor
+Envelope for current competitor. Current competitor is the competitor that
+is performing currently or is performing next, if no one is performing.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|version|string¦null|false|read-only|none|
-|type|string¦null|false|read-only|none|
+|version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |content|[CurrentCompetitorContentModel](#schemacurrentcompetitorcontentmodel)|false|none|Represents current competitor who is performing or performing next<br>when no other competitor is not active.|
 
 <h2 id="tocS_CurrentCompetitorFileModel">CurrentCompetitorFileModel</h2>
@@ -1104,12 +1108,12 @@ Envelope for current competitor
 
 ```json
 {
-  "id": 0,
-  "division": "string",
+  "id": 25,
+  "division": "Senior Women",
   "competitors": [
     {
-      "name": "string",
-      "team": "string"
+      "name": "Matt Smith",
+      "team": "Team Pole Queens"
     }
   ]
 }
@@ -1124,8 +1128,8 @@ when no other competitor is not active.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |id|integer(int32)¦null|false|none|ID of competitor. This might not be set if competitor is not listed.|
-|division|string|true|none|Division of competitor(s). Example: "Senior Women"|
-|competitors|[[CompetitorFileModel](#schemacompetitorfilemodel)]|true|none|Competitor(s)|
+|division|string|true|none|Division of competitor(s). This should match some division in<br>current competition.|
+|competitors|[[CompetitorFileModel](#schemacompetitorfilemodel)]|true|none|Competitor(s). This should have at least one value, but may have<br>multiple values if there are multiple persons performing for single<br>performance.|
 
 <h2 id="tocS_CurrentCompetitorsEntity">CurrentCompetitorsEntity</h2>
 <!-- backwards compatibility -->
@@ -1165,7 +1169,7 @@ when no other competitor is not active.
 
 ```json
 {
-  "id": 0
+  "id": 123
 }
 
 ```
@@ -1187,21 +1191,21 @@ Model used to set ID of current competitor(s)
 
 ```json
 {
-  "name": "string",
+  "name": "Senior Women",
   "items": [
     {
-      "id": 0,
+      "id": 123,
       "competitors": [
         {
-          "name": "string",
-          "team": "string"
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
         }
       ],
       "forfeit": true,
       "results": {
-        "artisticScore": 0,
-        "executionScore": 0,
-        "difficultyScore": 0,
+        "artisticScore": 59.266,
+        "executionScore": 70.333,
+        "difficultyScore": 12.8,
         "headJudgePenalty": 0
       }
     }
@@ -1216,7 +1220,7 @@ Describes division that is saved in file. User for JSON conversions.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|string|true|none|Name of the division. For example "Senior Wome" or "Mixed doubles"|
+|name|string|true|none|Name of the division.|
 |items|[[CompetitorPositionFileModel](#schemacompetitorpositionfilemodel)]|true|none|Competitors participating in this division.|
 
 <h2 id="tocS_DivisionStatusModel">DivisionStatusModel</h2>
@@ -1228,21 +1232,21 @@ Describes division that is saved in file. User for JSON conversions.
 
 ```json
 {
-  "name": "string",
+  "name": "Senior women",
   "results": [
     {
       "id": 0,
       "competitors": [
         {
-          "name": "string",
-          "team": "string"
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
         }
       ],
       "result": {
-        "total": 0,
-        "artisticScore": 0,
-        "executionScore": 0,
-        "difficultyScore": 0,
+        "total": 127.266,
+        "artisticScore": 59.266,
+        "executionScore": 70.333,
+        "difficultyScore": 12.8,
         "headJudgePenalty": 0
       },
       "forfeit": true
@@ -1253,15 +1257,15 @@ Describes division that is saved in file. User for JSON conversions.
       "id": 0,
       "competitors": [
         {
-          "name": "string",
-          "team": "string"
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
         }
       ],
       "result": {
-        "total": 0,
-        "artisticScore": 0,
-        "executionScore": 0,
-        "difficultyScore": 0,
+        "total": 127.266,
+        "artisticScore": 59.266,
+        "executionScore": 70.333,
+        "difficultyScore": 12.8,
         "headJudgePenalty": 0
       },
       "forfeit": true
@@ -1269,11 +1273,11 @@ Describes division that is saved in file. User for JSON conversions.
   ],
   "upcomingCompetitorModels": [
     {
-      "id": 0,
+      "id": 123,
       "competitors": [
         {
-          "name": "string",
-          "team": "string"
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
         }
       ]
     }
@@ -1290,8 +1294,8 @@ This is generated on the fly.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|string|true|none|Name if the division. Example: "Senior women"|
-|results|[[ResultRowModel](#schemaresultrowmodel)]|true|none|Current results in order. Forfeited are not yet listed|
-|forfeited|[[ResultRowModel](#schemaresultrowmodel)]|true|none|Forfeited competitors. Is empty if no one has forfeited.|
+|results|[[ParticipationRowModel](#schemaparticipationrowmodel)]|true|none|Current results in order. Forfeited are not yet listed|
+|forfeited|[[ParticipationRowModel](#schemaparticipationrowmodel)]|true|none|Forfeited competitors. Is empty if no one has forfeited. These are<br>not returned in any special order.|
 |upcomingCompetitorModels|[[UpcomingCompetitorModel](#schemaupcomingcompetitormodel)]|true|none|Upcoming competitors. First is in zero index.<br>This can be empty, if no competitors are remaining.|
 
 <h2 id="tocS_ParticipationModel">ParticipationModel</h2>
@@ -1303,19 +1307,19 @@ This is generated on the fly.
 
 ```json
 {
-  "division": "string",
-  "id": 0,
+  "division": "Senior Women",
+  "id": 123,
   "competitors": [
     {
-      "name": "string",
-      "team": "string"
+      "name": "Matt Smith",
+      "team": "Team Pole Queens"
     }
   ],
   "result": {
-    "total": 0,
-    "artisticScore": 0,
-    "executionScore": 0,
-    "difficultyScore": 0,
+    "total": 127.266,
+    "artisticScore": 59.266,
+    "executionScore": 70.333,
+    "difficultyScore": 12.8,
     "headJudgePenalty": 0
   },
   "forfeit": true
@@ -1329,11 +1333,52 @@ Represents a participation in division by one or multiple competitors.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|division|string|true|none|Division name|
+|division|string|true|none|Division name. Should match some division in currently active<br>competition|
 |id|integer(int32)|true|none|Unique ID for these comeptitors|
 |competitors|[[CompetitorModel](#schemacompetitormodel)]|true|none|Competitors|
 |result|[PoleSportResultModel](#schemapolesportresultmodel)|false|none|Represents a score in Pole Dance Sport series|
-|forfeit|boolean|true|none|If true, this competitor has forfeited and should not have a result|
+|forfeit|boolean|true|none|If true, competitors are shown as forfeited for this division.<br><br>In this context, forfeit can happen if:<br>a) Competitor doesn't show up for competition<br>b) Competitor gets injured and is unable to continue<br>c) Competitor is disqualified<br><br>This doesn't care if it's competitor's fault or not, this just<br>means that competitors score is not shown.<br><br>This means following:<br>a) Results are not shown, if given.<br>b) These competitors are not shown schedule.<br>c) When listed, competitors are shown in the bottom part of the<br>listing.|
+
+<h2 id="tocS_ParticipationRowModel">ParticipationRowModel</h2>
+<!-- backwards compatibility -->
+<a id="schemaparticipationrowmodel"></a>
+<a id="schema_ParticipationRowModel"></a>
+<a id="tocSparticipationrowmodel"></a>
+<a id="tocsparticipationrowmodel"></a>
+
+```json
+{
+  "id": 0,
+  "competitors": [
+    {
+      "name": "Matt Smith",
+      "team": "Team Pole Queens"
+    }
+  ],
+  "result": {
+    "total": 127.266,
+    "artisticScore": 59.266,
+    "executionScore": 70.333,
+    "difficultyScore": 12.8,
+    "headJudgePenalty": 0
+  },
+  "forfeit": true
+}
+
+```
+
+This represents a finished or or otherwise resolved performance result.
+Result might be missing, if performance has been finished but has not been
+graded yet or if the competitor has forfeited.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|integer(int32)|true|none|Unique ID for these comeptitors|
+|competitors|[[CompetitorModel](#schemacompetitormodel)]|true|none|Competitors|
+|result|[PoleSportResultModel](#schemapolesportresultmodel)|false|none|Represents a score in Pole Dance Sport series|
+|forfeit|boolean|true|none|If true, competitors are shown as forfeited for this division.<br><br>In this context, forfeit can happen if:<br>a) Competitor doesn't show up for competition<br>b) Competitor gets injured and is unable to continue<br>c) Competitor is disqualified<br><br>This doesn't care if it's competitor's fault or not, this just<br>means that competitors score is not shown.<br><br>This means following:<br>a) Results are not shown, if given.<br>b) These competitors are not shown schedule.<br>c) When listed, competitors are shown in the bottom part of the<br>listing.|
 
 <h2 id="tocS_PerformanceResultsContentModel">PerformanceResultsContentModel</h2>
 <!-- backwards compatibility -->
@@ -1344,19 +1389,19 @@ Represents a participation in division by one or multiple competitors.
 
 ```json
 {
-  "division": "string",
-  "currentPlace": 0,
+  "division": "Senior Women",
+  "currentPlace": 1,
   "competitors": [
     {
-      "name": "string",
-      "team": "string"
+      "name": "Matt Smith",
+      "team": "Team Pole Queens"
     }
   ],
   "result": {
-    "total": 0,
-    "artisticScore": 0,
-    "executionScore": 0,
-    "difficultyScore": 0,
+    "total": 127.266,
+    "artisticScore": 59.266,
+    "executionScore": 70.333,
+    "difficultyScore": 12.8,
     "headJudgePenalty": 0
   }
 }
@@ -1370,8 +1415,8 @@ place it did achieve, if any.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|division|string|true|none|Name of the division. Example: Senior women|
-|currentPlace|integer(int32)¦null|false|none|Placement that the competitor(s) received with this result. This is null<br>If current place couldn't be calculated.|
+|division|string|true|none|Name of the division. Should match some division in currenlty active<br>competition.|
+|currentPlace|integer(int32)¦null|false|none|Placement that the competitor(s) received with this result. This is null<br>If current place couldn't be calculated.<br>Starts from 1.|
 |competitors|[[CompetitorModel](#schemacompetitormodel)]|true|none|Competitors that did the performance. This should contain at least one<br>item.|
 |result|[PoleSportResultModel](#schemapolesportresultmodel)|true|none|Represents a score in Pole Dance Sport series|
 
@@ -1387,19 +1432,19 @@ place it did achieve, if any.
   "version": "string",
   "type": "string",
   "content": {
-    "division": "string",
-    "currentPlace": 0,
+    "division": "Senior Women",
+    "currentPlace": 1,
     "competitors": [
       {
-        "name": "string",
-        "team": "string"
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
       }
     ],
     "result": {
-      "total": 0,
-      "artisticScore": 0,
-      "executionScore": 0,
-      "difficultyScore": 0,
+      "total": 127.266,
+      "artisticScore": 59.266,
+      "executionScore": 70.333,
+      "difficultyScore": 12.8,
       "headJudgePenalty": 0
     }
   }
@@ -1407,12 +1452,14 @@ place it did achieve, if any.
 
 ```
 
+Message containing performance results
+
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|version|string¦null|false|read-only|none|
-|type|string¦null|false|read-only|none|
+|version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |content|[PerformanceResultsContentModel](#schemaperformanceresultscontentmodel)|false|none|Describes a result for competitor(s) in for a single performance and what<br>place it did achieve, if any.|
 
 <h2 id="tocS_PoleResultFileModel">PoleResultFileModel</h2>
@@ -1424,9 +1471,9 @@ place it did achieve, if any.
 
 ```json
 {
-  "artisticScore": 0,
-  "executionScore": 0,
-  "difficultyScore": 0,
+  "artisticScore": 59.266,
+  "executionScore": 70.333,
+  "difficultyScore": 12.8,
   "headJudgePenalty": 0
 }
 
@@ -1452,10 +1499,10 @@ Represents a score in Pole Dance Sport series
 
 ```json
 {
-  "total": 0,
-  "artisticScore": 0,
-  "executionScore": 0,
-  "difficultyScore": 0,
+  "total": 127.266,
+  "artisticScore": 59.266,
+  "executionScore": 70.333,
+  "difficultyScore": 12.8,
   "headJudgePenalty": 0
 }
 
@@ -1473,47 +1520,6 @@ Represents a score in Pole Dance Sport series
 |difficultyScore|number(double)|true|none|Difficulty score (D)|
 |headJudgePenalty|number(double)|true|none|Head judge penalty (HJ). This is subtracted from the total.|
 
-<h2 id="tocS_ResultRowModel">ResultRowModel</h2>
-<!-- backwards compatibility -->
-<a id="schemaresultrowmodel"></a>
-<a id="schema_ResultRowModel"></a>
-<a id="tocSresultrowmodel"></a>
-<a id="tocsresultrowmodel"></a>
-
-```json
-{
-  "id": 0,
-  "competitors": [
-    {
-      "name": "string",
-      "team": "string"
-    }
-  ],
-  "result": {
-    "total": 0,
-    "artisticScore": 0,
-    "executionScore": 0,
-    "difficultyScore": 0,
-    "headJudgePenalty": 0
-  },
-  "forfeit": true
-}
-
-```
-
-This represents a finished or or otherwise resolved performance result.
-Result might be missing, if performance has been finished but has not been
-graded yet or if the competitor has forfeited.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|id|integer(int32)|true|none|Unique ID for these comeptitors|
-|competitors|[[CompetitorModel](#schemacompetitormodel)]|true|none|Competitors|
-|result|[PoleSportResultModel](#schemapolesportresultmodel)|false|none|Represents a score in Pole Dance Sport series|
-|forfeit|boolean|true|none|If true, this competitor has forfeited and should not have a result|
-
 <h2 id="tocS_UpcomingCompetitorModel">UpcomingCompetitorModel</h2>
 <!-- backwards compatibility -->
 <a id="schemaupcomingcompetitormodel"></a>
@@ -1523,11 +1529,11 @@ graded yet or if the competitor has forfeited.
 
 ```json
 {
-  "id": 0,
+  "id": 123,
   "competitors": [
     {
-      "name": "string",
-      "team": "string"
+      "name": "Matt Smith",
+      "team": "Team Pole Queens"
     }
   ]
 }
@@ -1541,5 +1547,5 @@ Represents an upcoming competitor.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |id|integer(int32)|true|none|Unique ID for these competitors|
-|competitors|[[CompetitorModel](#schemacompetitormodel)]|true|none|Competitor(s)|
+|competitors|[[CompetitorModel](#schemacompetitormodel)]|true|none|Competitor(s). Contains at least one entity.|
 

@@ -9,7 +9,7 @@ import type { CompetitorPositionFileModel } from './CompetitorPositionFileModel'
  */
 export type DivisionFileModel = {
     /**
-     * Name of the division. For example "Senior Wome" or "Mixed doubles"
+     * Name of the division.
      */
     name: string;
     /**

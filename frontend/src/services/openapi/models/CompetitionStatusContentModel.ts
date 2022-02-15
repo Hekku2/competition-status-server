@@ -14,7 +14,9 @@ export type CompetitionStatusContentModel = {
      */
     eventName: string;
     /**
-     * Timestamp indicating when this status was generated
+     * Timestamp indicating when this status was generated.
+     * This is always In UTC
+     * Format "yyyy-MM-ddTHH:mm:ss.fffZ"
      */
     createdAt: string;
     /**

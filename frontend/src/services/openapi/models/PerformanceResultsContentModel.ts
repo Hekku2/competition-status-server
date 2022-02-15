@@ -11,12 +11,14 @@ import type { PoleSportResultModel } from './PoleSportResultModel';
  */
 export type PerformanceResultsContentModel = {
     /**
-     * Name of the division. Example: Senior women
+     * Name of the division. Should match some division in currenlty active
+     * competition.
      */
     division: string;
     /**
      * Placement that the competitor(s) received with this result. This is null
      * If current place couldn't be calculated.
+     * Starts from 1.
      */
     currentPlace?: number | null;
     /**

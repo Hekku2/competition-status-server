@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 /**
- * Represents a single competitor. May be a part of team.
+ * Represents a single competitor in file. May be a part of team.
  */
 export type CompetitorFileModel = {
     /**

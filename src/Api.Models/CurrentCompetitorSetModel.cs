@@ -10,6 +10,7 @@ namespace Api.Models
         /// 
         /// If null is used, active competitor is cleared.
         /// </summary>
+        /// <example>123</example>
         public int? Id { get; set; }
     }
 }

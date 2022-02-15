@@ -8,8 +8,10 @@ namespace Api.Models
     public class DivisionFileModel
     {
         /// <summary>
-        /// Name of the division. For example "Senior Wome" or "Mixed doubles"
+        /// Name of the division.
         /// </summary>
+        /// <example>Senior Women</example>
+        /// <example>Mixed doubles</example>
         [Required]
         public string Name { get; set; } = null!;
 

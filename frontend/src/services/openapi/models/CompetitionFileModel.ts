@@ -12,7 +12,7 @@ import type { DivisionFileModel } from './DivisionFileModel';
  */
 export type CompetitionFileModel = {
     /**
-     * Name of the whole competition. Example: National finals 2022
+     * Name of the whole competition.
      */
     name: string;
     /**
