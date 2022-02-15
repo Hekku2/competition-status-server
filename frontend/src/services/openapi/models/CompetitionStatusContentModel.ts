@@ -10,11 +10,13 @@ import type { DivisionStatusModel } from './DivisionStatusModel';
  */
 export type CompetitionStatusContentModel = {
     /**
-     * Name of the event. Example: "National finals 2022"
+     * Name of the event. Example: National finals 2022
      */
     eventName: string;
     /**
-     * Timestamp indicating when this status was generated
+     * Timestamp indicating when this status was generated.
+     * This is always In UTC
+     * Format "yyyy-MM-ddTHH:mm:ss.fffZ"
      */
     createdAt: string;
     /**

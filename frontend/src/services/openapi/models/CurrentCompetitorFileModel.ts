@@ -14,11 +14,14 @@ export type CurrentCompetitorFileModel = {
      */
     id?: number | null;
     /**
-     * Division of competitor(s). Example: "Senior Women"
+     * Division of competitor(s). This should match some division in
+     * current competition.
      */
     division: string;
     /**
-     * Competitor(s)
+     * Competitor(s). This should have at least one value, but may have
+     * multiple values if there are multiple persons performing for single
+     * performance.
      */
     competitors: Array<CompetitorFileModel>;
 }

@@ -11,6 +11,8 @@ namespace Api.Models
         /// <summary>
         /// Name if the division. Example: "Senior women"
         /// </summary>
+        /// <example>Senior women</example>
+        /// <example>Mixed doubles</example>
         [Required]
         public string Name { get; set; } = null!;
 
@@ -18,13 +20,14 @@ namespace Api.Models
         /// Current results in order. Forfeited are not yet listed
         /// </summary>
         [Required]
-        public ResultRowModel[] Results { get; set; } = null!;
+        public ParticipationRowModel[] Results { get; set; } = null!;
 
         /// <summary>
-        /// Forfeited competitors. Is empty if no one has forfeited.
+        /// Forfeited competitors. Is empty if no one has forfeited. These are
+        /// not returned in any special order.
         /// </summary>
         [Required]
-        public ResultRowModel[] Forfeited { get; set; } = null!;
+        public ParticipationRowModel[] Forfeited { get; set; } = null!;
 
         /// <summary>
         /// Upcoming competitors. First is in zero index.

@@ -8,14 +8,18 @@ namespace Api.Models
     public class CompetitionStatusContentModel
     {
         /// <summary>
-        /// Name of the event. Example: "National finals 2022"
+        /// Name of the event. Example: National finals 2022
         /// </summary>
+        /// <example>National finals 2022</example>
         [Required]
         public string EventName { get; set; } = null!;
 
         /// <summary>
-        /// Timestamp indicating when this status was generated
+        /// Timestamp indicating when this status was generated.
+        /// This is always In UTC
+        /// Format "yyyy-MM-ddTHH:mm:ss.fffZ"
         /// </summary>
+        /// <example>2022-02-15T19:14:25.004Z</example>
         [Required]
         public string CreatedAt { get; set; } = null!;
 

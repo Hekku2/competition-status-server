@@ -6,11 +6,11 @@ namespace Api.Models
     public class CurrentCompetitorSetModel
     {
         /// <summary>
-        /// ID of currently active competitor (or who is performing next if no
-        /// one is active).
+        /// ID of currently active competitor (or who is performing next if no one is active).
         /// 
         /// If null is used, active competitor is cleared.
         /// </summary>
+        /// <example>123</example>
         public int? Id { get; set; }
     }
 }

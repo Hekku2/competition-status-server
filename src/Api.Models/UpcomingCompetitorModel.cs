@@ -10,11 +10,12 @@ namespace Api.Models
         /// <summary>
         /// Unique ID for these competitors
         /// </summary>
+        /// <example>123</example>
         [Required]
         public int Id { get; set; }
 
         /// <summary>
-        /// Competitor(s)
+        /// Competitor(s). Contains at least one entity.
         /// </summary>
         [Required]
         public CompetitorModel[] Competitors { get; set; } = null!;
