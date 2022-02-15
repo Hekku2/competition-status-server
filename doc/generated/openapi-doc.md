@@ -1170,11 +1170,13 @@ when no other competitor is not active.
 
 ```
 
+Model used to set ID of current competitor(s)
+
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|integer(int32)¦null|false|none|none|
+|id|integer(int32)¦null|false|none|ID of currently active competitor (or who is performing next if no one is active).<br><br>If null is used, active competitor is cleared.|
 
 <h2 id="tocS_DivisionFileModel">DivisionFileModel</h2>
 <!-- backwards compatibility -->
