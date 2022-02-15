@@ -21,7 +21,8 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "typescript": "^4.4.2",
-    "web-vitals": "^2.1.0"
+    "web-vitals": "^2.1.0",
+    "widdershins": "^4.0.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.178",

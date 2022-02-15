@@ -11,13 +11,13 @@ import type { DivisionFileModel } from './DivisionFileModel';
  * that can be saved to file.
  */
 export type CompetitionFileModel = {
-    /**
-     * Name of the whole competition. Example: "National finals 2022"
-     */
-    name: string;
-    /**
-     * Divisions for this competition.
-     */
-    divisions: Array<DivisionFileModel>;
-    currentCompetitor?: CurrentCompetitorFileModel;
+  /**
+   * Name of the whole competition. Example: National finals 2022
+   */
+  name: string;
+  /**
+   * Divisions for this competition.
+   */
+  divisions: Array<DivisionFileModel>;
+  currentCompetitor?: CurrentCompetitorFileModel;
 }

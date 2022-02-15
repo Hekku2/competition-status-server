@@ -1,6 +1,0 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
-
-ENV PATH="/root/.dotnet/tools:${PATH}"
-RUN dotnet tool install --global DefaultDocumentation.Console --version 0.7.9
-
-ENTRYPOINT ["defaultdocumentation"]

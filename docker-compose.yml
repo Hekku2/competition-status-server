@@ -8,6 +8,7 @@ services:
     working_dir: /app
     volumes:
       - ./frontend/:/app
+      - ./doc/generated/:/doc
     ports:
       - '3000:3000'
     depends_on:
@@ -53,7 +54,7 @@ services:
       - frontend
 
   test:
-    container_name:  competition-status-test
+    container_name: competition-status-test
     build:
       context: src/.
       dockerfile: Dockerfile.test
@@ -65,8 +66,8 @@ services:
 
   doc:
     container_name: competition-status-doc-generator
-    build:
-      context: tools/.
-      dockerfile: Dockerfile.doc
+    image: tchaypo/widdershins
+    depends_on:
+      - 'api'
     volumes:
-      - ./:/project
+      - ./:/local

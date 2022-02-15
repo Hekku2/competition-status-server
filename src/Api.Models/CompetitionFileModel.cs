@@ -10,7 +10,7 @@ namespace Api.Models
     public class CompetitionFileModel
     {
         /// <summary>
-        /// Name of the whole competition. Example: "National finals 2022"
+        /// Name of the whole competition. Example: National finals 2022
         /// </summary>
         [Required]
         public string Name { get; set; } = null!;

@@ -8,7 +8,7 @@ namespace Api.Models
     public class CompetitionStatusContentModel
     {
         /// <summary>
-        /// Name of the event. Example: "National finals 2022"
+        /// Name of the event. Example: National finals 2022
         /// </summary>
         [Required]
         public string EventName { get; set; } = null!;
