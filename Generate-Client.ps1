@@ -11,7 +11,7 @@ $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
 $apiLocation = 'http://api/swagger/v1/swagger.json'
-$apiLocation2 = 'http://api/swagger/v1/swagger.yaml'
+$yaml = 'http://api/swagger/v1/swagger.yaml'
 $apiContainerName = 'api'
 $frontEndContainerName = 'frontend'
 
@@ -21,6 +21,15 @@ docker-compose up -d $apiContainerName
 Start-Sleep -Seconds 10
 
 docker-compose run --user "$(id -u):$(id -g)" $frontEndContainerName yarn openapi -i $apiLocation -o src/services/openapi
-docker-compose run --user "$(id -u):$(id -g)" $frontEndContainerName yarn widdershins $apiLocation2 --language_tabs 'http:HTTP' -o /doc/openapi-doc.md
+docker-compose run --user "$(id -u):$(id -g)" $frontEndContainerName yarn widdershins $yaml --language_tabs 'http:HTTP' -o /doc/openapi-doc.md
+
+
+docker run `
+    --user "$(id -u):$(id -g)" `
+    --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate `
+    -i 'http://host.docker.internal:5000/swagger/v1/swagger.json' `
+    -g csharp-netcore `
+    --validatable false `
+    -o /local/temp
 
 docker-compose stop $apiContainerName

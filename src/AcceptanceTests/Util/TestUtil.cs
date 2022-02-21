@@ -1,18 +1,16 @@
-using Api.Models;
+using System.Collections.Generic;
+using System.Linq;
+using Org.OpenAPITools.Model;
 
 namespace AcceptanceTests.Util;
 
 public static class TestUtil
 {
-    public static CompetitorFileModel[] CreateSingleCompetitor(string name, string team)
+    public static List<CompetitorFileModel> CreateSingleCompetitor(string name, string team)
     {
         return new CompetitorFileModel[]
         {
-            new CompetitorFileModel
-            {
-                Name = name,
-                Team = team
-            }
-        };
+            new CompetitorFileModel(name, team)
+        }.ToList();
     }
 }

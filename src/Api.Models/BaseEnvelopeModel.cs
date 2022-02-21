@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Api.Models
 {
     /// <summary>
@@ -10,12 +12,14 @@ namespace Api.Models
         /// Envelope version number. Version can be discarded if no
         /// functionality is specified for given version
         /// </summary>
+        [Required]
         public string Version { get; protected set; } = null!;
 
         /// <summary>
         /// Type of the message. This and version can be used to identify
         /// correct parser for this message.
         /// </summary>
+        [Required]
         public string Type { get; protected set; } = null!;
 
         /// <summary>

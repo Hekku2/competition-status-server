@@ -1,27 +1,24 @@
 using System;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using AcceptanceTests.Util;
-using Api.Hubs;
-using Api.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.SignalR.Client;
 using NUnit.Framework;
-using RestSharp;
-using RestSharp.Serializers.Json;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Model;
 
 namespace AcceptanceTests;
 
 public class ScoreboardTests
 {
-    private RestClient _client;
-
+    private ScoreboardApi _client;
     private ScoreboardStatusModel _latestMessage;
     private CancellationTokenSource _source;
 
-    private const string ApiName = "Scoreboard";
     private const string HubName = "scoreboard-hub";
 
     [SetUp]
@@ -40,27 +37,28 @@ public class ScoreboardTests
             .Build();
 
         await connection.StartAsync(_source.Token);
-        var channel = await connection.StreamAsChannelAsync<ScoreboardStatusModel>(nameof(ScoreboardHub.StreamScoreboardStatus));
+        var channel = await connection.StreamAsChannelAsync<ScoreboardStatusModel>("StreamScoreboardStatus");
         _ = channel.ReadUntilStopped((item) =>
         {
             _latestMessage = item;
         }, _source.Token);
 
-        _client = new RestClient($"{uri}{ApiName}");
-        _client.UseSystemTextJson(new JsonSerializerOptions
-        {
-            Converters =
-            {
-                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-            }
-        });
+        _client = new ScoreboardApi(uri);
     }
 
     [Test]
     public async Task ScoreboardModeChanges()
     {
-        var response = await _client.GetJsonAsync<ScoreboardStatusModel>("", _source.Token);
+        await ChangeAndVerify(ScoreboardModeModel.CompetitorResults);
+        await ChangeAndVerify(ScoreboardModeModel.DivisionStatus);
+        await ChangeAndVerify(ScoreboardModeModel.UpcomingCompetitors);
+        await ChangeAndVerify(ScoreboardModeModel.Unknown);
+    }
 
-        response.ScoreboardMode.Should().Be(ScoreboardModeModel.Unknown, "Initial status should be unknown");
+    private async Task ChangeAndVerify(ScoreboardModeModel model)
+    {
+        await _client.ScoreboardSetScoreboardModeAsync(model);
+        var newStatus = await _client.ScoreboardGetStatusAsync(_source.Token);
+        newStatus.ScoreboardMode.Should().Be(model);
     }
 }

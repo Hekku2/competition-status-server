@@ -1,23 +1,23 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AcceptanceTests.Util;
-using Api.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.SignalR.Client;
 using NUnit.Framework;
-using RestSharp;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Model;
 
 namespace AcceptanceTests;
 
 public class MessagingTests
 {
-    private RestClient _client;
+    private CompetitionApi _client;
 
     private CurrentCompetitorEnvelopeModel _latesCurrentCompetitor;
     private PerformanceResultsEnvelopeModel _latestPerformanceResults;
     private CancellationTokenSource _source;
-    private const string ApiName = "Competition";
 
     [SetUp]
     public async Task Setup()
@@ -50,7 +50,7 @@ public class MessagingTests
 
         _latesCurrentCompetitor = null;
         _latestPerformanceResults = null;
-        _client = new RestClient($"{uri}{ApiName}");
+        _client = new CompetitionApi(uri);
     }
 
     [TearDown]
@@ -62,27 +62,27 @@ public class MessagingTests
     [Test]
     public async Task SettingResultHasEvent_SendsMessage()
     {
-        var model = new CompetitionFileModel
+        var model = new CompetitionFileModel("", new List<DivisionFileModel>())
         {
             Name = "New competition",
-            Divisions = new[]
+            Divisions = new List<DivisionFileModel>
             {
-                new DivisionFileModel
+                new DivisionFileModel("", new List<CompetitorPositionFileModel>())
                 {
                     Name = "Senior Women",
-                    Items = new []
+                    Items = new List<CompetitorPositionFileModel>
                     {
-                        new CompetitorPositionFileModel
+                        new CompetitorPositionFileModel(competitors: new List<CompetitorFileModel>())
                         {
                             Id = 1,
                             Competitors = TestUtil.CreateSingleCompetitor("expected name", "my team"),
                             Results = null,
                         },
-                        new CompetitorPositionFileModel
+                        new CompetitorPositionFileModel(competitors: new List<CompetitorFileModel>())
                         {
                             Id = 2,
                             Competitors = TestUtil.CreateSingleCompetitor("I should be first", "my team"),
-                            Results = new PoleResultFileModel
+                            Results = new PoleResultFileModel(0, 0, 0, 0)
                             {
                                 ArtisticScore = 199,
                                 DifficultyScore = 2,
@@ -90,11 +90,11 @@ public class MessagingTests
                                 HeadJudgePenalty = 0
                             },
                         },
-                        new CompetitorPositionFileModel
+                        new CompetitorPositionFileModel(competitors: new List<CompetitorFileModel>())
                         {
                             Id = 3,
                             Competitors = TestUtil.CreateSingleCompetitor("I should be third", "my team"),
-                            Results = new PoleResultFileModel
+                            Results = new PoleResultFileModel(0, 0, 0, 0)
                             {
                                 ArtisticScore = 0,
                                 DifficultyScore = 2,
@@ -102,11 +102,11 @@ public class MessagingTests
                                 HeadJudgePenalty = 100
                             },
                         },
-                        new CompetitorPositionFileModel
+                        new CompetitorPositionFileModel(competitors: new List<CompetitorFileModel>())
                         {
                             Id = 4,
                             Competitors = TestUtil.CreateSingleCompetitor("I should not be included", "my team"),
-                            Results = new PoleResultFileModel
+                            Results = new PoleResultFileModel(0, 0, 0, 0)
                             {
                                 ArtisticScore = 199,
                                 DifficultyScore = 992,
@@ -119,13 +119,12 @@ public class MessagingTests
                 }
             }
         };
-        var result = await _client.PostJsonAsync("upload-competition", model, _source.Token);
-        result.Should().Be(System.Net.HttpStatusCode.OK);
+        await _client.CompetitionUploadCompetitionAsync(model, _source.Token);
 
         var resultModel = new CompetitorResultModel
         {
             Id = 1,
-            Results = new PoleResultFileModel
+            Results = new PoleResultFileModel(0, 0, 0, 0)
             {
                 ArtisticScore = 1,
                 DifficultyScore = 2,
@@ -133,8 +132,7 @@ public class MessagingTests
                 HeadJudgePenalty = 0
             }
         };
-        var setResuttResult = await _client.PostJsonAsync("set-result", resultModel, _source.Token);
-        setResuttResult.Should().Be(System.Net.HttpStatusCode.OK);
+        await _client.CompetitionSetResultAsync(resultModel, _source.Token);
 
         await Task.Delay(1000);
         _latestPerformanceResults.Should().NotBeNull();

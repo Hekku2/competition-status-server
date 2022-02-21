@@ -1,14 +1,13 @@
 using System;
 using System.Threading.Tasks;
-using FluentAssertions;
 using NUnit.Framework;
-using RestSharp;
+using Org.OpenAPITools.Api;
 
 namespace AcceptanceTests
 {
     public class MinimumTests
     {
-        private RestClient _client;
+        private HomeApi _client;
 
         [SetUp]
         public void Setup()
@@ -18,15 +17,14 @@ namespace AcceptanceTests
             {
                 Assert.Inconclusive("URI not set. Unable to execute acceptance tests.");
             }
-            _client = new RestClient(uri);
+
+            _client = new HomeApi(uri);
         }
 
         [Test]
         public async Task GetHealth_ReturnsOk()
         {
-            var request = new RestRequest();
-            var response = await _client.GetAsync(request, System.Threading.CancellationToken.None);
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            await _client.HomeGetHealthAsync();
         }
     }
 }

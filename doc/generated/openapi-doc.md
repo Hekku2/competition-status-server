@@ -139,8 +139,8 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[PerformanceResultsEnvelopeModel](#schemaperformanceresultsenvelopemodel)]|false|none|[Message containing performance results]|
-|» version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
-|» type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
+|» version|string|true|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|» type|string|true|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |» content|[PerformanceResultsContentModel](#schemaperformanceresultscontentmodel)|false|none|Describes a result for competitor(s) in for a single performance and what<br>place it did achieve, if any.|
 |»» division|string|true|none|Name of the division. Should match some division in currenlty active<br>competition.|
 |»» currentPlace|integer(int32)¦null|false|none|Placement that the competitor(s) received with this result. This is null<br>If current place couldn't be calculated.<br>Starts from 1.|
@@ -972,8 +972,8 @@ If competition is not active, Content can be null.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
-|type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
+|version|string|true|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|type|string|true|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |content|[CompetitionStatusContentModel](#schemacompetitionstatuscontentmodel)|false|none|Current status of the competition.|
 
 <h2 id="tocS_CompetitorEntity">CompetitorEntity</h2>
@@ -1174,8 +1174,8 @@ is performing currently or is performing next, if no one is performing.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
-|type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
+|version|string|true|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|type|string|true|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |content|[CurrentCompetitorContentModel](#schemacurrentcompetitorcontentmodel)|false|none|Represents current competitor who is performing or performing next<br>when no other competitor is not active.|
 
 <h2 id="tocS_CurrentCompetitorFileModel">CurrentCompetitorFileModel</h2>
@@ -1537,8 +1537,8 @@ Message containing performance results
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
-|type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
+|version|string|true|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|type|string|true|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |content|[PerformanceResultsContentModel](#schemaperformanceresultscontentmodel)|false|none|Describes a result for competitor(s) in for a single performance and what<br>place it did achieve, if any.|
 
 <h2 id="tocS_PoleResultFileModel">PoleResultFileModel</h2>

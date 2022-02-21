@@ -13,11 +13,11 @@ export type CompetitionStatusEnvelopeModel = {
      * Envelope version number. Version can be discarded if no
      * functionality is specified for given version
      */
-    readonly version?: string | null;
+    readonly version: string;
     /**
      * Type of the message. This and version can be used to identify
      * correct parser for this message.
      */
-    readonly type?: string | null;
+    readonly type: string;
     content?: CompetitionStatusContentModel;
 }
