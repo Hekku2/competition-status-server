@@ -1,8 +1,8 @@
 import { ListItem, ListItemText, Typography } from "@mui/material";
-import { ResultRowModel } from "../../services/openapi";
+import { ParticipationRowModel } from "../../services/openapi";
 
 type CompetitorResultListItemProps = {
-  competitor: ResultRowModel
+  competitor: ParticipationRowModel
 }
 
 export const CompetitorResultListItem = ({ competitor }: CompetitorResultListItemProps) => {
