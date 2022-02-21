@@ -31,6 +31,6 @@ export type { UpcomingCompetitorModel } from './models/UpcomingCompetitorModel';
 
 export { CompetitionService } from './services/CompetitionService';
 export { CompetitorService } from './services/CompetitorService';
+export { HomeService } from './services/HomeService';
 export { ScoreboardService } from './services/ScoreboardService';
-export { StatusService } from './services/StatusService';
 export { TestService } from './services/TestService';

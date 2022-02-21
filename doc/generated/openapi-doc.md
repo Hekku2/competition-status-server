@@ -581,6 +581,31 @@ Status Code **200**
 This operation does not require authentication
 </aside>
 
+<h1 id="competition-status-api-home">Home</h1>
+
+## HomeGetHealth
+
+<a id="opIdHomeGetHealth"></a>
+
+> Code samples
+
+```http
+GET / HTTP/1.1
+
+```
+
+`GET /`
+
+<h3 id="homegethealth-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 <h1 id="competition-status-api-scoreboard">Scoreboard</h1>
 
 ## ScoreboardGetStatus
@@ -617,31 +642,6 @@ Accept: text/plain
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|[ScoreboardStatusModel](#schemascoreboardstatusmodel)|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-<h1 id="competition-status-api-status">Status</h1>
-
-## StatusGetHealth
-
-<a id="opIdStatusGetHealth"></a>
-
-> Code samples
-
-```http
-GET / HTTP/1.1
-
-```
-
-`GET /`
-
-<h3 id="statusgethealth-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|None|
 
 <aside class="success">
 This operation does not require authentication
