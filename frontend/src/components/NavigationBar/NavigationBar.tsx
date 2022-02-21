@@ -2,7 +2,7 @@ import { Card } from "@mui/material"
 import { TopNavLink } from "."
 
 type ContentBarProps = {
-  children: any
+  children: React.ReactNode
 }
 
 const ContentBar = ({ children }: ContentBarProps) => {
@@ -24,6 +24,7 @@ export const NavigationBar = () => {
     <ContentBar>
       <TopNavLink to="/" text="Main" />
       <TopNavLink to="/competitors" text="Competitors" />
+      <TopNavLink to="/scoreboard" text="Scoreboard" />
     </ContentBar>
   )
 }
