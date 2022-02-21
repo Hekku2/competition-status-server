@@ -1,4 +1,6 @@
 using Api.Models;
+using Api.Services.Interfaces;
+using Api.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -7,13 +9,21 @@ namespace Api.Controllers
     [Route("[controller]")]
     public class ScoreboardController : ControllerBase
     {
+        private readonly IScoreboardService _scoreboardService;
+
+        public ScoreboardController(IScoreboardService scoreboardService)
+        {
+            _scoreboardService = scoreboardService;
+        }
+
         [HttpGet]
         [Route("")]
         public ScoreboardStatusModel GetStatus()
         {
+            var current = _scoreboardService.GetScoreboardMode();
             return new ScoreboardStatusModel
             {
-
+                ScoreboardMode = current.ToScoreboardModeModel()
             };
         }
     }

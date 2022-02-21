@@ -13,5 +13,11 @@ namespace Api.Services.Interfaces
         /// </summary>
         /// <returns>ScoreboardMode enum</returns>
         IObservable<ScoreboardMode> GetScoreboardModeObservable();
+
+        /// <summary>
+        /// Current scoreboard mode
+        /// </summary>
+        /// <returns>Current mode or Unknown</returns>
+        ScoreboardMode GetScoreboardMode();
     }
 }

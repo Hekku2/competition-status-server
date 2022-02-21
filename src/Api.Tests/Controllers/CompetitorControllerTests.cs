@@ -1,10 +1,8 @@
 using System;
 using System.Linq;
-using Api.Models;
 using Api.Services.Interfaces;
 using DataAccess.Entity;
 using FluentAssertions;
-using FluentAssertions.Primitives;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;

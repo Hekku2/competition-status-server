@@ -57,6 +57,11 @@ namespace Api.Services.Implementations
             return _currentScoreboardMode;
         }
 
+        public ScoreboardMode GetScoreboardMode()
+        {
+            return _currentScoreboardMode.Value;
+        }
+
         public void UpdateCurrentCompetitor(CurrentCompetitorsEntity? competitor)
         {
             _currentCompetitor.OnNext(competitor);
