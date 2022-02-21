@@ -6,130 +6,118 @@ using Api.Services.Interfaces;
 using Api.Util;
 using DataAccess.Entity;
 
-namespace Api.Services.Implementations
+namespace Api.Services.Implementations;
+
+/// <summary>
+/// TODO Make a proper implementation which actually saves the competition entity to database
+/// </summary>
+public class CompetitionService : ICompetitionService, ICompetitionStatusService
 {
-    /// <summary>
-    /// TODO Make a proper implementation which actually saves the competition entity to database
-    /// </summary>
-    public class CompetitionService : ICompetitionService, ICompetitionStatusService, IScoreboardService
+    private readonly BehaviorSubject<CurrentCompetitorsEntity?> _currentCompetitor = new(null);
+    private readonly Subject<PerformanceResultsEntity> _performanceResults = new();
+
+    private readonly ConcurrentQueue<PerformanceResultsEntity> _concurrentQueue = new();
+
+    private CompetitionEntity? _competitionEntity;
+
+    public void UploadCompetition(CompetitionEntity entity)
     {
-        private readonly BehaviorSubject<CurrentCompetitorsEntity?> _currentCompetitor = new(null);
-        private readonly BehaviorSubject<ScoreboardMode> _currentScoreboardMode = new(ScoreboardMode.Unknown);
-        private readonly Subject<PerformanceResultsEntity> _performanceResults = new();
+        _competitionEntity = entity;
+        _currentCompetitor.OnNext(_competitionEntity.CurrentCompetitor);
+    }
 
-        private readonly ConcurrentQueue<PerformanceResultsEntity> _concurrentQueue = new();
+    public CompetitionEntity? GetCurrentState()
+    {
+        return _competitionEntity;
+    }
 
-        private CompetitionEntity? _competitionEntity;
+    public CurrentCompetitorsEntity? GetCurrentCompetitor()
+    {
+        return _currentCompetitor.Value;
+    }
 
-        public void UploadCompetition(CompetitionEntity entity)
+    public PerformanceResultsEntity[] GetReportedResults()
+    {
+        return _concurrentQueue.ToArray();
+    }
+
+    public IObservable<PerformanceResultsEntity> GetPerformanceResultsObservable()
+    {
+        return _performanceResults;
+    }
+
+    public IObservable<CurrentCompetitorsEntity?> GetCurrentCompetitorObservable()
+    {
+        return _currentCompetitor;
+    }
+
+    public void UpdateCurrentCompetitor(CurrentCompetitorsEntity? competitor)
+    {
+        _currentCompetitor.OnNext(competitor);
+    }
+
+    public void UpdateCurrentCompetitor(int? id)
+    {
+        var competition = GetCurrentState() ?? throw new InvalidOperationException("No competition set!");
+        if (id is null)
         {
-            _competitionEntity = entity;
-            _currentCompetitor.OnNext(_competitionEntity.CurrentCompetitor);
+            competition.CurrentCompetitor = null;
+            UpdateCurrentCompetitor((CurrentCompetitorsEntity?)null);
+            return;
         }
 
-        public CompetitionEntity? GetCurrentState()
+        var (division, order) = GetForCurrentCompetitorsEntity(competition, id.Value);
+        var entity = new CurrentCompetitorsEntity
         {
-            return _competitionEntity;
-        }
+            Id = order.Id,
+            Division = division.Name,
+            Competitors = order.Competitors,
+        };
+        competition.CurrentCompetitor = entity;
+        UpdateCurrentCompetitor(entity);
+    }
 
-        public CurrentCompetitorsEntity? GetCurrentCompetitor()
+    public void UpdateResults(int id, PoleDanceResultEntity? results)
+    {
+        var competition = GetCurrentState() ?? throw new InvalidOperationException("No competition set!");
+        foreach (var division in competition.Divisions)
         {
-            return _currentCompetitor.Value;
-        }
-
-        public PerformanceResultsEntity[] GetReportedResults()
-        {
-            return _concurrentQueue.ToArray();
-        }
-
-        public IObservable<PerformanceResultsEntity> GetPerformanceResultsObservable()
-        {
-            return _performanceResults;
-        }
-
-        public IObservable<CurrentCompetitorsEntity?> GetCurrentCompetitorObservable()
-        {
-            return _currentCompetitor;
-        }
-
-        public IObservable<ScoreboardMode> GetScoreboardModeObservable()
-        {
-            return _currentScoreboardMode;
-        }
-
-        public ScoreboardMode GetScoreboardMode()
-        {
-            return _currentScoreboardMode.Value;
-        }
-
-        public void UpdateCurrentCompetitor(CurrentCompetitorsEntity? competitor)
-        {
-            _currentCompetitor.OnNext(competitor);
-        }
-
-        public void UpdateCurrentCompetitor(int? id)
-        {
-            var competition = GetCurrentState() ?? throw new InvalidOperationException("No competition set!");
-            if (id is null)
+            foreach (var competitionOrder in division.CompetitionOrder)
             {
-                competition.CurrentCompetitor = null;
-                UpdateCurrentCompetitor((CurrentCompetitorsEntity?)null);
-                return;
-            }
-
-            var (division, order) = GetForCurrentCompetitorsEntity(competition, id.Value);
-            var entity = new CurrentCompetitorsEntity
-            {
-                Id = order.Id,
-                Division = division.Name,
-                Competitors = order.Competitors,
-            };
-            competition.CurrentCompetitor = entity;
-            UpdateCurrentCompetitor(entity);
-        }
-
-        public void UpdateResults(int id, PoleDanceResultEntity? results)
-        {
-            var competition = GetCurrentState() ?? throw new InvalidOperationException("No competition set!");
-            foreach (var division in competition.Divisions)
-            {
-                foreach (var competitionOrder in division.CompetitionOrder)
+                if (competitionOrder.Id == id)
                 {
-                    if (competitionOrder.Id == id)
-                    {
-                        competitionOrder.Result = results;
+                    competitionOrder.Result = results;
 
-                        if (results is not null)
+                    if (results is not null)
+                    {
+                        var entity = new PerformanceResultsEntity
                         {
-                            var entity = new PerformanceResultsEntity
-                            {
-                                Division = division.Name,
-                                Result = results,
-                                Competitors = competitionOrder.Competitors,
-                                CurrentPlace = CompetitionOrderUtil.CalculatePlacement(division.CompetitionOrder, id)
-                            };
-                            _concurrentQueue.Enqueue(entity);
-                            _performanceResults.OnNext(entity);
-                        }
+                            Division = division.Name,
+                            Result = results,
+                            Competitors = competitionOrder.Competitors,
+                            CurrentPlace = CompetitionOrderUtil.CalculatePlacement(division.CompetitionOrder, id)
+                        };
+                        _concurrentQueue.Enqueue(entity);
+                        _performanceResults.OnNext(entity);
                     }
                 }
             }
         }
+    }
 
-        private static (DivisionEntity, CompetitionOrderEntity) GetForCurrentCompetitorsEntity(CompetitionEntity competition, int id)
-        {
-            var matches =
-                from division in competition.Divisions
-                from order in division.CompetitionOrder
-                where order.Id == id
-                select new
-                {
-                    Division = division,
-                    CompetitionOrder = order
-                };
+    private static (DivisionEntity, CompetitionOrderEntity) GetForCurrentCompetitorsEntity(CompetitionEntity competition, int id)
+    {
+        var matches =
+            from division in competition.Divisions
+            from order in division.CompetitionOrder
+            where order.Id == id
+            select new
+            {
+                Division = division,
+                CompetitionOrder = order
+            };
 
-            var match = matches.First();
-            return (match.Division, match.CompetitionOrder);
-        }
+        var match = matches.First();
+        return (match.Division, match.CompetitionOrder);
     }
 }

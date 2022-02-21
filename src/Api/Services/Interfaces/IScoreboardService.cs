@@ -19,5 +19,11 @@ namespace Api.Services.Interfaces
         /// </summary>
         /// <returns>Current mode or Unknown</returns>
         ScoreboardMode GetScoreboardMode();
+
+        /// <summary>
+        /// Set scoreboard mode. If same as current, this is no-op.
+        /// </summary>
+        /// <param name="mode">New scoreboard mode</param>
+        void SetScoreboardMode(ScoreboardMode mode);
     }
 }

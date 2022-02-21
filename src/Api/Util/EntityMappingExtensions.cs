@@ -118,16 +118,13 @@ public static class EntityMappingExtensions
         Result = entity.Result.ToPoleSportResultModel()
     };
 
-    public static ScoreboardModeModel ToScoreboardModeModel(this ScoreboardMode entity)
+    public static ScoreboardModeModel ToScoreboardModeModel(this ScoreboardMode entity) => entity switch
     {
-        return entity switch
-        {
-            ScoreboardMode.Unknown => ScoreboardModeModel.Unknown,
-            ScoreboardMode.DivisionStatus => ScoreboardModeModel.DivisionStatus,
-            ScoreboardMode.CompetitorResults => ScoreboardModeModel.CompetitorResults,
-            ScoreboardMode.UpcomingCompetitors => ScoreboardModeModel.UpcomingCompetitors,
-            _ => ScoreboardModeModel.Unknown,
-        };
-    }
+        ScoreboardMode.Unknown => ScoreboardModeModel.Unknown,
+        ScoreboardMode.DivisionStatus => ScoreboardModeModel.DivisionStatus,
+        ScoreboardMode.CompetitorResults => ScoreboardModeModel.CompetitorResults,
+        ScoreboardMode.UpcomingCompetitors => ScoreboardModeModel.UpcomingCompetitors,
+        _ => ScoreboardModeModel.Unknown,
+    };
 }
 

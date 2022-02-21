@@ -32,4 +32,12 @@ public class ScoreboardControllerTests
         result.Should().NotBeNull();
         result.ScoreboardMode.Should().Be(ScoreboardModeModel.DivisionStatus);
     }
+
+    [Test]
+    public void SetScoreboardMode_CallsService()
+    {
+        _controller.SetScoreboardMode(ScoreboardModeModel.DivisionStatus);
+
+        _mockScoreboardService.Received().SetScoreboardMode(ScoreboardMode.DivisionStatus);
+    }
 }

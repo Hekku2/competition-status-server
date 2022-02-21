@@ -647,6 +647,44 @@ Accept: text/plain
 This operation does not require authentication
 </aside>
 
+## ScoreboardSetScoreboardMode
+
+<a id="opIdScoreboardSetScoreboardMode"></a>
+
+> Code samples
+
+```http
+PUT /Scoreboard/set-mode HTTP/1.1
+
+```
+
+`PUT /Scoreboard/set-mode`
+
+<h3 id="scoreboardsetscoreboardmode-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|mode|query|[ScoreboardModeModel](#schemascoreboardmodemodel)|false|none|
+
+#### Enumerated Values
+
+|Parameter|Value|
+|---|---|
+|mode|Unknown|
+|mode|DivisionStatus|
+|mode|CompetitorResults|
+|mode|UpcomingCompetitors|
+
+<h3 id="scoreboardsetscoreboardmode-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 <h1 id="competition-status-api-test">Test</h1>
 
 ## TestLoadPoleCompetitionData

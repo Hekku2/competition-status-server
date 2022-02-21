@@ -26,5 +26,12 @@ namespace Api.Controllers
                 ScoreboardMode = current.ToScoreboardModeModel()
             };
         }
+
+        [HttpPut]
+        [Route("set-mode")]
+        public void SetScoreboardMode(ScoreboardModeModel mode)
+        {
+            _scoreboardService.SetScoreboardMode(mode.ToScoreboardMode());
+        }
     }
 }

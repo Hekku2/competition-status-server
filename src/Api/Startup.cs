@@ -59,7 +59,7 @@ public class Startup
         services.AddSingleton<CompetitionService>();
         services.AddTransient<ICompetitionService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
         services.AddTransient<ICompetitionStatusService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
-        services.AddTransient<IScoreboardService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
+        services.AddSingleton<IScoreboardService, ScoreboardService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

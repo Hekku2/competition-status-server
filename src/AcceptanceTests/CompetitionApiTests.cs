@@ -9,81 +9,82 @@ using Microsoft.AspNetCore.SignalR.Client;
 using NUnit.Framework;
 using RestSharp;
 
-namespace AcceptanceTests
+namespace AcceptanceTests;
+
+public class CompetitionApiTests
 {
-    public class CompetitionApiTests
+    private RestClient _client;
+
+    private CurrentCompetitorEnvelopeModel _latestMessage;
+    private CancellationTokenSource _source;
+    private const string ApiName = "Competition";
+    private const string HubName = "competition-hub";
+
+    [SetUp]
+    public async Task Setup()
     {
-        private RestClient _client;
-
-        private CurrentCompetitorEnvelopeModel _latestMessage;
-        private CancellationTokenSource _source;
-        private const string ApiName = "Competition";
-
-        [SetUp]
-        public async Task Setup()
+        var uri = Environment.GetEnvironmentVariable("APP_URI");
+        if (string.IsNullOrWhiteSpace(uri))
         {
-            var uri = Environment.GetEnvironmentVariable("APP_URI");
-            if (string.IsNullOrWhiteSpace(uri))
-            {
-                Assert.Inconclusive("URI not set. Unable to execute acceptance tests.");
-            }
-            _latestMessage = null;
-
-            var connection = new HubConnectionBuilder()
-                .WithUrl($"{uri}competition-hub")
-                .Build();
-
-            await connection.StartAsync();
-            var channel = await connection.StreamAsChannelAsync<CurrentCompetitorEnvelopeModel>("StreamCompetitors");
-            _source = new CancellationTokenSource();
-            _ = channel.ReadUntilStopped((item) =>
-            {
-                _latestMessage = item;
-            }, _source.Token);
-
-            _client = new RestClient($"{uri}{ApiName}");
+            Assert.Inconclusive("URI not set. Unable to execute acceptance tests.");
         }
+        _latestMessage = null;
 
-        [TearDown]
-        public void TearDown()
+        var connection = new HubConnectionBuilder()
+            .WithUrl($"{uri}{HubName}")
+            .Build();
+
+        await connection.StartAsync();
+        var channel = await connection.StreamAsChannelAsync<CurrentCompetitorEnvelopeModel>("StreamCompetitors");
+        _source = new CancellationTokenSource();
+        _ = channel.ReadUntilStopped((item) =>
         {
-            _source?.Cancel();
-        }
+            _latestMessage = item;
+        }, _source.Token);
+
+        _client = new RestClient($"{uri}{ApiName}");
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        _source?.Cancel();
+    }
 
 
-        [Test]
-        public async Task CreateCompetition_MinimalValues()
+    [Test]
+    public async Task CreateCompetition_MinimalValues()
+    {
+        var model = new CompetitionFileModel
         {
-            var model = new CompetitionFileModel
+            Name = "New competition",
+            Divisions = Array.Empty<DivisionFileModel>()
+        };
+        await _client.PostJsonAsync("upload-competition", model, _source.Token);
+
+        var response = await _client.GetJsonAsync<CompetitionStatusEnvelopeModel>("competition-status", _source.Token);
+        response.Type.Should().Be("competition-status");
+        response.Version.Should().Be("1");
+        response.Content.Should().NotBeNull();
+
+        response.Content.EventName.Should().Be(model.Name);
+        response.Content.CurrentCompetitor.Should().BeNull();
+    }
+
+    [Test]
+    public async Task CreateCompetition_GeneralValues()
+    {
+        var model = new CompetitionFileModel
+        {
+            Name = "New competition",
+            CurrentCompetitor = new CurrentCompetitorFileModel
             {
-                Name = "New competition",
-                Divisions = Array.Empty<DivisionFileModel>()
-            };
-            await _client.PostJsonAsync("upload-competition", model, CancellationToken.None);
-
-            var response = await _client.GetJsonAsync<CompetitionStatusEnvelopeModel>("competition-status", CancellationToken.None);
-            response.Type.Should().Be("competition-status");
-            response.Version.Should().Be("1");
-            response.Content.Should().NotBeNull();
-
-            response.Content.EventName.Should().Be(model.Name);
-            response.Content.CurrentCompetitor.Should().BeNull();
-        }
-
-        [Test]
-        public async Task CreateCompetition_GeneralValues()
-        {
-            var model = new CompetitionFileModel
+                Id = 5,
+                Competitors = TestUtil.CreateSingleCompetitor("Different 1", "my team"),
+                Division = "Masters +40 Women"
+            },
+            Divisions = new[]
             {
-                Name = "New competition",
-                CurrentCompetitor = new CurrentCompetitorFileModel
-                {
-                    Id = 5,
-                    Competitors = TestUtil.CreateSingleCompetitor("Different 1", "my team"),
-                    Division = "Masters +40 Women"
-                },
-                Divisions = new[]
-                {
                     new DivisionFileModel
                     {
                         Name = "Senior Women",
@@ -152,53 +153,53 @@ namespace AcceptanceTests
                         }
                     }
                 }
-            };
-            var result = await _client.PostJsonAsync("upload-competition", model, CancellationToken.None);
-            result.Should().Be(System.Net.HttpStatusCode.OK);
+        };
+        var result = await _client.PostJsonAsync("upload-competition", model, _source.Token);
+        result.Should().Be(System.Net.HttpStatusCode.OK);
 
-            var response = await _client.GetJsonAsync<CompetitionStatusEnvelopeModel>("competition-status", CancellationToken.None);
+        var response = await _client.GetJsonAsync<CompetitionStatusEnvelopeModel>("competition-status", _source.Token);
 
-            response.Content.EventName.Should().Be(model.Name);
-            response.Content.CurrentCompetitor.Should().NotBeNull("CurrentCompetitor should be defined");
-            response.Content.CurrentCompetitor.Division.Should().Be("Masters +40 Women");
-            response.Content.CurrentCompetitor.Competitors.Length.Should().Be(1);
-            response.Content.CurrentCompetitor.Competitors[0].Name.Should().Be("Different 1");
+        response.Content.EventName.Should().Be(model.Name);
+        response.Content.CurrentCompetitor.Should().NotBeNull("CurrentCompetitor should be defined");
+        response.Content.CurrentCompetitor.Division.Should().Be("Masters +40 Women");
+        response.Content.CurrentCompetitor.Competitors.Length.Should().Be(1);
+        response.Content.CurrentCompetitor.Competitors[0].Name.Should().Be("Different 1");
 
-            response.Content.Divisions.Length.Should().Be(1);
-            var responseDivision = response.Content.Divisions.First();
-            responseDivision.Name.Should().Be(model.Divisions[0].Name);
+        response.Content.Divisions.Length.Should().Be(1);
+        var responseDivision = response.Content.Divisions.First();
+        responseDivision.Name.Should().Be(model.Divisions[0].Name);
 
-            responseDivision.Results.Length.Should().Be(2);
-            responseDivision.Results[0].Competitors.Length.Should().Be(1);
-            responseDivision.Results[0].Competitors[0].Name.Should().Be("I should be first");
-            responseDivision.Results[0].Forfeit.Should().BeFalse();
-            responseDivision.Results[1].Competitors.Length.Should().Be(1);
-            responseDivision.Results[1].Competitors[0].Name.Should().Be("I should be second");
-            responseDivision.Results[1].Forfeit.Should().BeFalse();
+        responseDivision.Results.Length.Should().Be(2);
+        responseDivision.Results[0].Competitors.Length.Should().Be(1);
+        responseDivision.Results[0].Competitors[0].Name.Should().Be("I should be first");
+        responseDivision.Results[0].Forfeit.Should().BeFalse();
+        responseDivision.Results[1].Competitors.Length.Should().Be(1);
+        responseDivision.Results[1].Competitors[0].Name.Should().Be("I should be second");
+        responseDivision.Results[1].Forfeit.Should().BeFalse();
 
-            responseDivision.Forfeited.Length.Should().Be(2);
-            responseDivision.Forfeited[0].Competitors.Length.Should().Be(1);
-            responseDivision.Forfeited[0].Competitors[0].Name.Should().Be("I should be last or second last");
-            responseDivision.Forfeited[0].Forfeit.Should().BeTrue();
-            responseDivision.Forfeited[0].Result.Should().BeNull();
-            responseDivision.Forfeited[1].Competitors.Length.Should().Be(1);
-            responseDivision.Forfeited[1].Competitors[0].Name.Should().Be("I also forfeited, my result should not be shown");
-            responseDivision.Forfeited[1].Forfeit.Should().BeTrue();
-            responseDivision.Forfeited[1].Result.Should().BeNull();
+        responseDivision.Forfeited.Length.Should().Be(2);
+        responseDivision.Forfeited[0].Competitors.Length.Should().Be(1);
+        responseDivision.Forfeited[0].Competitors[0].Name.Should().Be("I should be last or second last");
+        responseDivision.Forfeited[0].Forfeit.Should().BeTrue();
+        responseDivision.Forfeited[0].Result.Should().BeNull();
+        responseDivision.Forfeited[1].Competitors.Length.Should().Be(1);
+        responseDivision.Forfeited[1].Competitors[0].Name.Should().Be("I also forfeited, my result should not be shown");
+        responseDivision.Forfeited[1].Forfeit.Should().BeTrue();
+        responseDivision.Forfeited[1].Result.Should().BeNull();
 
-            responseDivision.UpcomingCompetitorModels.Length.Should().Be(2);
-            responseDivision.UpcomingCompetitorModels[0].Competitors[0].Name.Should().Be("I'm upcoming 1");
-            responseDivision.UpcomingCompetitorModels[1].Competitors[0].Name.Should().Be("I'm upcoming 2");
-        }
+        responseDivision.UpcomingCompetitorModels.Length.Should().Be(2);
+        responseDivision.UpcomingCompetitorModels[0].Competitors[0].Name.Should().Be("I'm upcoming 1");
+        responseDivision.UpcomingCompetitorModels[1].Competitors[0].Name.Should().Be("I'm upcoming 2");
+    }
 
-        [Test]
-        public async Task SetCurrentCompetitor_Normal()
+    [Test]
+    public async Task SetCurrentCompetitor_Normal()
+    {
+        var model = new CompetitionFileModel
         {
-            var model = new CompetitionFileModel
+            Name = "New competition",
+            Divisions = new[]
             {
-                Name = "New competition",
-                Divisions = new[]
-                {
                     new DivisionFileModel
                     {
                         Name = "Senior Women",
@@ -222,30 +223,29 @@ namespace AcceptanceTests
                         }
                     }
                 }
-            };
-            await _client.PostJsonAsync("upload-competition", model, CancellationToken.None);
+        };
+        await _client.PostJsonAsync("upload-competition", model, _source.Token);
 
-            var shoudlBeNull = await _client.GetJsonAsync<CurrentCompetitorEnvelopeModel>("current-competitor", CancellationToken.None);
-            shoudlBeNull.Content.Should().BeNull();
+        var shoudlBeNull = await _client.GetJsonAsync<CurrentCompetitorEnvelopeModel>("current-competitor", _source.Token);
+        shoudlBeNull.Content.Should().BeNull();
 
-            _latestMessage.Content.Should().BeNull();
+        _latestMessage.Content.Should().BeNull();
 
-            await _client.PostJsonAsync("set-current-competitor", new CurrentCompetitorSetModel { Id = 2 }, CancellationToken.None);
+        await _client.PostJsonAsync("set-current-competitor", new CurrentCompetitorSetModel { Id = 2 }, _source.Token);
 
-            Thread.Sleep(1000);
-            _latestMessage.Content.Should().NotBeNull();
+        Thread.Sleep(1000);
+        _latestMessage.Content.Should().NotBeNull();
 
-            var first = await _client.GetJsonAsync<CurrentCompetitorEnvelopeModel>("current-competitor", CancellationToken.None);
-            first.Content.Should().NotBeNull();
-            first.Content.Division.Should().Be("Senior Women");
-            first.Content.Competitors[0].Name.Should().Be("I should be shown first");
+        var first = await _client.GetJsonAsync<CurrentCompetitorEnvelopeModel>("current-competitor", _source.Token);
+        first.Content.Should().NotBeNull();
+        first.Content.Division.Should().Be("Senior Women");
+        first.Content.Competitors[0].Name.Should().Be("I should be shown first");
 
-            await _client.PostJsonAsync("set-current-competitor", new CurrentCompetitorSetModel { Id = 3 }, CancellationToken.None);
+        await _client.PostJsonAsync("set-current-competitor", new CurrentCompetitorSetModel { Id = 3 }, _source.Token);
 
-            var second = await _client.GetJsonAsync<CurrentCompetitorEnvelopeModel>("current-competitor", CancellationToken.None);
-            second.Content.Should().NotBeNull();
-            second.Content.Division.Should().Be("Senior Women");
-            second.Content.Competitors[0].Name.Should().Be("I should be shown second");
-        }
+        var second = await _client.GetJsonAsync<CurrentCompetitorEnvelopeModel>("current-competitor", _source.Token);
+        second.Content.Should().NotBeNull();
+        second.Content.Division.Should().Be("Senior Women");
+        second.Content.Competitors[0].Name.Should().Be("I should be shown second");
     }
 }
