@@ -581,6 +581,47 @@ Status Code **200**
 This operation does not require authentication
 </aside>
 
+<h1 id="competition-status-api-scoreboard">Scoreboard</h1>
+
+## ScoreboardGetStatus
+
+<a id="opIdScoreboardGetStatus"></a>
+
+> Code samples
+
+```http
+GET /Scoreboard HTTP/1.1
+
+Accept: text/plain
+
+```
+
+`GET /Scoreboard`
+
+> Example responses
+
+> 200 Response
+
+```
+{"scoreboardMode":"Unknown"}
+```
+
+```json
+{
+  "scoreboardMode": "Unknown"
+}
+```
+
+<h3 id="scoreboardgetstatus-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|[ScoreboardStatusModel](#schemascoreboardstatusmodel)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 <h1 id="competition-status-api-status">Status</h1>
 
 ## StatusGetHealth
@@ -1519,6 +1560,55 @@ Represents a score in Pole Dance Sport series
 |executionScore|number(double)|true|none|Execution score (E)|
 |difficultyScore|number(double)|true|none|Difficulty score (D)|
 |headJudgePenalty|number(double)|true|none|Head judge penalty (HJ). This is subtracted from the total.|
+
+<h2 id="tocS_ScoreboardModeModel">ScoreboardModeModel</h2>
+<!-- backwards compatibility -->
+<a id="schemascoreboardmodemodel"></a>
+<a id="schema_ScoreboardModeModel"></a>
+<a id="tocSscoreboardmodemodel"></a>
+<a id="tocsscoreboardmodemodel"></a>
+
+```json
+"Unknown"
+
+```
+
+This desribes the mode that the scoreboard should be in.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|This desribes the mode that the scoreboard should be in.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|*anonymous*|Unknown|
+|*anonymous*|DivisionStatus|
+|*anonymous*|CompetitorResults|
+|*anonymous*|UpcomingCompetitors|
+
+<h2 id="tocS_ScoreboardStatusModel">ScoreboardStatusModel</h2>
+<!-- backwards compatibility -->
+<a id="schemascoreboardstatusmodel"></a>
+<a id="schema_ScoreboardStatusModel"></a>
+<a id="tocSscoreboardstatusmodel"></a>
+<a id="tocsscoreboardstatusmodel"></a>
+
+```json
+{
+  "scoreboardMode": "Unknown"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|scoreboardMode|[ScoreboardModeModel](#schemascoreboardmodemodel)|false|none|This desribes the mode that the scoreboard should be in.|
 
 <h2 id="tocS_UpcomingCompetitorModel">UpcomingCompetitorModel</h2>
 <!-- backwards compatibility -->

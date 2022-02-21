@@ -25,9 +25,12 @@ export type { PerformanceResultsContentModel } from './models/PerformanceResults
 export type { PerformanceResultsEnvelopeModel } from './models/PerformanceResultsEnvelopeModel';
 export type { PoleResultFileModel } from './models/PoleResultFileModel';
 export type { PoleSportResultModel } from './models/PoleSportResultModel';
+export { ScoreboardModeModel } from './models/ScoreboardModeModel';
+export type { ScoreboardStatusModel } from './models/ScoreboardStatusModel';
 export type { UpcomingCompetitorModel } from './models/UpcomingCompetitorModel';
 
 export { CompetitionService } from './services/CompetitionService';
 export { CompetitorService } from './services/CompetitorService';
+export { ScoreboardService } from './services/ScoreboardService';
 export { StatusService } from './services/StatusService';
 export { TestService } from './services/TestService';

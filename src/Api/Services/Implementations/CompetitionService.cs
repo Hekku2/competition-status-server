@@ -11,9 +11,10 @@ namespace Api.Services.Implementations
     /// <summary>
     /// TODO Make a proper implementation which actually saves the competition entity to database
     /// </summary>
-    public class CompetitionService : ICompetitionService, ICompetitionStatusService
+    public class CompetitionService : ICompetitionService, ICompetitionStatusService, IScoreboardService
     {
         private readonly BehaviorSubject<CurrentCompetitorsEntity?> _currentCompetitor = new(null);
+        private readonly BehaviorSubject<ScoreboardMode> _currentScoreboardMode = new(ScoreboardMode.Unknown);
         private readonly Subject<PerformanceResultsEntity> _performanceResults = new();
 
         private readonly ConcurrentQueue<PerformanceResultsEntity> _concurrentQueue = new();
@@ -49,6 +50,11 @@ namespace Api.Services.Implementations
         public IObservable<CurrentCompetitorsEntity?> GetCurrentCompetitorObservable()
         {
             return _currentCompetitor;
+        }
+
+        public IObservable<ScoreboardMode> GetScoreboardModeObservable()
+        {
+            return _currentScoreboardMode;
         }
 
         public void UpdateCurrentCompetitor(CurrentCompetitorsEntity? competitor)

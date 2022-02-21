@@ -117,5 +117,17 @@ public static class EntityMappingExtensions
         Competitors = entity.Competitors.Select(ToCompetitorModel).ToArray(),
         Result = entity.Result.ToPoleSportResultModel()
     };
+
+    public static ScoreboardModeModel ToScoreboardModeModel(this ScoreboardMode entity)
+    {
+        return entity switch
+        {
+            ScoreboardMode.Unknown => ScoreboardModeModel.Unknown,
+            ScoreboardMode.DivisionStatus => ScoreboardModeModel.DivisionStatus,
+            ScoreboardMode.CompetitorResults => ScoreboardModeModel.CompetitorResults,
+            ScoreboardMode.UpcomingCompetitors => ScoreboardModeModel.UpcomingCompetitors,
+            _ => ScoreboardModeModel.Unknown,
+        };
+    }
 }
 
