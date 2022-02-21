@@ -33,14 +33,14 @@ public class ScoreboardTests
             Assert.Inconclusive("URI not set. Unable to execute acceptance tests.");
         }
         _latestMessage = null;
+        _source = new CancellationTokenSource();
 
         var connection = new HubConnectionBuilder()
             .WithUrl($"{uri}{HubName}")
             .Build();
 
-        await connection.StartAsync();
+        await connection.StartAsync(_source.Token);
         var channel = await connection.StreamAsChannelAsync<ScoreboardStatusModel>(nameof(ScoreboardHub.StreamScoreboardStatus));
-        _source = new CancellationTokenSource();
         _ = channel.ReadUntilStopped((item) =>
         {
             _latestMessage = item;
