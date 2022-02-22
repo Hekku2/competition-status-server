@@ -55,7 +55,13 @@ public class Startup
             });
         });
 
-        services.AddSignalR();
+        services
+            .AddSignalR()
+            .AddJsonProtocol(options =>
+            {
+                var enumConverter = new JsonStringEnumConverter();
+                options.PayloadSerializerOptions.Converters.Add(enumConverter);
+            });
         services.AddSingleton<CompetitionService>();
         services.AddTransient<ICompetitionService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
         services.AddTransient<ICompetitionStatusService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
