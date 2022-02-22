@@ -1,30 +1,26 @@
-import { Card } from "@mui/material"
-import { TopNavLink } from "."
-
-type ContentBarProps = {
-  children: React.ReactNode
-}
-
-const ContentBar = ({ children }: ContentBarProps) => {
-  return (
-    <Card
-      sx={{
-        width: "100%",
-        display: 'flex',
-        alignItems: 'center',
-        textAlign: 'center',
-        height: "50px"
-      }}>
-      {children}
-    </Card>)
-}
+import { AppBar, MenuItem, Toolbar, Box } from "@mui/material"
+import { Link } from "react-router-dom"
+import { ScoreboardStatusBanner } from "."
 
 export const NavigationBar = () => {
   return (
-    <ContentBar>
-      <TopNavLink to="/" text="Main" />
-      <TopNavLink to="/competitors" text="Competitors" />
-      <TopNavLink to="/scoreboard" text="Scoreboard" />
-    </ContentBar>
+    <AppBar position="static">
+      <Toolbar>
+        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <MenuItem component={Link} to={"/"}>
+            Main
+          </MenuItem>
+          <MenuItem component={Link} to={"/competitors"}>
+            Competitors
+          </MenuItem>
+          <MenuItem component={Link} to={"/Scoreboard"}>
+            Scoreboard
+          </MenuItem>
+        </Box>
+        <Box sx={{ flexGrow: 0 }}>
+          <ScoreboardStatusBanner />
+        </Box>
+      </Toolbar>
+    </AppBar>
   )
 }
