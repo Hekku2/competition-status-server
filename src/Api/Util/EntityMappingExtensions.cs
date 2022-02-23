@@ -61,17 +61,21 @@ public static class EntityMappingExtensions
             .CompetitionOrder)
             .Select(ToResultRowModel)
             .ToArray(),
-        UpcomingCompetitorModels = entity
-            .CompetitionOrder
-            .Where(item => !item.Forfeit && item.Result is null)
-            .Select(ToUpcomingCompetitorModel)
-            .ToArray(),
+        UpcomingCompetitorModels = entity.CompetitionOrder.ToUpcomingCompetitorModelArray(),
         Forfeited = entity
             .CompetitionOrder
             .Where(item => item.Forfeit)
             .Select(ToResultRowModel)
             .ToArray()
     };
+
+    public static UpcomingCompetitorModel[] ToUpcomingCompetitorModelArray(this CompetitionOrderEntity[] entities)
+    {
+        return entities
+            .Where(item => !item.Forfeit && item.Result is null)
+            .Select(ToUpcomingCompetitorModel)
+            .ToArray();
+    }
 
     public static UpcomingCompetitorModel ToUpcomingCompetitorModel(this CompetitionOrderEntity entity) => new()
     {

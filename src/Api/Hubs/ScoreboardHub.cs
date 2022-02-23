@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Channels;
@@ -30,17 +31,19 @@ public class ScoreboardHub : Hub
 
         return ObservableEx.CombineLatest(
             _scoreboardService.GetScoreboardModeObservable(),
-            _scoreboardService.GetActiveResults()
+            _scoreboardService.GetActiveResultsObservable(),
+            _scoreboardService.GetActiveDivisionObservable()
         ).Select(CreateScoreboardStatusModel)
         .AsChannelReader();
     }
 
-    private ScoreboardStatusModel CreateScoreboardStatusModel((ScoreboardMode scoreboardMode, (DivisionEntity, CompetitionOrderEntity)? result) combined)
+    private ScoreboardStatusModel CreateScoreboardStatusModel((ScoreboardMode scoreboardMode, (DivisionEntity, CompetitionOrderEntity)? result, DivisionEntity? division) combined)
     {
         return new ScoreboardStatusModel
         {
             ScoreboardMode = combined.scoreboardMode.ToScoreboardModeModel(),
-            Result = combined.result.HasValue ? CreatePerformanceResultsContentModel(combined.result.Value) : null
+            Result = combined.result.HasValue ? CreatePerformanceResultsContentModel(combined.result.Value) : null,
+            UpcomingCompetitors = combined.division?.CompetitionOrder.ToUpcomingCompetitorModelArray() ?? Array.Empty<UpcomingCompetitorModel>()
         };
     }
 

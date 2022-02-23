@@ -1,6 +1,8 @@
+using System.Linq;
 using Api.Models;
 using Api.Services.Interfaces;
 using Api.Util;
+using DataAccess.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -21,9 +23,11 @@ namespace Api.Controllers
         public ScoreboardStatusModel GetStatus()
         {
             var current = _scoreboardService.GetScoreboardMode();
+            var activeResult = _scoreboardService.GetActiveResults();
             return new ScoreboardStatusModel
             {
-                ScoreboardMode = current.ToScoreboardModeModel()
+                ScoreboardMode = current.ToScoreboardModeModel(),
+                Result = activeResult != null ? CreatePerformanceResultsContentModel(activeResult) : null
             };
         }
 
@@ -44,6 +48,27 @@ namespace Api.Controllers
         public void SelectResultForShowing(int id)
         {
             _scoreboardService.SetResultsForShowing(id);
+        }
+
+        [HttpPut]
+        [Route("set-active-division")]
+        public void SetActiveDivision(string name)
+        {
+            _scoreboardService.SetActiveDivision(name);
+        }
+
+        private static PerformanceResultsContentModel? CreatePerformanceResultsContentModel((DivisionEntity, CompetitionOrderEntity)? resultEntity)
+        {
+            if (resultEntity == null)
+                return null;
+
+            return new PerformanceResultsContentModel
+            {
+                Competitors = resultEntity.Value.Item2.Competitors.Select(EntityMappingExtensions.ToCompetitorModel).ToArray(),
+                Division = resultEntity.Value.Item1.Name,
+                CurrentPlace = CompetitionOrderUtil.CalculatePlacement(resultEntity.Value.Item1.CompetitionOrder, resultEntity.Value.Item2.Id),
+                Result = resultEntity.Value.Item2.Result?.ToPoleSportResultModel() ?? new PoleSportResultModel()
+            };
         }
     }
 }

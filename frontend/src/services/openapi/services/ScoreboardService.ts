@@ -57,4 +57,22 @@ export class ScoreboardService {
         return result.body;
     }
 
+    /**
+     * @param name
+     * @returns any Success
+     * @throws ApiError
+     */
+    public static async scoreboardSetActiveDivision(
+        name?: string,
+    ): Promise<any> {
+        const result = await __request({
+            method: 'PUT',
+            path: `/Scoreboard/set-active-division`,
+            query: {
+                'name': name,
+            },
+        });
+        return result.body;
+    }
+
 }

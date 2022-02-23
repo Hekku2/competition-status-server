@@ -8,4 +8,7 @@ public class ScoreboardStatusModel
     public ScoreboardModeModel ScoreboardMode { get; set; }
 
     public PerformanceResultsContentModel? Result { get; set; }
+
+    [Required]
+    public UpcomingCompetitorModel[] UpcomingCompetitors { get; set; } = Array.Empty<UpcomingCompetitorModel>();
 }

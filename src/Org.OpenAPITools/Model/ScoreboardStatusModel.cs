@@ -47,9 +47,15 @@ namespace Org.OpenAPITools.Model
         /// </summary>
         /// <param name="scoreboardMode">scoreboardMode (required).</param>
         /// <param name="result">result.</param>
-        public ScoreboardStatusModel(ScoreboardModeModel scoreboardMode = default(ScoreboardModeModel), PerformanceResultsContentModel result = default(PerformanceResultsContentModel))
+        /// <param name="upcomingCompetitors">upcomingCompetitors (required).</param>
+        public ScoreboardStatusModel(ScoreboardModeModel scoreboardMode = default(ScoreboardModeModel), PerformanceResultsContentModel result = default(PerformanceResultsContentModel), List<UpcomingCompetitorModel> upcomingCompetitors = default(List<UpcomingCompetitorModel>))
         {
             this.ScoreboardMode = scoreboardMode;
+            // to ensure "upcomingCompetitors" is required (not null)
+            if (upcomingCompetitors == null) {
+                throw new ArgumentNullException("upcomingCompetitors is a required property for ScoreboardStatusModel and cannot be null");
+            }
+            this.UpcomingCompetitors = upcomingCompetitors;
             this.Result = result;
         }
 
@@ -58,6 +64,12 @@ namespace Org.OpenAPITools.Model
         /// </summary>
         [DataMember(Name = "result", EmitDefaultValue = false)]
         public PerformanceResultsContentModel Result { get; set; }
+
+        /// <summary>
+        /// Gets or Sets UpcomingCompetitors
+        /// </summary>
+        [DataMember(Name = "upcomingCompetitors", IsRequired = true, EmitDefaultValue = false)]
+        public List<UpcomingCompetitorModel> UpcomingCompetitors { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -69,6 +81,7 @@ namespace Org.OpenAPITools.Model
             sb.Append("class ScoreboardStatusModel {\n");
             sb.Append("  ScoreboardMode: ").Append(ScoreboardMode).Append("\n");
             sb.Append("  Result: ").Append(Result).Append("\n");
+            sb.Append("  UpcomingCompetitors: ").Append(UpcomingCompetitors).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -112,6 +125,12 @@ namespace Org.OpenAPITools.Model
                     this.Result == input.Result ||
                     (this.Result != null &&
                     this.Result.Equals(input.Result))
+                ) && 
+                (
+                    this.UpcomingCompetitors == input.UpcomingCompetitors ||
+                    this.UpcomingCompetitors != null &&
+                    input.UpcomingCompetitors != null &&
+                    this.UpcomingCompetitors.SequenceEqual(input.UpcomingCompetitors)
                 );
         }
 
@@ -128,6 +147,10 @@ namespace Org.OpenAPITools.Model
                 if (this.Result != null)
                 {
                     hashCode = (hashCode * 59) + this.Result.GetHashCode();
+                }
+                if (this.UpcomingCompetitors != null)
+                {
+                    hashCode = (hashCode * 59) + this.UpcomingCompetitors.GetHashCode();
                 }
                 return hashCode;
             }

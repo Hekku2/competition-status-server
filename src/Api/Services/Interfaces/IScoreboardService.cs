@@ -26,8 +26,12 @@ namespace Api.Services.Interfaces
         /// <param name="mode">New scoreboard mode</param>
         void SetScoreboardMode(ScoreboardMode mode);
 
-        IObservable<(DivisionEntity, CompetitionOrderEntity)?> GetActiveResults();
+        IObservable<(DivisionEntity, CompetitionOrderEntity)?> GetActiveResultsObservable();
+        (DivisionEntity, CompetitionOrderEntity)? GetActiveResults();
 
         void SetResultsForShowing(int id);
+        void SetActiveDivision(string name);
+
+        IObservable<DivisionEntity?> GetActiveDivisionObservable();
     }
 }

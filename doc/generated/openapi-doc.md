@@ -628,7 +628,7 @@ Accept: text/plain
 > 200 Response
 
 ```
-{"scoreboardMode":"Unknown","result":{"division":"Senior Women","currentPlace":1,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}}}
+{"scoreboardMode":"Unknown","result":{"division":"Senior Women","currentPlace":1,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}},"upcomingCompetitors":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}]}
 ```
 
 ```json
@@ -650,7 +650,18 @@ Accept: text/plain
       "difficultyScore": 12.8,
       "headJudgePenalty": 0
     }
-  }
+  },
+  "upcomingCompetitors": [
+    {
+      "id": 123,
+      "competitors": [
+        {
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
+        }
+      ]
+    }
+  ]
 }
 ```
 
@@ -725,6 +736,35 @@ This is done with "set-mode"*
 |id|query|integer(int32)|false|id|
 
 <h3 id="scoreboardselectresultforshowing-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## ScoreboardSetActiveDivision
+
+<a id="opIdScoreboardSetActiveDivision"></a>
+
+> Code samples
+
+```http
+PUT /Scoreboard/set-active-division HTTP/1.1
+
+```
+
+`PUT /Scoreboard/set-active-division`
+
+<h3 id="scoreboardsetactivedivision-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|name|query|string|false|none|
+
+<h3 id="scoreboardsetactivedivision-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -1703,7 +1743,18 @@ This desribes the mode that the scoreboard should be in.
       "difficultyScore": 12.8,
       "headJudgePenalty": 0
     }
-  }
+  },
+  "upcomingCompetitors": [
+    {
+      "id": 123,
+      "competitors": [
+        {
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
+        }
+      ]
+    }
+  ]
 }
 
 ```
@@ -1714,6 +1765,7 @@ This desribes the mode that the scoreboard should be in.
 |---|---|---|---|---|
 |scoreboardMode|[ScoreboardModeModel](#schemascoreboardmodemodel)|true|none|This desribes the mode that the scoreboard should be in.|
 |result|[PerformanceResultsContentModel](#schemaperformanceresultscontentmodel)|false|none|Describes a result for competitor(s) in for a single performance and what<br>place it did achieve, if any.|
+|upcomingCompetitors|[[UpcomingCompetitorModel](#schemaupcomingcompetitormodel)]|true|none|[Represents an upcoming competitor.]|
 
 <h2 id="tocS_UpcomingCompetitorModel">UpcomingCompetitorModel</h2>
 <!-- backwards compatibility -->
