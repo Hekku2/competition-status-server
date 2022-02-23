@@ -35,16 +35,29 @@ namespace Org.OpenAPITools.Model
         /// <summary>
         /// Gets or Sets ScoreboardMode
         /// </summary>
-        [DataMember(Name = "scoreboardMode", EmitDefaultValue = false)]
-        public ScoreboardModeModel? ScoreboardMode { get; set; }
+        [DataMember(Name = "scoreboardMode", IsRequired = true, EmitDefaultValue = false)]
+        public ScoreboardModeModel ScoreboardMode { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="ScoreboardStatusModel" /> class.
         /// </summary>
-        /// <param name="scoreboardMode">scoreboardMode.</param>
-        public ScoreboardStatusModel(ScoreboardModeModel? scoreboardMode = default(ScoreboardModeModel?))
+        [JsonConstructorAttribute]
+        protected ScoreboardStatusModel() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScoreboardStatusModel" /> class.
+        /// </summary>
+        /// <param name="scoreboardMode">scoreboardMode (required).</param>
+        /// <param name="result">result.</param>
+        public ScoreboardStatusModel(ScoreboardModeModel scoreboardMode = default(ScoreboardModeModel), PerformanceResultsContentModel result = default(PerformanceResultsContentModel))
         {
             this.ScoreboardMode = scoreboardMode;
+            this.Result = result;
         }
+
+        /// <summary>
+        /// Gets or Sets Result
+        /// </summary>
+        [DataMember(Name = "result", EmitDefaultValue = false)]
+        public PerformanceResultsContentModel Result { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -55,6 +68,7 @@ namespace Org.OpenAPITools.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class ScoreboardStatusModel {\n");
             sb.Append("  ScoreboardMode: ").Append(ScoreboardMode).Append("\n");
+            sb.Append("  Result: ").Append(Result).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -93,6 +107,11 @@ namespace Org.OpenAPITools.Model
                 (
                     this.ScoreboardMode == input.ScoreboardMode ||
                     this.ScoreboardMode.Equals(input.ScoreboardMode)
+                ) && 
+                (
+                    this.Result == input.Result ||
+                    (this.Result != null &&
+                    this.Result.Equals(input.Result))
                 );
         }
 
@@ -106,6 +125,10 @@ namespace Org.OpenAPITools.Model
             {
                 int hashCode = 41;
                 hashCode = (hashCode * 59) + this.ScoreboardMode.GetHashCode();
+                if (this.Result != null)
+                {
+                    hashCode = (hashCode * 59) + this.Result.GetHashCode();
+                }
                 return hashCode;
             }
         }

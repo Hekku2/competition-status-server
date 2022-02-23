@@ -1,13 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ScoreboardModeModel, ScoreboardStatusModel } from '../../services/openapi'
+import { PerformanceResultsContentModel, ScoreboardModeModel, ScoreboardStatusModel } from '../../services/openapi'
 import { RootState } from '../store'
 
 export interface ScoreboardState {
   scoreboardMode: ScoreboardModeModel
+  result: PerformanceResultsContentModel | undefined
 }
 
 export const initialState: ScoreboardState = {
   scoreboardMode: ScoreboardModeModel.UNKNOWN,
+  result: undefined
 }
 
 export const scoreboardSlice = createSlice({
@@ -16,6 +18,7 @@ export const scoreboardSlice = createSlice({
   reducers: {
     setScoreboardStatus(state, action: PayloadAction<ScoreboardStatusModel>) {
       state.scoreboardMode = action.payload.scoreboardMode || ScoreboardModeModel.UNKNOWN
+      state.result = action.payload.result
     }
   }
 })

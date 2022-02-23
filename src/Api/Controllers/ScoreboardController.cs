@@ -33,5 +33,17 @@ namespace Api.Controllers
         {
             _scoreboardService.SetScoreboardMode(mode.ToScoreboardMode());
         }
+
+        /// <summary>
+        /// Sets results that will be shown. Doesn't show the results yet.
+        /// This is done with "set-mode"
+        /// </summary>
+        /// <param name="id">id</param>
+        [HttpPut]
+        [Route("select-results")]
+        public void SelectResultForShowing(int id)
+        {
+            _scoreboardService.SetResultsForShowing(id);
+        }
     }
 }

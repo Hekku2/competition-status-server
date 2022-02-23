@@ -37,4 +37,24 @@ export class ScoreboardService {
         return result.body;
     }
 
+    /**
+     * Sets results that will be shown. Doesn't show the results yet.
+     * This is done with "set-mode"
+     * @param id id
+     * @returns any Success
+     * @throws ApiError
+     */
+    public static async scoreboardSelectResultForShowing(
+        id?: number,
+    ): Promise<any> {
+        const result = await __request({
+            method: 'PUT',
+            path: `/Scoreboard/select-results`,
+            query: {
+                'id': id,
+            },
+        });
+        return result.body;
+    }
+
 }

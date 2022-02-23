@@ -66,7 +66,7 @@ public class CompetitionService : ICompetitionService, ICompetitionStatusService
             return;
         }
 
-        var (division, order) = GetForCurrentCompetitorsEntity(competition, id.Value);
+        var (division, order) = GetForCurrentCompetitorsEntity(id.Value);
         var entity = new CurrentCompetitorsEntity
         {
             Id = order.Id,
@@ -105,8 +105,9 @@ public class CompetitionService : ICompetitionService, ICompetitionStatusService
         }
     }
 
-    private static (DivisionEntity, CompetitionOrderEntity) GetForCurrentCompetitorsEntity(CompetitionEntity competition, int id)
+    public (DivisionEntity, CompetitionOrderEntity) GetForCurrentCompetitorsEntity(int id)
     {
+        var competition = GetCurrentState() ?? throw new InvalidOperationException("No competition set!");
         var matches =
             from division in competition.Divisions
             from order in division.CompetitionOrder

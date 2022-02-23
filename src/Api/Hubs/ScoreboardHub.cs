@@ -27,14 +27,31 @@ public class ScoreboardHub : Hub
     public ChannelReader<ScoreboardStatusModel> StreamScoreboardStatus()
     {
         _logger.LogInformation("Stream connection for scoreboad status received");
-        return _scoreboardService.GetScoreboardModeObservable().Select(CreateScoreboardStatusModel).AsChannelReader();
+
+        return ObservableEx.CombineLatest(
+            _scoreboardService.GetScoreboardModeObservable(),
+            _scoreboardService.GetActiveResults()
+        ).Select(CreateScoreboardStatusModel)
+        .AsChannelReader();
     }
 
-    private ScoreboardStatusModel CreateScoreboardStatusModel(ScoreboardMode entity)
+    private ScoreboardStatusModel CreateScoreboardStatusModel((ScoreboardMode scoreboardMode, (DivisionEntity, CompetitionOrderEntity)? result) combined)
     {
         return new ScoreboardStatusModel
         {
-            ScoreboardMode = entity.ToScoreboardModeModel()
+            ScoreboardMode = combined.scoreboardMode.ToScoreboardModeModel(),
+            Result = combined.result.HasValue ? CreatePerformanceResultsContentModel(combined.result.Value) : null
+        };
+    }
+
+    private static PerformanceResultsContentModel CreatePerformanceResultsContentModel((DivisionEntity, CompetitionOrderEntity) resultEntity)
+    {
+        return new PerformanceResultsContentModel
+        {
+            Competitors = resultEntity.Item2.Competitors.Select(EntityMappingExtensions.ToCompetitorModel).ToArray(),
+            Division = resultEntity.Item1.Name,
+            CurrentPlace = CompetitionOrderUtil.CalculatePlacement(resultEntity.Item1.CompetitionOrder, resultEntity.Item2.Id),
+            Result = resultEntity.Item2.Result?.ToPoleSportResultModel() ?? new PoleSportResultModel()
         };
     }
 }

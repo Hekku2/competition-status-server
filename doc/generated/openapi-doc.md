@@ -628,12 +628,29 @@ Accept: text/plain
 > 200 Response
 
 ```
-{"scoreboardMode":"Unknown"}
+{"scoreboardMode":"Unknown","result":{"division":"Senior Women","currentPlace":1,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}}}
 ```
 
 ```json
 {
-  "scoreboardMode": "Unknown"
+  "scoreboardMode": "Unknown",
+  "result": {
+    "division": "Senior Women",
+    "currentPlace": 1,
+    "competitors": [
+      {
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
+      }
+    ],
+    "result": {
+      "total": 127.266,
+      "artisticScore": 59.266,
+      "executionScore": 70.333,
+      "difficultyScore": 12.8,
+      "headJudgePenalty": 0
+    }
+  }
 }
 ```
 
@@ -676,6 +693,38 @@ PUT /Scoreboard/set-mode HTTP/1.1
 |mode|UpcomingCompetitors|
 
 <h3 id="scoreboardsetscoreboardmode-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## ScoreboardSelectResultForShowing
+
+<a id="opIdScoreboardSelectResultForShowing"></a>
+
+> Code samples
+
+```http
+PUT /Scoreboard/select-results HTTP/1.1
+
+```
+
+`PUT /Scoreboard/select-results`
+
+*Sets results that will be shown. Doesn't show the results yet.
+This is done with "set-mode"*
+
+<h3 id="scoreboardselectresultforshowing-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|id|query|integer(int32)|false|id|
+
+<h3 id="scoreboardselectresultforshowing-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -1637,7 +1686,24 @@ This desribes the mode that the scoreboard should be in.
 
 ```json
 {
-  "scoreboardMode": "Unknown"
+  "scoreboardMode": "Unknown",
+  "result": {
+    "division": "Senior Women",
+    "currentPlace": 1,
+    "competitors": [
+      {
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
+      }
+    ],
+    "result": {
+      "total": 127.266,
+      "artisticScore": 59.266,
+      "executionScore": 70.333,
+      "difficultyScore": 12.8,
+      "headJudgePenalty": 0
+    }
+  }
 }
 
 ```
@@ -1646,7 +1712,8 @@ This desribes the mode that the scoreboard should be in.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|scoreboardMode|[ScoreboardModeModel](#schemascoreboardmodemodel)|false|none|This desribes the mode that the scoreboard should be in.|
+|scoreboardMode|[ScoreboardModeModel](#schemascoreboardmodemodel)|true|none|This desribes the mode that the scoreboard should be in.|
+|result|[PerformanceResultsContentModel](#schemaperformanceresultscontentmodel)|false|none|Describes a result for competitor(s) in for a single performance and what<br>place it did achieve, if any.|
 
 <h2 id="tocS_UpcomingCompetitorModel">UpcomingCompetitorModel</h2>
 <!-- backwards compatibility -->

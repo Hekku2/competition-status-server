@@ -8,6 +8,7 @@ namespace Api.Services.Interfaces
     public interface ICompetitionService
     {
         void UploadCompetition(CompetitionEntity entity);
-        public CompetitionEntity? GetCurrentState();
+        CompetitionEntity? GetCurrentState();
+        (DivisionEntity, CompetitionOrderEntity) GetForCurrentCompetitorsEntity(int id);
     }
 }
