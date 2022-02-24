@@ -12,6 +12,7 @@ public class CompetitionControllerTests
 {
     private ICompetitionStatusService _mockCompetitionStatusService;
     private ICompetitionService _mockCompetitionService;
+    private ICompetitionDataAccess _mockCompetitionDataAccess;
 
     private CompetitionController _controller;
 
@@ -21,7 +22,8 @@ public class CompetitionControllerTests
         var logger = Substitute.For<ILogger<CompetitionController>>();
         _mockCompetitionStatusService = Substitute.For<ICompetitionStatusService>();
         _mockCompetitionService = Substitute.For<ICompetitionService>();
-        _controller = new CompetitionController(logger, _mockCompetitionStatusService, _mockCompetitionService);
+        _mockCompetitionDataAccess = Substitute.For<ICompetitionDataAccess>();
+        _controller = new CompetitionController(logger, _mockCompetitionStatusService, _mockCompetitionService, _mockCompetitionDataAccess);
     }
 
     [Test]
@@ -128,7 +130,7 @@ public class CompetitionControllerTests
                 }
             }
         };
-        _mockCompetitionService.GetCurrentState().Returns(expectedCompetition);
+        _mockCompetitionDataAccess.GetCurrentState().Returns(expectedCompetition);
 
         var actualCompetitionEnvelope = _controller.GetCompetitionStatus();
         actualCompetitionEnvelope.Content.Divisions[0].Results[0].Id.Should().Be(45);
@@ -190,7 +192,7 @@ public class CompetitionControllerTests
                 }
             }
         };
-        _mockCompetitionService.GetCurrentState().Returns(expectedCompetition);
+        _mockCompetitionDataAccess.GetCurrentState().Returns(expectedCompetition);
 
         var actualCompetitionEnvelope = _controller.GetCompetitionStatus();
         actualCompetitionEnvelope.Content.Divisions[0].UpcomingCompetitorModels.Length.Should().Be(2);
@@ -247,7 +249,7 @@ public class CompetitionControllerTests
                 }
             }
         };
-        _mockCompetitionService.GetCurrentState().Returns(expectedCompetition);
+        _mockCompetitionDataAccess.GetCurrentState().Returns(expectedCompetition);
 
         var actualStatusEnvelope = _controller.GetCompetitionStatus();
 

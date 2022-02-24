@@ -62,6 +62,7 @@ public class Startup
                 var enumConverter = new JsonStringEnumConverter();
                 options.PayloadSerializerOptions.Converters.Add(enumConverter);
             });
+        services.AddSingleton<ICompetitionDataAccess, CompetitionDataAccess>();
         services.AddSingleton<CompetitionService>();
         services.AddTransient<ICompetitionService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
         services.AddTransient<ICompetitionStatusService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());

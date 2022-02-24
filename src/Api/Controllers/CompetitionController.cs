@@ -16,12 +16,14 @@ namespace Api.Controllers
         private readonly ILogger<CompetitionController> _logger;
         private readonly ICompetitionStatusService _competitionStatusService;
         private readonly ICompetitionService _competitionService;
+        private readonly ICompetitionDataAccess _competitionDataAccess;
 
-        public CompetitionController(ILogger<CompetitionController> logger, ICompetitionStatusService competitionStatusService, ICompetitionService competitionService)
+        public CompetitionController(ILogger<CompetitionController> logger, ICompetitionStatusService competitionStatusService, ICompetitionService competitionService, ICompetitionDataAccess competitionDataAccess)
         {
             _logger = logger;
             _competitionStatusService = competitionStatusService;
             _competitionService = competitionService;
+            _competitionDataAccess = competitionDataAccess;
         }
 
         /// <summary>
@@ -101,7 +103,7 @@ namespace Api.Controllers
         [Route("competition-status")]
         public CompetitionStatusEnvelopeModel GetCompetitionStatus()
         {
-            var entity = _competitionService.GetCurrentState();
+            var entity = _competitionDataAccess.GetCurrentState();
             return new CompetitionStatusEnvelopeModel
             {
                 Content = entity?.ToCompetitionStatusContentModel()
@@ -116,7 +118,7 @@ namespace Api.Controllers
         [Route("download-competition")]
         public CompetitionFileModel DownloadCompetition()
         {
-            var entity = _competitionService.GetCurrentState() ?? throw new InvalidOperationException("No competition in progress");
+            var entity = _competitionDataAccess.GetCurrentState() ?? throw new InvalidOperationException("No competition in progress");
             return entity.ToCompetitionFileModel();
         }
 

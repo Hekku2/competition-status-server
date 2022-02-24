@@ -32,6 +32,6 @@ namespace Api.Services.Interfaces
         void SetResultsForShowing(int id);
         void SetActiveDivision(string name);
 
-        IObservable<DivisionEntity?> GetActiveDivisionObservable();
+        IObservable<string?> GetActiveDivisionObservable();
     }
 }

@@ -18,11 +18,15 @@ public class ScoreboardHub : Hub
 {
     private readonly ILogger<ScoreboardHub> _logger;
     private readonly IScoreboardService _scoreboardService;
+    private readonly ICompetitionDataAccess _competitionDataAccess;
+    private readonly ICompetitionStatusService _competitionStatusService;
 
-    public ScoreboardHub(ILogger<ScoreboardHub> logger, IScoreboardService scoreboardService)
+    public ScoreboardHub(ILogger<ScoreboardHub> logger, IScoreboardService scoreboardService, ICompetitionDataAccess competitionDataAccess, ICompetitionStatusService competitionStatusService)
     {
         _logger = logger;
         _scoreboardService = scoreboardService;
+        _competitionDataAccess = competitionDataAccess;
+        _competitionStatusService = competitionStatusService;
     }
 
     public ChannelReader<ScoreboardStatusModel> StreamScoreboardStatus()
@@ -32,18 +36,21 @@ public class ScoreboardHub : Hub
         return ObservableEx.CombineLatest(
             _scoreboardService.GetScoreboardModeObservable(),
             _scoreboardService.GetActiveResultsObservable(),
-            _scoreboardService.GetActiveDivisionObservable()
+            _scoreboardService.GetActiveDivisionObservable(),
+            _competitionStatusService.GetLatestUpdateTime()
         ).Select(CreateScoreboardStatusModel)
         .AsChannelReader();
     }
 
-    private ScoreboardStatusModel CreateScoreboardStatusModel((ScoreboardMode scoreboardMode, (DivisionEntity, CompetitionOrderEntity)? result, DivisionEntity? division) combined)
+    private ScoreboardStatusModel CreateScoreboardStatusModel((ScoreboardMode scoreboardMode, (DivisionEntity, CompetitionOrderEntity)? result, string? divisionName, DateTime latestUpdate) combined)
     {
+        var upcoming = combined.divisionName != null ? _competitionDataAccess.GetDivisionEntity(combined.divisionName)?.CompetitionOrder.ToUpcomingCompetitorModelArray() ?? Array.Empty<UpcomingCompetitorModel>() : Array.Empty<UpcomingCompetitorModel>();
         return new ScoreboardStatusModel
         {
+            LatestUpdate = combined.latestUpdate,
             ScoreboardMode = combined.scoreboardMode.ToScoreboardModeModel(),
             Result = combined.result.HasValue ? CreatePerformanceResultsContentModel(combined.result.Value) : null,
-            UpcomingCompetitors = combined.division?.CompetitionOrder.ToUpcomingCompetitorModelArray() ?? Array.Empty<UpcomingCompetitorModel>()
+            UpcomingCompetitors = upcoming,
         };
     }
 

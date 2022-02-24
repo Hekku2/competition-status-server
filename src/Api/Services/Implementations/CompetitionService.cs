@@ -17,18 +17,20 @@ public class CompetitionService : ICompetitionService, ICompetitionStatusService
     private readonly Subject<PerformanceResultsEntity> _performanceResults = new();
 
     private readonly ConcurrentQueue<PerformanceResultsEntity> _concurrentQueue = new();
+    private readonly ICompetitionDataAccess _competitionDataAccess;
 
-    private CompetitionEntity? _competitionEntity;
+    private readonly BehaviorSubject<DateTime> _latestUpdate = new(DateTime.UtcNow);
+
+    public CompetitionService(ICompetitionDataAccess competitionDataAccess)
+    {
+        _competitionDataAccess = competitionDataAccess;
+    }
 
     public void UploadCompetition(CompetitionEntity entity)
     {
-        _competitionEntity = entity;
-        _currentCompetitor.OnNext(_competitionEntity.CurrentCompetitor);
-    }
-
-    public CompetitionEntity? GetCurrentState()
-    {
-        return _competitionEntity;
+        _competitionDataAccess.UpdateState(entity);
+        _currentCompetitor.OnNext(entity.CurrentCompetitor);
+        _latestUpdate.OnNext(DateTime.UtcNow);
     }
 
     public CurrentCompetitorsEntity? GetCurrentCompetitor()
@@ -51,22 +53,22 @@ public class CompetitionService : ICompetitionService, ICompetitionStatusService
         return _currentCompetitor;
     }
 
-    public void UpdateCurrentCompetitor(CurrentCompetitorsEntity? competitor)
+    public IObservable<DateTime> GetLatestUpdateTime()
     {
-        _currentCompetitor.OnNext(competitor);
+        return _latestUpdate;
     }
 
     public void UpdateCurrentCompetitor(int? id)
     {
-        var competition = GetCurrentState() ?? throw new InvalidOperationException("No competition set!");
+        var competition = _competitionDataAccess.GetCurrentState() ?? throw new InvalidOperationException("No competition set!");
         if (id is null)
         {
             competition.CurrentCompetitor = null;
-            UpdateCurrentCompetitor((CurrentCompetitorsEntity?)null);
+            _currentCompetitor.OnNext(null);
             return;
         }
 
-        var (division, order) = GetForCurrentCompetitorsEntity(id.Value);
+        var (division, order) = _competitionDataAccess.GetForCurrentCompetitorsEntity(id.Value);
         var entity = new CurrentCompetitorsEntity
         {
             Id = order.Id,
@@ -74,12 +76,13 @@ public class CompetitionService : ICompetitionService, ICompetitionStatusService
             Competitors = order.Competitors,
         };
         competition.CurrentCompetitor = entity;
-        UpdateCurrentCompetitor(entity);
+        _currentCompetitor.OnNext(entity);
+        _latestUpdate.OnNext(DateTime.UtcNow);
     }
 
     public void UpdateResults(int id, PoleDanceResultEntity? results)
     {
-        var competition = GetCurrentState() ?? throw new InvalidOperationException("No competition set!");
+        var competition = _competitionDataAccess.GetCurrentState() ?? throw new InvalidOperationException("No competition set!");
         foreach (var division in competition.Divisions)
         {
             foreach (var competitionOrder in division.CompetitionOrder)
@@ -103,22 +106,6 @@ public class CompetitionService : ICompetitionService, ICompetitionStatusService
                 }
             }
         }
-    }
-
-    public (DivisionEntity, CompetitionOrderEntity) GetForCurrentCompetitorsEntity(int id)
-    {
-        var competition = GetCurrentState() ?? throw new InvalidOperationException("No competition set!");
-        var matches =
-            from division in competition.Divisions
-            from order in division.CompetitionOrder
-            where order.Id == id
-            select new
-            {
-                Division = division,
-                CompetitionOrder = order
-            };
-
-        var match = matches.First();
-        return (match.Division, match.CompetitionOrder);
+        _latestUpdate.OnNext(DateTime.UtcNow);
     }
 }

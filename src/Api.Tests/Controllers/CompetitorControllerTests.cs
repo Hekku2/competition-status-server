@@ -11,7 +11,7 @@ namespace Api.Controllers.Tests;
 
 public class CompetitorControllerTests
 {
-    private ICompetitionService _mockCompetitionService;
+    private ICompetitionDataAccess _mockCompetitionDataAccess;
 
     private CompetitorController _controller;
 
@@ -19,8 +19,8 @@ public class CompetitorControllerTests
     public void Setup()
     {
         var logger = Substitute.For<ILogger<CompetitorController>>();
-        _mockCompetitionService = Substitute.For<ICompetitionService>();
-        _controller = new CompetitorController(logger, _mockCompetitionService);
+        _mockCompetitionDataAccess = Substitute.For<ICompetitionDataAccess>();
+        _controller = new CompetitorController(logger, _mockCompetitionDataAccess);
     }
 
     [Test]
@@ -39,7 +39,7 @@ public class CompetitorControllerTests
         {
             Divisions = Array.Empty<DivisionEntity>()
         };
-        _mockCompetitionService.GetCurrentState().Returns(competition);
+        _mockCompetitionDataAccess.GetCurrentState().Returns(competition);
 
         var result = _controller.GetAll();
 
@@ -113,7 +113,7 @@ public class CompetitorControllerTests
                 }
             }
         };
-        _mockCompetitionService.GetCurrentState().Returns(competition);
+        _mockCompetitionDataAccess.GetCurrentState().Returns(competition);
 
         var result = _controller.GetAll();
 

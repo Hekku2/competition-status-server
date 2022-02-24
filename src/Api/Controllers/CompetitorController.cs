@@ -16,19 +16,19 @@ namespace Api.Controllers;
 public class CompetitorController : ControllerBase
 {
     private readonly ILogger<CompetitorController> _logger;
-    private readonly ICompetitionService _competitionService;
+    private readonly ICompetitionDataAccess _competitionDataAccess;
 
-    public CompetitorController(ILogger<CompetitorController> logger, ICompetitionService competitionService)
+    public CompetitorController(ILogger<CompetitorController> logger, ICompetitionDataAccess competitionDataAccess)
     {
         _logger = logger;
-        _competitionService = competitionService;
+        _competitionDataAccess = competitionDataAccess;
     }
 
     [HttpGet]
     [Route("all")]
     public ParticipationModel[] GetAll()
     {
-        var state = _competitionService.GetCurrentState();
+        var state = _competitionDataAccess.GetCurrentState();
         if (state is null)
         {
             return Array.Empty<ParticipationModel>();
