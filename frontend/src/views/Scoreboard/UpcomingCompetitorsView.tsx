@@ -27,7 +27,7 @@ export const UpcomingCompetitorsView = () => {
         {
           state.upcomingCompetitors.map(item => <ListItem key={item.id} disablePadding>
             <ListItemButton>
-              <ListItemText primary={item.competitors[0].name} />
+              <ListItemText primary={item.competitors.map(s => `${s.name} ${s.team}`)} />
             </ListItemButton>
           </ListItem>
           )
