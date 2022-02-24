@@ -5,6 +5,8 @@ import { PoleSportResultModel } from "../../services/openapi"
 export const DivisionStatusView = () => {
   const state = useAppSelector(state => state.scoreboardSlice)
 
+  const listEmpty = state.results.length === 0
+
   const scoreFormat = (result: PoleSportResultModel) => {
     return `Total: ${result.total}, A: ${result.artisticScore} E: ${result.executionScore} D: ${result.difficultyScore} HJ: ${result.headJudgePenalty}`
   }
@@ -19,7 +21,7 @@ export const DivisionStatusView = () => {
       alignItems: "center"
     }}>
       <Typography>
-        Current scores:
+        {!listEmpty ? 'Current scores:' : 'No results for division'}
       </Typography>
 
       <List>

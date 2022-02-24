@@ -4,6 +4,8 @@ import { useAppSelector } from "../../components"
 export const UpcomingCompetitorsView = () => {
   const state = useAppSelector(state => state.scoreboardSlice)
 
+  const listEmpty = state.upcomingCompetitors.length === 0
+
   return (
     <Box sx={{
       width: "100%",
@@ -14,7 +16,7 @@ export const UpcomingCompetitorsView = () => {
       alignItems: "center"
     }}>
       <Typography>
-        Next Up:
+        {!listEmpty ? 'Next Up:' : 'Division finished'}
       </Typography>
 
       <List>
