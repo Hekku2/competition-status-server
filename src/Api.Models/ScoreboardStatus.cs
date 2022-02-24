@@ -12,6 +12,8 @@ public class ScoreboardStatusModel
 
     public PerformanceResultsContentModel? Result { get; set; }
 
+    public string? Division { get; set; }
+
     [Required]
     public UpcomingCompetitorModel[] UpcomingCompetitors { get; set; } = Array.Empty<UpcomingCompetitorModel>();
 

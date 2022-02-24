@@ -15,6 +15,10 @@ export const UpcomingCompetitorsView = () => {
       justifyContent: "space-evenly",
       alignItems: "center"
     }}>
+      <Typography variant="h1">
+        {state.division}
+      </Typography>
+
       <Typography>
         {!listEmpty ? 'Next Up:' : 'Division finished'}
       </Typography>

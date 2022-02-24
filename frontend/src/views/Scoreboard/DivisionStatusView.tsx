@@ -1,4 +1,4 @@
-import { Box, List, ListItemButton, ListItemText, ListItem, Typography } from "@mui/material"
+import { Box, List, ListItemText, ListItem, Typography } from "@mui/material"
 import { useAppSelector } from "../../components"
 import { PoleSportResultModel } from "../../services/openapi"
 
@@ -20,6 +20,10 @@ export const DivisionStatusView = () => {
       justifyContent: "space-evenly",
       alignItems: "center"
     }}>
+      <Typography variant="h1">
+        {state.division}
+      </Typography>
+
       <Typography>
         {!listEmpty ? 'Current scores:' : 'No results for division'}
       </Typography>

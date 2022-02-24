@@ -6,14 +6,16 @@ export interface ScoreboardState {
   scoreboardMode: ScoreboardModeModel
   result: PerformanceResultsContentModel | undefined
   upcomingCompetitors: Array<UpcomingCompetitorModel>
-  results: Array<ParticipationRowModel>
+  results: Array<ParticipationRowModel>,
+  division: string | undefined | null
 }
 
 export const initialState: ScoreboardState = {
   scoreboardMode: ScoreboardModeModel.UNKNOWN,
   result: undefined,
   upcomingCompetitors: [],
-  results: []
+  results: [],
+  division: undefined
 }
 
 export const scoreboardSlice = createSlice({
@@ -25,6 +27,7 @@ export const scoreboardSlice = createSlice({
       state.result = action.payload.result
       state.upcomingCompetitors = action.payload.upcomingCompetitors
       state.results = action.payload.results
+      state.division = action.payload.division
     }
   }
 })

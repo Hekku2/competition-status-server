@@ -52,6 +52,7 @@ public class ScoreboardHub : Hub
         {
             LatestUpdate = combined.latestUpdate,
             ScoreboardMode = combined.scoreboardMode.ToScoreboardModeModel(),
+            Division = combined.divisionName,
             Result = combined.result.HasValue ? CreatePerformanceResultsContentModel(combined.result.Value) : null,
             Results = CompetitionOrderUtil.CalculateOrder(competitionOrder).Select(EntityMappingExtensions.ToResultRowModel).ToArray(),
             UpcomingCompetitors = upcoming,

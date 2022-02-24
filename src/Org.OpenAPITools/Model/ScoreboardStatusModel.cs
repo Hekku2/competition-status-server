@@ -48,9 +48,10 @@ namespace Org.OpenAPITools.Model
         /// <param name="latestUpdate">latestUpdate (required).</param>
         /// <param name="scoreboardMode">scoreboardMode (required).</param>
         /// <param name="result">result.</param>
+        /// <param name="division">division.</param>
         /// <param name="upcomingCompetitors">upcomingCompetitors (required).</param>
         /// <param name="results">results (required).</param>
-        public ScoreboardStatusModel(DateTime latestUpdate = default(DateTime), ScoreboardModeModel scoreboardMode = default(ScoreboardModeModel), PerformanceResultsContentModel result = default(PerformanceResultsContentModel), List<UpcomingCompetitorModel> upcomingCompetitors = default(List<UpcomingCompetitorModel>), List<ParticipationRowModel> results = default(List<ParticipationRowModel>))
+        public ScoreboardStatusModel(DateTime latestUpdate = default(DateTime), ScoreboardModeModel scoreboardMode = default(ScoreboardModeModel), PerformanceResultsContentModel result = default(PerformanceResultsContentModel), string division = default(string), List<UpcomingCompetitorModel> upcomingCompetitors = default(List<UpcomingCompetitorModel>), List<ParticipationRowModel> results = default(List<ParticipationRowModel>))
         {
             this.LatestUpdate = latestUpdate;
             this.ScoreboardMode = scoreboardMode;
@@ -65,6 +66,7 @@ namespace Org.OpenAPITools.Model
             }
             this.Results = results;
             this.Result = result;
+            this.Division = division;
         }
 
         /// <summary>
@@ -78,6 +80,12 @@ namespace Org.OpenAPITools.Model
         /// </summary>
         [DataMember(Name = "result", EmitDefaultValue = false)]
         public PerformanceResultsContentModel Result { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Division
+        /// </summary>
+        [DataMember(Name = "division", EmitDefaultValue = true)]
+        public string Division { get; set; }
 
         /// <summary>
         /// Gets or Sets UpcomingCompetitors
@@ -102,6 +110,7 @@ namespace Org.OpenAPITools.Model
             sb.Append("  LatestUpdate: ").Append(LatestUpdate).Append("\n");
             sb.Append("  ScoreboardMode: ").Append(ScoreboardMode).Append("\n");
             sb.Append("  Result: ").Append(Result).Append("\n");
+            sb.Append("  Division: ").Append(Division).Append("\n");
             sb.Append("  UpcomingCompetitors: ").Append(UpcomingCompetitors).Append("\n");
             sb.Append("  Results: ").Append(Results).Append("\n");
             sb.Append("}\n");
@@ -154,6 +163,11 @@ namespace Org.OpenAPITools.Model
                     this.Result.Equals(input.Result))
                 ) && 
                 (
+                    this.Division == input.Division ||
+                    (this.Division != null &&
+                    this.Division.Equals(input.Division))
+                ) && 
+                (
                     this.UpcomingCompetitors == input.UpcomingCompetitors ||
                     this.UpcomingCompetitors != null &&
                     input.UpcomingCompetitors != null &&
@@ -184,6 +198,10 @@ namespace Org.OpenAPITools.Model
                 if (this.Result != null)
                 {
                     hashCode = (hashCode * 59) + this.Result.GetHashCode();
+                }
+                if (this.Division != null)
+                {
+                    hashCode = (hashCode * 59) + this.Division.GetHashCode();
                 }
                 if (this.UpcomingCompetitors != null)
                 {

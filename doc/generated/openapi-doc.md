@@ -628,7 +628,7 @@ Accept: text/plain
 > 200 Response
 
 ```
-{"latestUpdate":"2019-08-24T14:15:22Z","scoreboardMode":"Unknown","result":{"division":"Senior Women","currentPlace":1,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}},"upcomingCompetitors":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}],"results":[{"id":0,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0},"forfeit":true}]}
+{"latestUpdate":"2019-08-24T14:15:22Z","scoreboardMode":"Unknown","result":{"division":"Senior Women","currentPlace":1,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}},"division":"string","upcomingCompetitors":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}],"results":[{"id":0,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0},"forfeit":true}]}
 ```
 
 ```json
@@ -652,6 +652,7 @@ Accept: text/plain
       "headJudgePenalty": 0
     }
   },
+  "division": "string",
   "upcomingCompetitors": [
     {
       "id": 123,
@@ -1666,6 +1667,7 @@ This desribes the mode that the scoreboard should be in.
       "headJudgePenalty": 0
     }
   },
+  "division": "string",
   "upcomingCompetitors": [
     {
       "id": 123,
@@ -1707,6 +1709,7 @@ This desribes the mode that the scoreboard should be in.
 |latestUpdate|string(date-time)|true|none|none|
 |scoreboardMode|[ScoreboardModeModel](#schemascoreboardmodemodel)|true|none|This desribes the mode that the scoreboard should be in.|
 |result|[PerformanceResultsContentModel](#schemaperformanceresultscontentmodel)|false|none|Describes a result for competitor(s) in for a single performance and what<br>place it did achieve, if any.|
+|division|string¦null|false|none|none|
 |upcomingCompetitors|[[UpcomingCompetitorModel](#schemaupcomingcompetitormodel)]|true|none|[Represents an upcoming competitor.]|
 |results|[[ParticipationRowModel](#schemaparticipationrowmodel)]|true|none|[This represents a finished or or otherwise resolved performance result.<br>Result might be missing, if performance has been finished but has not been<br>graded yet or if the competitor has forfeited.]|
 

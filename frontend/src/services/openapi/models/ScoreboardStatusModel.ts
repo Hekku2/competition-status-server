@@ -11,6 +11,7 @@ export type ScoreboardStatusModel = {
     latestUpdate: string;
     scoreboardMode: ScoreboardModeModel;
     result?: PerformanceResultsContentModel;
+    division?: string | null;
     upcomingCompetitors: Array<UpcomingCompetitorModel>;
     results: Array<ParticipationRowModel>;
 }
