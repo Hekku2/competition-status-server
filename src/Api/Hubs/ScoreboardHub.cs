@@ -44,12 +44,16 @@ public class ScoreboardHub : Hub
 
     private ScoreboardStatusModel CreateScoreboardStatusModel((ScoreboardMode scoreboardMode, (DivisionEntity, CompetitionOrderEntity)? result, string? divisionName, DateTime latestUpdate) combined)
     {
-        var upcoming = combined.divisionName != null ? _competitionDataAccess.GetDivisionEntity(combined.divisionName)?.CompetitionOrder.ToUpcomingCompetitorModelArray() ?? Array.Empty<UpcomingCompetitorModel>() : Array.Empty<UpcomingCompetitorModel>();
+        var division = combined.divisionName != null ? _competitionDataAccess.GetDivisionEntity(combined.divisionName) : null;
+        var competitionOrder = division != null ? division.CompetitionOrder : Array.Empty<CompetitionOrderEntity>();
+        var upcoming = competitionOrder.ToUpcomingCompetitorModelArray();
+
         return new ScoreboardStatusModel
         {
             LatestUpdate = combined.latestUpdate,
             ScoreboardMode = combined.scoreboardMode.ToScoreboardModeModel(),
             Result = combined.result.HasValue ? CreatePerformanceResultsContentModel(combined.result.Value) : null,
+            Results = CompetitionOrderUtil.CalculateOrder(competitionOrder).Select(EntityMappingExtensions.ToResultRowModel).ToArray(),
             UpcomingCompetitors = upcoming,
         };
     }

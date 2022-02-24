@@ -14,4 +14,7 @@ public class ScoreboardStatusModel
 
     [Required]
     public UpcomingCompetitorModel[] UpcomingCompetitors { get; set; } = Array.Empty<UpcomingCompetitorModel>();
+
+    [Required]
+    public ParticipationRowModel[] Results { get; set; } = Array.Empty<ParticipationRowModel>();
 }

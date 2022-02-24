@@ -628,11 +628,12 @@ Accept: text/plain
 > 200 Response
 
 ```
-{"scoreboardMode":"Unknown","result":{"division":"Senior Women","currentPlace":1,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}},"upcomingCompetitors":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}]}
+{"latestUpdate":"2019-08-24T14:15:22Z","scoreboardMode":"Unknown","result":{"division":"Senior Women","currentPlace":1,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}},"upcomingCompetitors":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}],"results":[{"id":0,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0},"forfeit":true}]}
 ```
 
 ```json
 {
+  "latestUpdate": "2019-08-24T14:15:22Z",
   "scoreboardMode": "Unknown",
   "result": {
     "division": "Senior Women",
@@ -660,6 +661,25 @@ Accept: text/plain
           "team": "Team Pole Queens"
         }
       ]
+    }
+  ],
+  "results": [
+    {
+      "id": 0,
+      "competitors": [
+        {
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
+        }
+      ],
+      "result": {
+        "total": 127.266,
+        "artisticScore": 59.266,
+        "executionScore": 70.333,
+        "difficultyScore": 12.8,
+        "headJudgePenalty": 0
+      },
+      "forfeit": true
     }
   ]
 }
@@ -765,54 +785,6 @@ PUT /Scoreboard/set-active-division HTTP/1.1
 |name|query|string|false|none|
 
 <h3 id="scoreboardsetactivedivision-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-<h1 id="competition-status-api-test">Test</h1>
-
-## TestLoadPoleCompetitionData
-
-<a id="opIdTestLoadPoleCompetitionData"></a>
-
-> Code samples
-
-```http
-POST /Test/set-current-competitors HTTP/1.1
-
-Content-Type: application/json
-
-```
-
-`POST /Test/set-current-competitors`
-
-> Body parameter
-
-```json
-{
-  "id": 0,
-  "division": "string",
-  "competitors": [
-    {
-      "name": "string",
-      "team": "string"
-    }
-  ]
-}
-```
-
-<h3 id="testloadpolecompetitiondata-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[CurrentCompetitorsEntity](#schemacurrentcompetitorsentity)|false|none|
-
-<h3 id="testloadpolecompetitiondata-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -1065,28 +1037,6 @@ If competition is not active, Content can be null.
 |type|string|true|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |content|[CompetitionStatusContentModel](#schemacompetitionstatuscontentmodel)|false|none|Current status of the competition.|
 
-<h2 id="tocS_CompetitorEntity">CompetitorEntity</h2>
-<!-- backwards compatibility -->
-<a id="schemacompetitorentity"></a>
-<a id="schema_CompetitorEntity"></a>
-<a id="tocScompetitorentity"></a>
-<a id="tocscompetitorentity"></a>
-
-```json
-{
-  "name": "string",
-  "team": "string"
-}
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string¦null|false|none|none|
-|team|string¦null|false|none|none|
-
 <h2 id="tocS_CompetitorFileModel">CompetitorFileModel</h2>
 <!-- backwards compatibility -->
 <a id="schemacompetitorfilemodel"></a>
@@ -1298,35 +1248,6 @@ when no other competitor is not active.
 |id|integer(int32)¦null|false|none|ID of competitor. This might not be set if competitor is not listed.|
 |division|string|true|none|Division of competitor(s). This should match some division in<br>current competition.|
 |competitors|[[CompetitorFileModel](#schemacompetitorfilemodel)]|true|none|Competitor(s). This should have at least one value, but may have<br>multiple values if there are multiple persons performing for single<br>performance.|
-
-<h2 id="tocS_CurrentCompetitorsEntity">CurrentCompetitorsEntity</h2>
-<!-- backwards compatibility -->
-<a id="schemacurrentcompetitorsentity"></a>
-<a id="schema_CurrentCompetitorsEntity"></a>
-<a id="tocScurrentcompetitorsentity"></a>
-<a id="tocscurrentcompetitorsentity"></a>
-
-```json
-{
-  "id": 0,
-  "division": "string",
-  "competitors": [
-    {
-      "name": "string",
-      "team": "string"
-    }
-  ]
-}
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|id|integer(int32)¦null|false|none|none|
-|division|string¦null|false|none|none|
-|competitors|[[CompetitorEntity](#schemacompetitorentity)]¦null|false|none|none|
 
 <h2 id="tocS_CurrentCompetitorSetModel">CurrentCompetitorSetModel</h2>
 <!-- backwards compatibility -->
@@ -1726,6 +1647,7 @@ This desribes the mode that the scoreboard should be in.
 
 ```json
 {
+  "latestUpdate": "2019-08-24T14:15:22Z",
   "scoreboardMode": "Unknown",
   "result": {
     "division": "Senior Women",
@@ -1754,6 +1676,25 @@ This desribes the mode that the scoreboard should be in.
         }
       ]
     }
+  ],
+  "results": [
+    {
+      "id": 0,
+      "competitors": [
+        {
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
+        }
+      ],
+      "result": {
+        "total": 127.266,
+        "artisticScore": 59.266,
+        "executionScore": 70.333,
+        "difficultyScore": 12.8,
+        "headJudgePenalty": 0
+      },
+      "forfeit": true
+    }
   ]
 }
 
@@ -1763,9 +1704,11 @@ This desribes the mode that the scoreboard should be in.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
+|latestUpdate|string(date-time)|true|none|none|
 |scoreboardMode|[ScoreboardModeModel](#schemascoreboardmodemodel)|true|none|This desribes the mode that the scoreboard should be in.|
 |result|[PerformanceResultsContentModel](#schemaperformanceresultscontentmodel)|false|none|Describes a result for competitor(s) in for a single performance and what<br>place it did achieve, if any.|
 |upcomingCompetitors|[[UpcomingCompetitorModel](#schemaupcomingcompetitormodel)]|true|none|[Represents an upcoming competitor.]|
+|results|[[ParticipationRowModel](#schemaparticipationrowmodel)]|true|none|[This represents a finished or or otherwise resolved performance result.<br>Result might be missing, if performance has been finished but has not been<br>graded yet or if the competitor has forfeited.]|
 
 <h2 id="tocS_UpcomingCompetitorModel">UpcomingCompetitorModel</h2>
 <!-- backwards compatibility -->

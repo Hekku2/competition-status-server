@@ -45,19 +45,33 @@ namespace Org.OpenAPITools.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="ScoreboardStatusModel" /> class.
         /// </summary>
+        /// <param name="latestUpdate">latestUpdate (required).</param>
         /// <param name="scoreboardMode">scoreboardMode (required).</param>
         /// <param name="result">result.</param>
         /// <param name="upcomingCompetitors">upcomingCompetitors (required).</param>
-        public ScoreboardStatusModel(ScoreboardModeModel scoreboardMode = default(ScoreboardModeModel), PerformanceResultsContentModel result = default(PerformanceResultsContentModel), List<UpcomingCompetitorModel> upcomingCompetitors = default(List<UpcomingCompetitorModel>))
+        /// <param name="results">results (required).</param>
+        public ScoreboardStatusModel(DateTime latestUpdate = default(DateTime), ScoreboardModeModel scoreboardMode = default(ScoreboardModeModel), PerformanceResultsContentModel result = default(PerformanceResultsContentModel), List<UpcomingCompetitorModel> upcomingCompetitors = default(List<UpcomingCompetitorModel>), List<ParticipationRowModel> results = default(List<ParticipationRowModel>))
         {
+            this.LatestUpdate = latestUpdate;
             this.ScoreboardMode = scoreboardMode;
             // to ensure "upcomingCompetitors" is required (not null)
             if (upcomingCompetitors == null) {
                 throw new ArgumentNullException("upcomingCompetitors is a required property for ScoreboardStatusModel and cannot be null");
             }
             this.UpcomingCompetitors = upcomingCompetitors;
+            // to ensure "results" is required (not null)
+            if (results == null) {
+                throw new ArgumentNullException("results is a required property for ScoreboardStatusModel and cannot be null");
+            }
+            this.Results = results;
             this.Result = result;
         }
+
+        /// <summary>
+        /// Gets or Sets LatestUpdate
+        /// </summary>
+        [DataMember(Name = "latestUpdate", IsRequired = true, EmitDefaultValue = false)]
+        public DateTime LatestUpdate { get; set; }
 
         /// <summary>
         /// Gets or Sets Result
@@ -72,6 +86,12 @@ namespace Org.OpenAPITools.Model
         public List<UpcomingCompetitorModel> UpcomingCompetitors { get; set; }
 
         /// <summary>
+        /// Gets or Sets Results
+        /// </summary>
+        [DataMember(Name = "results", IsRequired = true, EmitDefaultValue = false)]
+        public List<ParticipationRowModel> Results { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -79,9 +99,11 @@ namespace Org.OpenAPITools.Model
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("class ScoreboardStatusModel {\n");
+            sb.Append("  LatestUpdate: ").Append(LatestUpdate).Append("\n");
             sb.Append("  ScoreboardMode: ").Append(ScoreboardMode).Append("\n");
             sb.Append("  Result: ").Append(Result).Append("\n");
             sb.Append("  UpcomingCompetitors: ").Append(UpcomingCompetitors).Append("\n");
+            sb.Append("  Results: ").Append(Results).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -118,6 +140,11 @@ namespace Org.OpenAPITools.Model
             }
             return 
                 (
+                    this.LatestUpdate == input.LatestUpdate ||
+                    (this.LatestUpdate != null &&
+                    this.LatestUpdate.Equals(input.LatestUpdate))
+                ) && 
+                (
                     this.ScoreboardMode == input.ScoreboardMode ||
                     this.ScoreboardMode.Equals(input.ScoreboardMode)
                 ) && 
@@ -131,6 +158,12 @@ namespace Org.OpenAPITools.Model
                     this.UpcomingCompetitors != null &&
                     input.UpcomingCompetitors != null &&
                     this.UpcomingCompetitors.SequenceEqual(input.UpcomingCompetitors)
+                ) && 
+                (
+                    this.Results == input.Results ||
+                    this.Results != null &&
+                    input.Results != null &&
+                    this.Results.SequenceEqual(input.Results)
                 );
         }
 
@@ -143,6 +176,10 @@ namespace Org.OpenAPITools.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
+                if (this.LatestUpdate != null)
+                {
+                    hashCode = (hashCode * 59) + this.LatestUpdate.GetHashCode();
+                }
                 hashCode = (hashCode * 59) + this.ScoreboardMode.GetHashCode();
                 if (this.Result != null)
                 {
@@ -151,6 +188,10 @@ namespace Org.OpenAPITools.Model
                 if (this.UpcomingCompetitors != null)
                 {
                     hashCode = (hashCode * 59) + this.UpcomingCompetitors.GetHashCode();
+                }
+                if (this.Results != null)
+                {
+                    hashCode = (hashCode * 59) + this.Results.GetHashCode();
                 }
                 return hashCode;
             }

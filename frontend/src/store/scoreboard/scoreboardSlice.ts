@@ -1,17 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { PerformanceResultsContentModel, ScoreboardModeModel, ScoreboardStatusModel, UpcomingCompetitorModel } from '../../services/openapi'
+import { ParticipationRowModel, PerformanceResultsContentModel, ScoreboardModeModel, ScoreboardStatusModel, UpcomingCompetitorModel } from '../../services/openapi'
 import { RootState } from '../store'
 
 export interface ScoreboardState {
   scoreboardMode: ScoreboardModeModel
   result: PerformanceResultsContentModel | undefined
-  upcomimngCompetitors: Array<UpcomingCompetitorModel>
+  upcomingCompetitors: Array<UpcomingCompetitorModel>
+  results: Array<ParticipationRowModel>
 }
 
 export const initialState: ScoreboardState = {
   scoreboardMode: ScoreboardModeModel.UNKNOWN,
   result: undefined,
-  upcomimngCompetitors: []
+  upcomingCompetitors: [],
+  results: []
 }
 
 export const scoreboardSlice = createSlice({
@@ -21,7 +23,8 @@ export const scoreboardSlice = createSlice({
     setScoreboardStatus(state, action: PayloadAction<ScoreboardStatusModel>) {
       state.scoreboardMode = action.payload.scoreboardMode || ScoreboardModeModel.UNKNOWN
       state.result = action.payload.result
-      state.upcomimngCompetitors = action.payload.upcomingCompetitors
+      state.upcomingCompetitors = action.payload.upcomingCompetitors
+      state.results = action.payload.results
     }
   }
 })
