@@ -14,42 +14,21 @@ using Org.OpenAPITools.Model;
 
 namespace AcceptanceTests;
 
-public class ScoreboardTests
+public class ScoreboardTests : AcceptanceTestBase
 {
-    private ScoreboardApi _client;
     private ScoreboardStatusModel _latestMessage;
-    private CancellationTokenSource _source;
 
     private const string HubName = "scoreboard-hub";
 
-    [SetUp]
-    public async Task Setup()
+    protected override async Task OnSetup()
     {
-        var uri = Environment.GetEnvironmentVariable("APP_URI");
-        if (string.IsNullOrWhiteSpace(uri))
-        {
-            Assert.Inconclusive("URI not set. Unable to execute acceptance tests.");
-        }
         _latestMessage = null;
-        _source = new CancellationTokenSource();
 
-        var connection = new HubConnectionBuilder()
-            .WithUrl($"{uri}{HubName}")
-            .AddJsonProtocol(options =>
-            {
-                var enumConverter = new JsonStringEnumConverter();
-                options.PayloadSerializerOptions.Converters.Add(enumConverter);
-            })
-            .Build();
-
-        await connection.StartAsync(_source.Token);
-        var channel = await connection.StreamAsChannelAsync<ScoreboardStatusModel>("StreamScoreboardStatus", _source.Token);
+        var channel = await ScoreboardHub.StreamAsChannelAsync<ScoreboardStatusModel>("StreamScoreboardStatus", TokenSource.Token);
         _ = channel.ReadUntilStopped((item) =>
         {
             _latestMessage = item;
-        }, _source.Token);
-
-        _client = new ScoreboardApi(uri);
+        }, TokenSource.Token);
     }
 
     [Test]
@@ -61,11 +40,36 @@ public class ScoreboardTests
         await ChangeAndVerify(ScoreboardModeModel.Unknown);
     }
 
+    [Test]
+    public async Task SetResultsUpdatesScoreboard()
+    {
+        var model = TestUtil.CreateDataModel();
+        await CompetitionApi.CompetitionUploadCompetitionAsync(model, TokenSource.Token);
+        await Task.Delay(TimeSpan.FromSeconds(2));
+        var updateTime = _latestMessage.LatestUpdate;
+
+        var resultModel = new CompetitorResultModel
+        {
+            Id = 6,
+            Results = new PoleResultFileModel(0, 0, 0, 0)
+            {
+                ArtisticScore = 1,
+                DifficultyScore = 2,
+                ExecutionScore = 3,
+                HeadJudgePenalty = 0
+            }
+        };
+        await CompetitionApi.CompetitionSetResultAsync(resultModel, TokenSource.Token);
+
+        await Task.Delay(TimeSpan.FromSeconds(2));
+        _latestMessage.LatestUpdate.Should().BeAfter(updateTime);
+    }
+
     private async Task ChangeAndVerify(ScoreboardModeModel model)
     {
-        await _client.ScoreboardSetScoreboardModeAsync(model);
+        await ScoreboardApi.ScoreboardSetScoreboardModeAsync(model);
         await Task.Delay(TimeSpan.FromSeconds(2));
-        var newStatus = await _client.ScoreboardGetStatusAsync(_source.Token);
+        var newStatus = await ScoreboardApi.ScoreboardGetStatusAsync(TokenSource.Token);
         newStatus.ScoreboardMode.Should().Be(model);
         _latestMessage.ScoreboardMode.Should().Be(model);
     }

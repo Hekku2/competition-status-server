@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -13,46 +12,21 @@ using Org.OpenAPITools.Model;
 
 namespace AcceptanceTests;
 
-public class CompetitionApiTests
+public class CompetitionApiTests : AcceptanceTestBase
 {
-    private CompetitionApi _client;
-
     private CurrentCompetitorEnvelopeModel _latestMessage;
-    private CancellationTokenSource _source;
-    private const string HubName = "competition-hub";
 
-    [SetUp]
-    public async Task Setup()
+    protected override async Task OnSetup()
     {
-        var uri = Environment.GetEnvironmentVariable("APP_URI");
-        if (string.IsNullOrWhiteSpace(uri))
-        {
-            Assert.Inconclusive("URI not set. Unable to execute acceptance tests.");
-        }
-
-        _client = new CompetitionApi(uri);
         _latestMessage = null;
-        _source = new CancellationTokenSource();
 
-        var connection = new HubConnectionBuilder()
-            .WithUrl($"{uri}{HubName}")
-            .Build();
-
-        await connection.StartAsync(_source.Token);
-        var channel = await connection.StreamAsChannelAsync<CurrentCompetitorEnvelopeModel>("StreamCompetitors");
+        var channel = await CompetitionHub.StreamAsChannelAsync<CurrentCompetitorEnvelopeModel>("StreamCompetitors");
 
         _ = channel.ReadUntilStopped((item) =>
         {
             _latestMessage = item;
-        }, _source.Token);
+        }, TokenSource.Token);
     }
-
-    [TearDown]
-    public void TearDown()
-    {
-        _source?.Cancel();
-    }
-
 
     [Test]
     public async Task CreateCompetition_MinimalValues()
@@ -62,9 +36,9 @@ public class CompetitionApiTests
             Name = "New competition",
             Divisions = new List<DivisionFileModel>()
         };
-        await _client.CompetitionUploadCompetitionAsync(model, _source.Token);
+        await CompetitionApi.CompetitionUploadCompetitionAsync(model, TokenSource.Token);
 
-        var response = await _client.CompetitionGetCompetitionStatusAsync(_source.Token);
+        var response = await CompetitionApi.CompetitionGetCompetitionStatusAsync(TokenSource.Token);
         response.Type.Should().Be("competition-status");
         response._Version.Should().Be("1");
         response.Content.Should().NotBeNull();
@@ -156,9 +130,9 @@ public class CompetitionApiTests
                 }
             }
         };
-        await _client.CompetitionUploadCompetitionAsync(model, _source.Token);
+        await CompetitionApi.CompetitionUploadCompetitionAsync(model, TokenSource.Token);
 
-        var response = await _client.CompetitionGetCompetitionStatusAsync(_source.Token);
+        var response = await CompetitionApi.CompetitionGetCompetitionStatusAsync(TokenSource.Token);
 
         response.Content.EventName.Should().Be(model.Name);
         response.Content.CurrentCompetitor.Should().NotBeNull("CurrentCompetitor should be defined");
@@ -225,26 +199,26 @@ public class CompetitionApiTests
                     }
                 }
         };
-        await _client.CompetitionUploadCompetitionAsync(model, _source.Token);
+        await CompetitionApi.CompetitionUploadCompetitionAsync(model, TokenSource.Token);
 
-        var shoudlBeNull = await _client.CompetitionGetCurrentCompetitorAsync(_source.Token);
+        var shoudlBeNull = await CompetitionApi.CompetitionGetCurrentCompetitorAsync(TokenSource.Token);
         shoudlBeNull.Content.Should().BeNull();
 
         _latestMessage.Content.Should().BeNull();
 
-        await _client.CompetitionSetCurrentCompetitorAsync(new CurrentCompetitorSetModel { Id = 2 }, _source.Token);
+        await CompetitionApi.CompetitionSetCurrentCompetitorAsync(new CurrentCompetitorSetModel { Id = 2 }, TokenSource.Token);
 
         Thread.Sleep(1000);
         _latestMessage.Content.Should().NotBeNull();
 
-        var first = await _client.CompetitionGetCurrentCompetitorAsync(_source.Token);
+        var first = await CompetitionApi.CompetitionGetCurrentCompetitorAsync(TokenSource.Token);
         first.Content.Should().NotBeNull();
         first.Content.Division.Should().Be("Senior Women");
         first.Content.Competitors.First().Name.Should().Be("I should be shown first");
 
-        await _client.CompetitionSetCurrentCompetitorAsync(new CurrentCompetitorSetModel { Id = 3 }, _source.Token);
+        await CompetitionApi.CompetitionSetCurrentCompetitorAsync(new CurrentCompetitorSetModel { Id = 3 }, TokenSource.Token);
 
-        var second = await _client.CompetitionGetCurrentCompetitorAsync(_source.Token);
+        var second = await CompetitionApi.CompetitionGetCurrentCompetitorAsync(TokenSource.Token);
         second.Content.Should().NotBeNull();
         second.Content.Division.Should().Be("Senior Women");
         second.Content.Competitors.First().Name.Should().Be("I should be shown second");
