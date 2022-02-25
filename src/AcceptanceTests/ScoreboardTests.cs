@@ -43,14 +43,17 @@ public class ScoreboardTests : AcceptanceTestBase
     [Test]
     public async Task SetResultsUpdatesScoreboard()
     {
+        var competitorId = 6;
+
         var model = TestUtil.CreateDataModel();
         await CompetitionApi.CompetitionUploadCompetitionAsync(model, TokenSource.Token);
+        await ScoreboardApi.ScoreboardSelectResultForShowingAsync(competitorId, TokenSource.Token);
         await Task.Delay(TimeSpan.FromSeconds(2));
         var updateTime = _latestMessage.LatestUpdate;
 
         var resultModel = new CompetitorResultModel
         {
-            Id = 6,
+            Id = competitorId,
             Results = new PoleResultFileModel(0, 0, 0, 0)
             {
                 ArtisticScore = 1,
@@ -63,6 +66,11 @@ public class ScoreboardTests : AcceptanceTestBase
 
         await Task.Delay(TimeSpan.FromSeconds(2));
         _latestMessage.LatestUpdate.Should().BeAfter(updateTime);
+        _latestMessage.Result.Should().NotBeNull();
+        _latestMessage.Result.Result.ArtisticScore.Should().Be(resultModel.Results.ArtisticScore);
+        _latestMessage.Result.Result.DifficultyScore.Should().Be(resultModel.Results.DifficultyScore);
+        _latestMessage.Result.Result.ExecutionScore.Should().Be(resultModel.Results.ExecutionScore);
+        _latestMessage.Result.Result.HeadJudgePenalty.Should().Be(resultModel.Results.HeadJudgePenalty);
     }
 
     private async Task ChangeAndVerify(ScoreboardModeModel model)
