@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AcceptanceTests.Util;
 using FluentAssertions;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Org.OpenAPITools.Api;
 using Org.OpenAPITools.Model;
@@ -34,10 +35,15 @@ public class ScoreboardTests
 
         var connection = new HubConnectionBuilder()
             .WithUrl($"{uri}{HubName}")
+            .AddJsonProtocol(options =>
+            {
+                var enumConverter = new JsonStringEnumConverter();
+                options.PayloadSerializerOptions.Converters.Add(enumConverter);
+            })
             .Build();
 
         await connection.StartAsync(_source.Token);
-        var channel = await connection.StreamAsChannelAsync<ScoreboardStatusModel>("StreamScoreboardStatus");
+        var channel = await connection.StreamAsChannelAsync<ScoreboardStatusModel>("StreamScoreboardStatus", _source.Token);
         _ = channel.ReadUntilStopped((item) =>
         {
             _latestMessage = item;
@@ -60,5 +66,6 @@ public class ScoreboardTests
         await _client.ScoreboardSetScoreboardModeAsync(model);
         var newStatus = await _client.ScoreboardGetStatusAsync(_source.Token);
         newStatus.ScoreboardMode.Should().Be(model);
+        _latestMessage.ScoreboardMode.Should().Be(model);
     }
 }

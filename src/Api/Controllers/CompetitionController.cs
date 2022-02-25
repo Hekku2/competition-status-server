@@ -73,7 +73,7 @@ namespace Api.Controllers
         [Route("set-result")]
         public void SetResult(CompetitorResultModel model)
         {
-            _logger.LogInformation("Setting results fro comeptitor #{Id}", model.Id);
+            _logger.LogInformation("Setting results for comeptitor #{Id}", model.Id);
             _competitionStatusService.UpdateResults(model.Id, model.Results?.ToPoleDanceResultEntity());
         }
 

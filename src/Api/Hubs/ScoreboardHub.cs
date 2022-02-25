@@ -44,6 +44,7 @@ public class ScoreboardHub : Hub
 
     private ScoreboardStatusModel CreateScoreboardStatusModel((ScoreboardMode scoreboardMode, (DivisionEntity, CompetitionOrderEntity)? result, string? divisionName, DateTime latestUpdate) combined)
     {
+        _logger.LogTrace("Scoreboard status updated: {UpdateTime}", combined.latestUpdate);
         var division = combined.divisionName != null ? _competitionDataAccess.GetDivisionEntity(combined.divisionName) : null;
         var competitionOrder = division != null ? division.CompetitionOrder : Array.Empty<CompetitionOrderEntity>();
         var upcoming = competitionOrder.ToUpcomingCompetitorModelArray();
