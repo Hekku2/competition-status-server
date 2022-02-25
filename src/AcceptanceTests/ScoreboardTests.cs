@@ -64,6 +64,7 @@ public class ScoreboardTests
     private async Task ChangeAndVerify(ScoreboardModeModel model)
     {
         await _client.ScoreboardSetScoreboardModeAsync(model);
+        await Task.Delay(TimeSpan.FromSeconds(2));
         var newStatus = await _client.ScoreboardGetStatusAsync(_source.Token);
         newStatus.ScoreboardMode.Should().Be(model);
         _latestMessage.ScoreboardMode.Should().Be(model);
