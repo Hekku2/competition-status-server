@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reactive.Subjects;
+using Api.Models;
 using Api.Services.Interfaces;
 using DataAccess.Entity;
 

@@ -1,4 +1,5 @@
 using System;
+using Api.Models;
 using DataAccess.Entity;
 
 namespace Api.Services.Interfaces

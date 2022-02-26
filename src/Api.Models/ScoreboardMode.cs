@@ -1,4 +1,4 @@
-namespace DataAccess.Entity
+namespace Api.Models
 {
     /// <summary>
     /// This desribes the mode that the scoreboard should be in.
