@@ -14,9 +14,14 @@ public static class TestUtil
         }.ToList();
     }
 
+    public static ScoreboardSettingsFileModel Minimal()
+    {
+        return new ScoreboardSettingsFileModel(ScoreboardMode.Unknown, null);
+    }
+
     public static CompetitionFileModel CreateDataModel()
     {
-        return new CompetitionFileModel("", new List<DivisionFileModel>())
+        return new CompetitionFileModel("", new List<DivisionFileModel>(), scoreboardSettings: Minimal())
         {
             Name = "New competition",
             CurrentCompetitor = new CurrentCompetitorFileModel(division: "", competitors: new List<CompetitorFileModel>())

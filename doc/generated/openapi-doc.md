@@ -300,6 +300,10 @@ Content-Type: application/json
         "team": "Team Pole Queens"
       }
     ]
+  },
+  "scoreboardSettings": {
+    "scoreboardMode": "Unknown",
+    "activeDivision": "Senior women"
   }
 }
 ```
@@ -451,7 +455,7 @@ Accept: text/plain
 > 200 Response
 
 ```
-{"name":"National finals 2022","divisions":[{"name":"Senior Women","items":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"forfeit":true,"results":{"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}}]}],"currentCompetitor":{"id":25,"division":"Senior Women","competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}}
+{"name":"National finals 2022","divisions":[{"name":"Senior Women","items":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"forfeit":true,"results":{"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}}]}],"currentCompetitor":{"id":25,"division":"Senior Women","competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]},"scoreboardSettings":{"scoreboardMode":"Unknown","activeDivision":"Senior women"}}
 ```
 
 ```json
@@ -489,6 +493,10 @@ Accept: text/plain
         "team": "Team Pole Queens"
       }
     ]
+  },
+  "scoreboardSettings": {
+    "scoreboardMode": "Unknown",
+    "activeDivision": "Senior women"
   }
 }
 ```
@@ -839,6 +847,10 @@ This operation does not require authentication
         "team": "Team Pole Queens"
       }
     ]
+  },
+  "scoreboardSettings": {
+    "scoreboardMode": "Unknown",
+    "activeDivision": "Senior women"
   }
 }
 
@@ -855,6 +867,7 @@ that can be saved to file.
 |name|string|true|none|Name of the whole competition.|
 |divisions|[[DivisionFileModel](#schemadivisionfilemodel)]|true|none|Divisions for this competition.|
 |currentCompetitor|[CurrentCompetitorFileModel](#schemacurrentcompetitorfilemodel)|false|none|Represents file model of current competitor performing or performing next<br>when no other competitor is not active.|
+|scoreboardSettings|[ScoreboardSettingsFileModel](#schemascoreboardsettingsfilemodel)|true|none|none|
 
 <h2 id="tocS_CompetitionStatusContentModel">CompetitionStatusContentModel</h2>
 <!-- backwards compatibility -->
@@ -1610,6 +1623,35 @@ Represents a score in Pole Dance Sport series
 |difficultyScore|number(double)|true|none|Difficulty score (D)|
 |headJudgePenalty|number(double)|true|none|Head judge penalty (HJ). This is subtracted from the total.|
 
+<h2 id="tocS_ScoreboardMode">ScoreboardMode</h2>
+<!-- backwards compatibility -->
+<a id="schemascoreboardmode"></a>
+<a id="schema_ScoreboardMode"></a>
+<a id="tocSscoreboardmode"></a>
+<a id="tocsscoreboardmode"></a>
+
+```json
+"Unknown"
+
+```
+
+This desribes the mode that the scoreboard should be in.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|This desribes the mode that the scoreboard should be in.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|*anonymous*|Unknown|
+|*anonymous*|DivisionStatus|
+|*anonymous*|CompetitorResults|
+|*anonymous*|UpcomingCompetitors|
+
 <h2 id="tocS_ScoreboardModeModel">ScoreboardModeModel</h2>
 <!-- backwards compatibility -->
 <a id="schemascoreboardmodemodel"></a>
@@ -1638,6 +1680,28 @@ This desribes the mode that the scoreboard should be in.
 |*anonymous*|DivisionStatus|
 |*anonymous*|CompetitorResults|
 |*anonymous*|UpcomingCompetitors|
+
+<h2 id="tocS_ScoreboardSettingsFileModel">ScoreboardSettingsFileModel</h2>
+<!-- backwards compatibility -->
+<a id="schemascoreboardsettingsfilemodel"></a>
+<a id="schema_ScoreboardSettingsFileModel"></a>
+<a id="tocSscoreboardsettingsfilemodel"></a>
+<a id="tocsscoreboardsettingsfilemodel"></a>
+
+```json
+{
+  "scoreboardMode": "Unknown",
+  "activeDivision": "Senior women"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|scoreboardMode|[ScoreboardMode](#schemascoreboardmode)|false|none|This desribes the mode that the scoreboard should be in.|
+|activeDivision|string¦null|false|none|Name of the currently selected division|
 
 <h2 id="tocS_ScoreboardStatusModel">ScoreboardStatusModel</h2>
 <!-- backwards compatibility -->

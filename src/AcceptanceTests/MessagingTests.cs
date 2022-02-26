@@ -62,7 +62,7 @@ public class MessagingTests
     [Test]
     public async Task SettingResultHasEvent_SendsMessage()
     {
-        var model = new CompetitionFileModel("", new List<DivisionFileModel>())
+        var model = new CompetitionFileModel("", new List<DivisionFileModel>(), scoreboardSettings: TestUtil.Minimal())
         {
             Name = "New competition",
             Divisions = new List<DivisionFileModel>

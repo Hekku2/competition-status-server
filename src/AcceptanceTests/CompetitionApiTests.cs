@@ -31,7 +31,7 @@ public class CompetitionApiTests : AcceptanceTestBase
     [Test]
     public async Task CreateCompetition_MinimalValues()
     {
-        var model = new CompetitionFileModel("", new List<DivisionFileModel>())
+        var model = new CompetitionFileModel("", new List<DivisionFileModel>(), scoreboardSettings: TestUtil.Minimal())
         {
             Name = "New competition",
             Divisions = new List<DivisionFileModel>()
@@ -50,7 +50,7 @@ public class CompetitionApiTests : AcceptanceTestBase
     [Test]
     public async Task CreateCompetition_GeneralValues()
     {
-        var model = new CompetitionFileModel("", new List<DivisionFileModel>())
+        var model = new CompetitionFileModel("", new List<DivisionFileModel>(), scoreboardSettings: TestUtil.Minimal())
         {
             Name = "New competition",
             CurrentCompetitor = new CurrentCompetitorFileModel(division: "", competitors: new List<CompetitorFileModel>())
@@ -170,7 +170,7 @@ public class CompetitionApiTests : AcceptanceTestBase
     [Test]
     public async Task SetCurrentCompetitor_Normal()
     {
-        var model = new CompetitionFileModel("", new List<DivisionFileModel>())
+        var model = new CompetitionFileModel("", new List<DivisionFileModel>(), scoreboardSettings: TestUtil.Minimal())
         {
             Name = "New competition",
             Divisions = new List<DivisionFileModel>

@@ -42,7 +42,8 @@ namespace Org.OpenAPITools.Model
         /// <param name="name">Name of the whole competition. (required).</param>
         /// <param name="divisions">Divisions for this competition. (required).</param>
         /// <param name="currentCompetitor">currentCompetitor.</param>
-        public CompetitionFileModel(string name = default(string), List<DivisionFileModel> divisions = default(List<DivisionFileModel>), CurrentCompetitorFileModel currentCompetitor = default(CurrentCompetitorFileModel))
+        /// <param name="scoreboardSettings">scoreboardSettings (required).</param>
+        public CompetitionFileModel(string name = default(string), List<DivisionFileModel> divisions = default(List<DivisionFileModel>), CurrentCompetitorFileModel currentCompetitor = default(CurrentCompetitorFileModel), ScoreboardSettingsFileModel scoreboardSettings = default(ScoreboardSettingsFileModel))
         {
             // to ensure "name" is required (not null)
             if (name == null) {
@@ -54,6 +55,11 @@ namespace Org.OpenAPITools.Model
                 throw new ArgumentNullException("divisions is a required property for CompetitionFileModel and cannot be null");
             }
             this.Divisions = divisions;
+            // to ensure "scoreboardSettings" is required (not null)
+            if (scoreboardSettings == null) {
+                throw new ArgumentNullException("scoreboardSettings is a required property for CompetitionFileModel and cannot be null");
+            }
+            this.ScoreboardSettings = scoreboardSettings;
             this.CurrentCompetitor = currentCompetitor;
         }
 
@@ -78,6 +84,12 @@ namespace Org.OpenAPITools.Model
         public CurrentCompetitorFileModel CurrentCompetitor { get; set; }
 
         /// <summary>
+        /// Gets or Sets ScoreboardSettings
+        /// </summary>
+        [DataMember(Name = "scoreboardSettings", IsRequired = true, EmitDefaultValue = false)]
+        public ScoreboardSettingsFileModel ScoreboardSettings { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -88,6 +100,7 @@ namespace Org.OpenAPITools.Model
             sb.Append("  Name: ").Append(Name).Append("\n");
             sb.Append("  Divisions: ").Append(Divisions).Append("\n");
             sb.Append("  CurrentCompetitor: ").Append(CurrentCompetitor).Append("\n");
+            sb.Append("  ScoreboardSettings: ").Append(ScoreboardSettings).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -138,6 +151,11 @@ namespace Org.OpenAPITools.Model
                     this.CurrentCompetitor == input.CurrentCompetitor ||
                     (this.CurrentCompetitor != null &&
                     this.CurrentCompetitor.Equals(input.CurrentCompetitor))
+                ) && 
+                (
+                    this.ScoreboardSettings == input.ScoreboardSettings ||
+                    (this.ScoreboardSettings != null &&
+                    this.ScoreboardSettings.Equals(input.ScoreboardSettings))
                 );
         }
 
@@ -161,6 +179,10 @@ namespace Org.OpenAPITools.Model
                 if (this.CurrentCompetitor != null)
                 {
                     hashCode = (hashCode * 59) + this.CurrentCompetitor.GetHashCode();
+                }
+                if (this.ScoreboardSettings != null)
+                {
+                    hashCode = (hashCode * 59) + this.ScoreboardSettings.GetHashCode();
                 }
                 return hashCode;
             }

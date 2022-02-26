@@ -26,5 +26,19 @@ namespace Api.Models
         /// Current competitor
         /// </summary>
         public CurrentCompetitorFileModel? CurrentCompetitor { get; set; }
+
+        [Required]
+        public ScoreboardSettingsFileModel ScoreboardSettings { get; set; } = null!;
+    }
+
+    public class ScoreboardSettingsFileModel
+    {
+        public ScoreboardMode ScoreboardMode { get; set; }
+
+        /// <summary>
+        /// Name of the currently selected division
+        /// </summary>
+        /// <example>Senior women</example>
+        public string? ActiveDivision { get; set; }
     }
 }

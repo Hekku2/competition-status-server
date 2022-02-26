@@ -26,41 +26,34 @@ using OpenAPIDateConverter = Org.OpenAPITools.Client.OpenAPIDateConverter;
 namespace Org.OpenAPITools.Model
 {
     /// <summary>
-    /// CurrentCompetitorsEntity
+    /// ScoreboardSettingsFileModel
     /// </summary>
-    [DataContract(Name = "CurrentCompetitorsEntity")]
-    public partial class CurrentCompetitorsEntity : IEquatable<CurrentCompetitorsEntity>, IValidatableObject
+    [DataContract(Name = "ScoreboardSettingsFileModel")]
+    public partial class ScoreboardSettingsFileModel : IEquatable<ScoreboardSettingsFileModel>, IValidatableObject
     {
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="CurrentCompetitorsEntity" /> class.
+        /// Gets or Sets ScoreboardMode
         /// </summary>
-        /// <param name="id">id.</param>
-        /// <param name="division">division.</param>
-        /// <param name="competitors">competitors.</param>
-        public CurrentCompetitorsEntity(int? id = default(int?), string division = default(string), List<CompetitorEntity> competitors = default(List<CompetitorEntity>))
+        [DataMember(Name = "scoreboardMode", EmitDefaultValue = false)]
+        public ScoreboardMode? ScoreboardMode { get; set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScoreboardSettingsFileModel" /> class.
+        /// </summary>
+        /// <param name="scoreboardMode">scoreboardMode.</param>
+        /// <param name="activeDivision">Name of the currently selected division.</param>
+        public ScoreboardSettingsFileModel(ScoreboardMode? scoreboardMode = default(ScoreboardMode?), string activeDivision = default(string))
         {
-            this.Id = id;
-            this.Division = division;
-            this.Competitors = competitors;
+            this.ScoreboardMode = scoreboardMode;
+            this.ActiveDivision = activeDivision;
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Name of the currently selected division
         /// </summary>
-        [DataMember(Name = "id", EmitDefaultValue = true)]
-        public int? Id { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Division
-        /// </summary>
-        [DataMember(Name = "division", EmitDefaultValue = true)]
-        public string Division { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Competitors
-        /// </summary>
-        [DataMember(Name = "competitors", EmitDefaultValue = true)]
-        public List<CompetitorEntity> Competitors { get; set; }
+        /// <value>Name of the currently selected division</value>
+        [DataMember(Name = "activeDivision", EmitDefaultValue = true)]
+        public string ActiveDivision { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -69,10 +62,9 @@ namespace Org.OpenAPITools.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class CurrentCompetitorsEntity {\n");
-            sb.Append("  Id: ").Append(Id).Append("\n");
-            sb.Append("  Division: ").Append(Division).Append("\n");
-            sb.Append("  Competitors: ").Append(Competitors).Append("\n");
+            sb.Append("class ScoreboardSettingsFileModel {\n");
+            sb.Append("  ScoreboardMode: ").Append(ScoreboardMode).Append("\n");
+            sb.Append("  ActiveDivision: ").Append(ActiveDivision).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -93,15 +85,15 @@ namespace Org.OpenAPITools.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as CurrentCompetitorsEntity);
+            return this.Equals(input as ScoreboardSettingsFileModel);
         }
 
         /// <summary>
-        /// Returns true if CurrentCompetitorsEntity instances are equal
+        /// Returns true if ScoreboardSettingsFileModel instances are equal
         /// </summary>
-        /// <param name="input">Instance of CurrentCompetitorsEntity to be compared</param>
+        /// <param name="input">Instance of ScoreboardSettingsFileModel to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(CurrentCompetitorsEntity input)
+        public bool Equals(ScoreboardSettingsFileModel input)
         {
             if (input == null)
             {
@@ -109,20 +101,13 @@ namespace Org.OpenAPITools.Model
             }
             return 
                 (
-                    this.Id == input.Id ||
-                    (this.Id != null &&
-                    this.Id.Equals(input.Id))
+                    this.ScoreboardMode == input.ScoreboardMode ||
+                    this.ScoreboardMode.Equals(input.ScoreboardMode)
                 ) && 
                 (
-                    this.Division == input.Division ||
-                    (this.Division != null &&
-                    this.Division.Equals(input.Division))
-                ) && 
-                (
-                    this.Competitors == input.Competitors ||
-                    this.Competitors != null &&
-                    input.Competitors != null &&
-                    this.Competitors.SequenceEqual(input.Competitors)
+                    this.ActiveDivision == input.ActiveDivision ||
+                    (this.ActiveDivision != null &&
+                    this.ActiveDivision.Equals(input.ActiveDivision))
                 );
         }
 
@@ -135,17 +120,10 @@ namespace Org.OpenAPITools.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
-                if (this.Id != null)
+                hashCode = (hashCode * 59) + this.ScoreboardMode.GetHashCode();
+                if (this.ActiveDivision != null)
                 {
-                    hashCode = (hashCode * 59) + this.Id.GetHashCode();
-                }
-                if (this.Division != null)
-                {
-                    hashCode = (hashCode * 59) + this.Division.GetHashCode();
-                }
-                if (this.Competitors != null)
-                {
-                    hashCode = (hashCode * 59) + this.Competitors.GetHashCode();
+                    hashCode = (hashCode * 59) + this.ActiveDivision.GetHashCode();
                 }
                 return hashCode;
             }

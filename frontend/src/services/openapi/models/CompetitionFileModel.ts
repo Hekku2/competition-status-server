@@ -4,6 +4,7 @@
 
 import type { CurrentCompetitorFileModel } from './CurrentCompetitorFileModel';
 import type { DivisionFileModel } from './DivisionFileModel';
+import type { ScoreboardSettingsFileModel } from './ScoreboardSettingsFileModel';
 
 /**
  * Describes the filemodel that is used to save current status of
@@ -20,4 +21,5 @@ export type CompetitionFileModel = {
      */
     divisions: Array<DivisionFileModel>;
     currentCompetitor?: CurrentCompetitorFileModel;
+    scoreboardSettings: ScoreboardSettingsFileModel;
 }
