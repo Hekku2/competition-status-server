@@ -16,14 +16,16 @@ namespace Api.Controllers
         private readonly ILogger<CompetitionController> _logger;
         private readonly ICompetitionStatusService _competitionStatusService;
         private readonly ICompetitionService _competitionService;
+        private readonly IScoreboardService _scoreboardService;
         private readonly ICompetitionDataAccess _competitionDataAccess;
 
-        public CompetitionController(ILogger<CompetitionController> logger, ICompetitionStatusService competitionStatusService, ICompetitionService competitionService, ICompetitionDataAccess competitionDataAccess)
+        public CompetitionController(ILogger<CompetitionController> logger, ICompetitionStatusService competitionStatusService, ICompetitionService competitionService, ICompetitionDataAccess competitionDataAccess, IScoreboardService scoreboardService)
         {
             _logger = logger;
             _competitionStatusService = competitionStatusService;
             _competitionService = competitionService;
             _competitionDataAccess = competitionDataAccess;
+            _scoreboardService = scoreboardService;
         }
 
         /// <summary>
@@ -93,6 +95,8 @@ namespace Api.Controllers
                 CurrentCompetitor = fileModel.CurrentCompetitor?.ToCurrentCompetitorsEntity()
             };
             _competitionService.UploadCompetition(entity);
+            _scoreboardService.SetActiveDivision(fileModel.ScoreboardSettings.ActiveDivision);
+            _scoreboardService.SetScoreboardMode(fileModel.ScoreboardSettings.ScoreboardMode);
         }
 
         /// <summary>

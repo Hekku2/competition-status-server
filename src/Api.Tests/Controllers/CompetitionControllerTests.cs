@@ -12,6 +12,7 @@ public class CompetitionControllerTests
 {
     private ICompetitionStatusService _mockCompetitionStatusService;
     private ICompetitionService _mockCompetitionService;
+    private IScoreboardService _mockScoreboardService;
     private ICompetitionDataAccess _mockCompetitionDataAccess;
 
     private CompetitionController _controller;
@@ -23,7 +24,8 @@ public class CompetitionControllerTests
         _mockCompetitionStatusService = Substitute.For<ICompetitionStatusService>();
         _mockCompetitionService = Substitute.For<ICompetitionService>();
         _mockCompetitionDataAccess = Substitute.For<ICompetitionDataAccess>();
-        _controller = new CompetitionController(logger, _mockCompetitionStatusService, _mockCompetitionService, _mockCompetitionDataAccess);
+        _mockScoreboardService = Substitute.For<IScoreboardService>();
+        _controller = new CompetitionController(logger, _mockCompetitionStatusService, _mockCompetitionService, _mockCompetitionDataAccess, _mockScoreboardService);
     }
 
     [Test]

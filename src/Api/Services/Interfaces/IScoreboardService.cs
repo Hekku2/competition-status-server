@@ -31,7 +31,7 @@ namespace Api.Services.Interfaces
         (DivisionEntity, CompetitionOrderEntity)? GetActiveResults();
 
         void SetResultsForShowing(int id);
-        void SetActiveDivision(string name);
+        void SetActiveDivision(string? name);
 
         IObservable<string?> GetActiveDivisionObservable();
     }

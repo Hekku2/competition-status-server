@@ -57,7 +57,7 @@ public class ScoreboardService : IScoreboardService
         _results.OnNext(result);
     }
 
-    public void SetActiveDivision(string name)
+    public void SetActiveDivision(string? name)
     {
         _activeDivision.OnNext(name);
     }
