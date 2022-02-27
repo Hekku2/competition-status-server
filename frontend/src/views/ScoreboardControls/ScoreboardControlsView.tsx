@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material"
-import { CurrentStatus } from "."
+import { Typography, Stack } from "@mui/material"
+import { CurrentStatus, Management } from "."
 
 export const ScoreboardControlsView = () => {
   return (
@@ -8,7 +8,11 @@ export const ScoreboardControlsView = () => {
         Scoreboard Controls
       </Typography>
 
-      <CurrentStatus />
+      <Stack direction='row'>
+        <Management />
+
+        <CurrentStatus />
+      </Stack>
     </>
   )
 }

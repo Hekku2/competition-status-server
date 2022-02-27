@@ -34,7 +34,6 @@ export const CurrentStatus = () => {
     }
   </List>
 
-
   return (
     <Card>
       <CardHeader title="Current state" />
