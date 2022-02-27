@@ -1,7 +1,7 @@
-using Api.Models;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Options;
+using Org.OpenAPITools.Model;
 
 namespace ConsoleClient;
 

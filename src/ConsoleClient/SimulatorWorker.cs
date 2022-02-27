@@ -1,5 +1,5 @@
-using Api.Models;
 using ConsoleClient.Util;
+using Org.OpenAPITools.Model;
 
 namespace ConsoleClient;
 

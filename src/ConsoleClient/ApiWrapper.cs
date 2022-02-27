@@ -1,37 +1,30 @@
-using Api.Models;
 using Microsoft.Extensions.Options;
-using RestSharp;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Model;
 
 namespace ConsoleClient;
 
-public class ApiWrapper : IDisposable
+public class ApiWrapper
 {
-    private const string ApiName = "Competition";
-    private readonly RestClient _client;
+    private readonly CompetitionApi _client;
 
     public ApiWrapper(IOptions<SignalRSettings> config)
     {
-        _client = new RestClient($"{config.Value.BaseUrl}{ApiName}");
+        _client = new CompetitionApi(config.Value.BaseUrl);
     }
 
     public async Task UploadCompetition(CompetitionFileModel model, CancellationToken token)
     {
-        await _client.PostJsonAsync("upload-competition", model, token);
+        await _client.CompetitionUploadCompetitionAsync(model, token);
     }
 
     public async Task SetCurrentCompetitor(CurrentCompetitorSetModel model, CancellationToken token)
     {
-        await _client.PostJsonAsync("set-current-competitor", model, token);
+        await _client.CompetitionSetCurrentCompetitorAsync(model, token);
     }
 
     public async Task SetResults(CompetitorResultModel model, CancellationToken token)
     {
-        await _client.PostJsonAsync("set-result", model, token);
-    }
-
-    public void Dispose()
-    {
-        _client?.Dispose();
-        GC.SuppressFinalize(this);
+        await _client.CompetitionSetResultAsync(model, token);
     }
 }
