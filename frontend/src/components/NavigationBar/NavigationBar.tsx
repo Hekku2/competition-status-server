@@ -13,7 +13,10 @@ export const NavigationBar = () => {
           <MenuItem component={Link} to={"/competitors"}>
             Competitors
           </MenuItem>
-          <MenuItem component={Link} to={"/Scoreboard"}>
+          <MenuItem component={Link} to={"/scoreboard-controls"}>
+            Scoreboard controls
+          </MenuItem>
+          <MenuItem component={Link} to={"/scoreboard"}>
             Scoreboard
           </MenuItem>
         </Box>

@@ -8,6 +8,7 @@ import {
 import { MainView } from "../views";
 import { CompetitorsView } from "../views/Competitors";
 import { ScoreboardView } from "../views/Scoreboard";
+import { ScoreboardControlsView } from "../views/ScoreboardControls";
 import { NavigationBar } from "./NavigationBar";
 
 const MainRouter = () => {
@@ -32,6 +33,7 @@ const MainRouter = () => {
       <Routes>
         <Route path="/" element={<MainView />} />
         <Route path="/competitors" element={<CompetitorsView />} />
+        <Route path="/scoreboard-controls" element={<ScoreboardControlsView />} />
         <Route path="/scoreboard" element={<ScoreboardView />} />
       </Routes>
     </BrowserRouter>
