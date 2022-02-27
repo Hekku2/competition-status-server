@@ -51,10 +51,17 @@ public class ScoreboardService : IScoreboardService
         _currentScoreboardMode.OnNext(mode);
     }
 
-    public void SetResultsForShowing(int id)
+    public void SetResultsForShowing(int? id)
     {
-        var result = _competitionDataAccess.GetForCurrentCompetitorsEntity(id);
-        _results.OnNext(result);
+        if (id.HasValue)
+        {
+            var result = _competitionDataAccess.GetForCurrentCompetitorsEntity(id.Value);
+            _results.OnNext(result);
+        }
+        else
+        {
+            _results.OnNext(null);
+        }
     }
 
     public void SetActiveDivision(string? name)

@@ -80,7 +80,7 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// Upload compettion data. This overrides all data
+        /// Upload competition data. This overrides all data
         /// </summary>
         /// <param name="fileModel">model representing the json file</param>
         [HttpPost]
@@ -97,6 +97,7 @@ namespace Api.Controllers
             _competitionService.UploadCompetition(entity);
             _scoreboardService.SetActiveDivision(fileModel.ScoreboardSettings.ActiveDivision);
             _scoreboardService.SetScoreboardMode(fileModel.ScoreboardSettings.ScoreboardMode);
+            _scoreboardService.SetResultsForShowing(fileModel.ScoreboardSettings.ActiveResult);
         }
 
         /// <summary>

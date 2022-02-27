@@ -352,6 +352,12 @@ public class CompetitionControllerTests
             Divisions = new[]
             {
                 expectedDivision
+            },
+            ScoreboardSettings = new ScoreboardSettingsFileModel
+            {
+                ActiveDivision = "Division 1",
+                ScoreboardMode = ScoreboardMode.CompetitorResults,
+                ActiveResult = 23
             }
         };
 
@@ -388,5 +394,9 @@ public class CompetitionControllerTests
         actualSecond.Result.DifficultyScore.Should().Be(expectedSecond.Results.DifficultyScore);
         actualSecond.Result.ExecutionScore.Should().Be(expectedSecond.Results.ExecutionScore);
         actualSecond.Result.HeadJudgePenalty.Should().Be(expectedSecond.Results.HeadJudgePenalty);
+
+        _mockScoreboardService.Received().SetActiveDivision(model.ScoreboardSettings.ActiveDivision);
+        _mockScoreboardService.Received().SetScoreboardMode(model.ScoreboardSettings.ScoreboardMode);
+        _mockScoreboardService.Received().SetResultsForShowing(model.ScoreboardSettings.ActiveResult);
     }
 }

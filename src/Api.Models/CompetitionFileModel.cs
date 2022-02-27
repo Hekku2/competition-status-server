@@ -40,5 +40,7 @@ namespace Api.Models
         /// </summary>
         /// <example>Senior women</example>
         public string? ActiveDivision { get; set; }
+
+        public int? ActiveResult { get; set; }
     }
 }
