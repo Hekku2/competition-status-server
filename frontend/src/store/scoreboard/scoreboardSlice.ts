@@ -4,6 +4,7 @@ import { RootState } from '../store'
 
 export interface ScoreboardState {
   isSettingScoreboardMode: boolean
+  isSettingActiveDivision: boolean
   scoreboardMode: ScoreboardModeModel
   result: PerformanceResultsContentModel | undefined
   upcomingCompetitors: Array<UpcomingCompetitorModel>
@@ -14,6 +15,7 @@ export interface ScoreboardState {
 
 export const initialState: ScoreboardState = {
   isSettingScoreboardMode: true,
+  isSettingActiveDivision: false,
   scoreboardMode: ScoreboardModeModel.UNKNOWN,
   result: undefined,
   upcomingCompetitors: [],
@@ -24,6 +26,10 @@ export const initialState: ScoreboardState = {
 
 export const setMode = createAsyncThunk('scoreboard/setMode', async (mode: ScoreboardModeModel) => {
   return await ScoreboardService.scoreboardSetScoreboardMode(mode)
+})
+
+export const setActiveDivision = createAsyncThunk('scoreboard/setActiveDivision', async (activeDvision: string | null | undefined) => {
+  return await ScoreboardService.scoreboardSetActiveDivision(activeDvision || undefined)
 })
 
 export const scoreboardSlice = createSlice({
@@ -45,11 +51,22 @@ export const scoreboardSlice = createSlice({
         state.isSettingScoreboardMode = true
         state.error = undefined
       })
-      .addCase(setMode.fulfilled, (state, action) => {
+      .addCase(setMode.fulfilled, (state) => {
         state.isSettingScoreboardMode = false
       })
       .addCase(setMode.rejected, (state, action) => {
         state.isSettingScoreboardMode = false
+        state.error = action.error
+      })
+      .addCase(setActiveDivision.pending, (state) => {
+        state.isSettingActiveDivision = true
+        state.error = undefined
+      })
+      .addCase(setActiveDivision.fulfilled, (state) => {
+        state.isSettingActiveDivision = false
+      })
+      .addCase(setActiveDivision.rejected, (state, action) => {
+        state.isSettingActiveDivision = false
         state.error = action.error
       })
   }

@@ -261,7 +261,7 @@ Content-Type: application/json
 
 `POST /Competition/upload-competition`
 
-*Upload compettion data. This overrides all data*
+*Upload competition data. This overrides all data*
 
 > Body parameter
 
@@ -303,7 +303,8 @@ Content-Type: application/json
   },
   "scoreboardSettings": {
     "scoreboardMode": "Unknown",
-    "activeDivision": "Senior women"
+    "activeDivision": "Senior women",
+    "activeResult": 0
   }
 }
 ```
@@ -455,7 +456,7 @@ Accept: text/plain
 > 200 Response
 
 ```
-{"name":"National finals 2022","divisions":[{"name":"Senior Women","items":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"forfeit":true,"results":{"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}}]}],"currentCompetitor":{"id":25,"division":"Senior Women","competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]},"scoreboardSettings":{"scoreboardMode":"Unknown","activeDivision":"Senior women"}}
+{"name":"National finals 2022","divisions":[{"name":"Senior Women","items":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"forfeit":true,"results":{"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}}]}],"currentCompetitor":{"id":25,"division":"Senior Women","competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]},"scoreboardSettings":{"scoreboardMode":"Unknown","activeDivision":"Senior women","activeResult":0}}
 ```
 
 ```json
@@ -496,7 +497,8 @@ Accept: text/plain
   },
   "scoreboardSettings": {
     "scoreboardMode": "Unknown",
-    "activeDivision": "Senior women"
+    "activeDivision": "Senior women",
+    "activeResult": 0
   }
 }
 ```
@@ -584,6 +586,58 @@ Status Code **200**
 |»» difficultyScore|number(double)|true|none|Difficulty score (D)|
 |»» headJudgePenalty|number(double)|true|none|Head judge penalty (HJ). This is subtracted from the total.|
 |» forfeit|boolean|true|none|If true, competitors are shown as forfeited for this division.<br><br>In this context, forfeit can happen if:<br>a) Competitor doesn't show up for competition<br>b) Competitor gets injured and is unable to continue<br>c) Competitor is disqualified<br><br>This doesn't care if it's competitor's fault or not, this just<br>means that competitors score is not shown.<br><br>This means following:<br>a) Results are not shown, if given.<br>b) These competitors are not shown schedule.<br>c) When listed, competitors are shown in the bottom part of the<br>listing.|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+<h1 id="competition-status-api-division">Division</h1>
+
+## DivisionGetAll
+
+<a id="opIdDivisionGetAll"></a>
+
+> Code samples
+
+```http
+GET /Division/all HTTP/1.1
+
+Accept: text/plain
+
+```
+
+`GET /Division/all`
+
+> Example responses
+
+> 200 Response
+
+```
+[{"name":"Senior Women"}]
+```
+
+```json
+[
+  {
+    "name": "Senior Women"
+  }
+]
+```
+
+<h3 id="divisiongetall-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+<h3 id="divisiongetall-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[DivisionListModel](#schemadivisionlistmodel)]|false|none|none|
+|» name|string|true|none|Name of the division.|
 
 <aside class="success">
 This operation does not require authentication
@@ -850,7 +904,8 @@ This operation does not require authentication
   },
   "scoreboardSettings": {
     "scoreboardMode": "Unknown",
-    "activeDivision": "Senior women"
+    "activeDivision": "Senior women",
+    "activeResult": 0
   }
 }
 
@@ -1326,6 +1381,26 @@ Describes division that is saved in file. User for JSON conversions.
 |name|string|true|none|Name of the division.|
 |items|[[CompetitorPositionFileModel](#schemacompetitorpositionfilemodel)]|true|none|Competitors participating in this division.|
 
+<h2 id="tocS_DivisionListModel">DivisionListModel</h2>
+<!-- backwards compatibility -->
+<a id="schemadivisionlistmodel"></a>
+<a id="schema_DivisionListModel"></a>
+<a id="tocSdivisionlistmodel"></a>
+<a id="tocsdivisionlistmodel"></a>
+
+```json
+{
+  "name": "Senior Women"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|true|none|Name of the division.|
+
 <h2 id="tocS_DivisionStatusModel">DivisionStatusModel</h2>
 <!-- backwards compatibility -->
 <a id="schemadivisionstatusmodel"></a>
@@ -1691,7 +1766,8 @@ This desribes the mode that the scoreboard should be in.
 ```json
 {
   "scoreboardMode": "Unknown",
-  "activeDivision": "Senior women"
+  "activeDivision": "Senior women",
+  "activeResult": 0
 }
 
 ```
@@ -1702,6 +1778,7 @@ This desribes the mode that the scoreboard should be in.
 |---|---|---|---|---|
 |scoreboardMode|[ScoreboardMode](#schemascoreboardmode)|false|none|This desribes the mode that the scoreboard should be in.|
 |activeDivision|string¦null|false|none|Name of the currently selected division|
+|activeResult|integer(int32)¦null|false|none|none|
 
 <h2 id="tocS_ScoreboardStatusModel">ScoreboardStatusModel</h2>
 <!-- backwards compatibility -->

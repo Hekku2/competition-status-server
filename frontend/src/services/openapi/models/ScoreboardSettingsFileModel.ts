@@ -10,4 +10,5 @@ export type ScoreboardSettingsFileModel = {
      * Name of the currently selected division
      */
     activeDivision?: string | null;
+    activeResult?: number | null;
 }

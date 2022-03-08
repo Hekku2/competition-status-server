@@ -127,7 +127,7 @@ namespace Org.OpenAPITools.Api
         /// <returns>ApiResponse of Object(void)</returns>
         ApiResponse<Object> CompetitionSetResultWithHttpInfo(CompetitorResultModel competitorResultModel = default(CompetitorResultModel));
         /// <summary>
-        /// Upload compettion data. This overrides all data
+        /// Upload competition data. This overrides all data
         /// </summary>
         /// <exception cref="Org.OpenAPITools.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="competitionFileModel">model representing the json file (optional)</param>
@@ -135,7 +135,7 @@ namespace Org.OpenAPITools.Api
         void CompetitionUploadCompetition(CompetitionFileModel competitionFileModel = default(CompetitionFileModel));
 
         /// <summary>
-        /// Upload compettion data. This overrides all data
+        /// Upload competition data. This overrides all data
         /// </summary>
         /// <remarks>
         /// 
@@ -284,7 +284,7 @@ namespace Org.OpenAPITools.Api
         /// <returns>Task of ApiResponse</returns>
         System.Threading.Tasks.Task<ApiResponse<Object>> CompetitionSetResultWithHttpInfoAsync(CompetitorResultModel competitorResultModel = default(CompetitorResultModel), System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
-        /// Upload compettion data. This overrides all data
+        /// Upload competition data. This overrides all data
         /// </summary>
         /// <remarks>
         /// 
@@ -296,7 +296,7 @@ namespace Org.OpenAPITools.Api
         System.Threading.Tasks.Task CompetitionUploadCompetitionAsync(CompetitionFileModel competitionFileModel = default(CompetitionFileModel), System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
-        /// Upload compettion data. This overrides all data
+        /// Upload competition data. This overrides all data
         /// </summary>
         /// <remarks>
         /// 
@@ -1155,7 +1155,7 @@ namespace Org.OpenAPITools.Api
         }
 
         /// <summary>
-        /// Upload compettion data. This overrides all data 
+        /// Upload competition data. This overrides all data 
         /// </summary>
         /// <exception cref="Org.OpenAPITools.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="competitionFileModel">model representing the json file (optional)</param>
@@ -1166,7 +1166,7 @@ namespace Org.OpenAPITools.Api
         }
 
         /// <summary>
-        /// Upload compettion data. This overrides all data 
+        /// Upload competition data. This overrides all data 
         /// </summary>
         /// <exception cref="Org.OpenAPITools.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="competitionFileModel">model representing the json file (optional)</param>
@@ -1215,7 +1215,7 @@ namespace Org.OpenAPITools.Api
         }
 
         /// <summary>
-        /// Upload compettion data. This overrides all data 
+        /// Upload competition data. This overrides all data 
         /// </summary>
         /// <exception cref="Org.OpenAPITools.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="competitionFileModel">model representing the json file (optional)</param>
@@ -1227,7 +1227,7 @@ namespace Org.OpenAPITools.Api
         }
 
         /// <summary>
-        /// Upload compettion data. This overrides all data 
+        /// Upload competition data. This overrides all data 
         /// </summary>
         /// <exception cref="Org.OpenAPITools.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="competitionFileModel">model representing the json file (optional)</param>

@@ -73,7 +73,7 @@ export class CompetitionService {
     }
 
     /**
-     * Upload compettion data. This overrides all data
+     * Upload competition data. This overrides all data
      * @param requestBody model representing the json file
      * @returns any Success
      * @throws ApiError

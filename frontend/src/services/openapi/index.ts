@@ -16,6 +16,7 @@ export type { CurrentCompetitorEnvelopeModel } from './models/CurrentCompetitorE
 export type { CurrentCompetitorFileModel } from './models/CurrentCompetitorFileModel';
 export type { CurrentCompetitorSetModel } from './models/CurrentCompetitorSetModel';
 export type { DivisionFileModel } from './models/DivisionFileModel';
+export type { DivisionListModel } from './models/DivisionListModel';
 export type { DivisionStatusModel } from './models/DivisionStatusModel';
 export type { ParticipationModel } from './models/ParticipationModel';
 export type { ParticipationRowModel } from './models/ParticipationRowModel';
@@ -31,5 +32,6 @@ export type { UpcomingCompetitorModel } from './models/UpcomingCompetitorModel';
 
 export { CompetitionService } from './services/CompetitionService';
 export { CompetitorService } from './services/CompetitorService';
+export { DivisionService } from './services/DivisionService';
 export { HomeService } from './services/HomeService';
 export { ScoreboardService } from './services/ScoreboardService';

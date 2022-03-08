@@ -26,42 +26,33 @@ using OpenAPIDateConverter = Org.OpenAPITools.Client.OpenAPIDateConverter;
 namespace Org.OpenAPITools.Model
 {
     /// <summary>
-    /// ScoreboardSettingsFileModel
+    /// CompetitorEntity
     /// </summary>
-    [DataContract(Name = "ScoreboardSettingsFileModel")]
-    public partial class ScoreboardSettingsFileModel : IEquatable<ScoreboardSettingsFileModel>, IValidatableObject
+    [DataContract(Name = "CompetitorEntity")]
+    public partial class CompetitorEntity : IEquatable<CompetitorEntity>, IValidatableObject
     {
-
         /// <summary>
-        /// Gets or Sets ScoreboardMode
+        /// Initializes a new instance of the <see cref="CompetitorEntity" /> class.
         /// </summary>
-        [DataMember(Name = "scoreboardMode", EmitDefaultValue = false)]
-        public ScoreboardMode? ScoreboardMode { get; set; }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScoreboardSettingsFileModel" /> class.
-        /// </summary>
-        /// <param name="scoreboardMode">scoreboardMode.</param>
-        /// <param name="activeDivision">Name of the currently selected division.</param>
-        /// <param name="activeResult">activeResult.</param>
-        public ScoreboardSettingsFileModel(ScoreboardMode? scoreboardMode = default(ScoreboardMode?), string activeDivision = default(string), int? activeResult = default(int?))
+        /// <param name="name">name.</param>
+        /// <param name="team">team.</param>
+        public CompetitorEntity(string name = default(string), string team = default(string))
         {
-            this.ScoreboardMode = scoreboardMode;
-            this.ActiveDivision = activeDivision;
-            this.ActiveResult = activeResult;
+            this.Name = name;
+            this.Team = team;
         }
 
         /// <summary>
-        /// Name of the currently selected division
+        /// Gets or Sets Name
         /// </summary>
-        /// <value>Name of the currently selected division</value>
-        [DataMember(Name = "activeDivision", EmitDefaultValue = true)]
-        public string ActiveDivision { get; set; }
+        [DataMember(Name = "name", EmitDefaultValue = true)]
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets ActiveResult
+        /// Gets or Sets Team
         /// </summary>
-        [DataMember(Name = "activeResult", EmitDefaultValue = true)]
-        public int? ActiveResult { get; set; }
+        [DataMember(Name = "team", EmitDefaultValue = true)]
+        public string Team { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -70,10 +61,9 @@ namespace Org.OpenAPITools.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class ScoreboardSettingsFileModel {\n");
-            sb.Append("  ScoreboardMode: ").Append(ScoreboardMode).Append("\n");
-            sb.Append("  ActiveDivision: ").Append(ActiveDivision).Append("\n");
-            sb.Append("  ActiveResult: ").Append(ActiveResult).Append("\n");
+            sb.Append("class CompetitorEntity {\n");
+            sb.Append("  Name: ").Append(Name).Append("\n");
+            sb.Append("  Team: ").Append(Team).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -94,15 +84,15 @@ namespace Org.OpenAPITools.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as ScoreboardSettingsFileModel);
+            return this.Equals(input as CompetitorEntity);
         }
 
         /// <summary>
-        /// Returns true if ScoreboardSettingsFileModel instances are equal
+        /// Returns true if CompetitorEntity instances are equal
         /// </summary>
-        /// <param name="input">Instance of ScoreboardSettingsFileModel to be compared</param>
+        /// <param name="input">Instance of CompetitorEntity to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(ScoreboardSettingsFileModel input)
+        public bool Equals(CompetitorEntity input)
         {
             if (input == null)
             {
@@ -110,18 +100,14 @@ namespace Org.OpenAPITools.Model
             }
             return 
                 (
-                    this.ScoreboardMode == input.ScoreboardMode ||
-                    this.ScoreboardMode.Equals(input.ScoreboardMode)
+                    this.Name == input.Name ||
+                    (this.Name != null &&
+                    this.Name.Equals(input.Name))
                 ) && 
                 (
-                    this.ActiveDivision == input.ActiveDivision ||
-                    (this.ActiveDivision != null &&
-                    this.ActiveDivision.Equals(input.ActiveDivision))
-                ) && 
-                (
-                    this.ActiveResult == input.ActiveResult ||
-                    (this.ActiveResult != null &&
-                    this.ActiveResult.Equals(input.ActiveResult))
+                    this.Team == input.Team ||
+                    (this.Team != null &&
+                    this.Team.Equals(input.Team))
                 );
         }
 
@@ -134,14 +120,13 @@ namespace Org.OpenAPITools.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
-                hashCode = (hashCode * 59) + this.ScoreboardMode.GetHashCode();
-                if (this.ActiveDivision != null)
+                if (this.Name != null)
                 {
-                    hashCode = (hashCode * 59) + this.ActiveDivision.GetHashCode();
+                    hashCode = (hashCode * 59) + this.Name.GetHashCode();
                 }
-                if (this.ActiveResult != null)
+                if (this.Team != null)
                 {
-                    hashCode = (hashCode * 59) + this.ActiveResult.GetHashCode();
+                    hashCode = (hashCode * 59) + this.Team.GetHashCode();
                 }
                 return hashCode;
             }

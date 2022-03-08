@@ -1,23 +1,49 @@
-import { Button, Card, CardActions, CardContent, CardHeader, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material"
-import { Form, Formik } from "formik"
+import { Button, Card, CardActions, CardContent, CardHeader, FormControl, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material"
+import { Field, Form, Formik } from "formik"
+import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../components"
 import { ScoreboardModeModel } from "../../services/openapi"
-import { setMode } from "../../store/scoreboard/scoreboardSlice"
+import { fetchCompetitionStatus } from "../../store/competition/competitionSlice"
+import { setActiveDivision, setMode } from "../../store/scoreboard/scoreboardSlice"
+
+const CustomizedSelectForFormik = ({ children, form, field }: any) => {
+  const { name, value } = field;
+  const { setFieldValue } = form;
+
+  return (
+    <Select
+      name={name}
+      value={value}
+      onChange={e => {
+        setFieldValue(name, e.target.value);
+      }}
+    >
+      {children}
+    </Select>
+  );
+};
 
 export const Management = () => {
   const dispatch = useAppDispatch()
-  const state = useAppSelector(state => state.scoreboardSlice)
+  const scoreboardState = useAppSelector(state => state.scoreboardSlice)
+  const competitionState = useAppSelector(state => state.competitionSlice)
+
+  useEffect(function () {
+    dispatch(fetchCompetitionStatus())
+  }, [dispatch])
 
   return (
     <>
       {
-        !state.isSettingScoreboardMode &&
+        !scoreboardState.isSettingScoreboardMode && !scoreboardState.isSettingActiveDivision && !competitionState.isLoadingCompetitionStatus &&
         <Formik
           initialValues={{
-            scoreboardMode: state.scoreboardMode,
+            scoreboardMode: scoreboardState.scoreboardMode,
+            activeDivision: scoreboardState.division
           }}
           onSubmit={(values) => {
             dispatch(setMode(values.scoreboardMode))
+            dispatch(setActiveDivision(values.activeDivision))
           }}
         >
           {
@@ -26,7 +52,7 @@ export const Management = () => {
                 <Card>
                   <CardHeader title="Manage" />
                   <CardContent>
-                    <FormControl component="fieldset">
+                    <FormControl fullWidth component="fieldset">
                       <FormLabel id="scoreboard-mode-select">Scoreboard mode</FormLabel>
                       <RadioGroup
                         name="scoreboardMode"
@@ -40,6 +66,15 @@ export const Management = () => {
                         <FormControlLabel value={ScoreboardModeModel.DIVISION_STATUS.toString()} control={<Radio />} label="Division status" />
                         <FormControlLabel value={ScoreboardModeModel.UPCOMING_COMPETITORS.toString()} control={<Radio />} label="Upcoming competitors" />
                       </RadioGroup>
+                    </FormControl>
+
+                    <FormControl fullWidth>
+                      <InputLabel id="activeDivision">Active division</InputLabel>
+                      <Field name="activeDivision" component={CustomizedSelectForFormik}>
+                        {
+                          competitionState.competitionStatus?.divisions.map(division => <MenuItem value={division.name} key={division.name}>{division.name}</MenuItem>)
+                        }
+                      </Field>
                     </FormControl>
 
                   </CardContent>
