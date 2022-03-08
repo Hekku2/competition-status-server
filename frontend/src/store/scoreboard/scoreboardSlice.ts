@@ -13,7 +13,7 @@ export interface ScoreboardState {
 }
 
 export const initialState: ScoreboardState = {
-  isSettingScoreboardMode: false,
+  isSettingScoreboardMode: true,
   scoreboardMode: ScoreboardModeModel.UNKNOWN,
   result: undefined,
   upcomingCompetitors: [],
@@ -36,6 +36,7 @@ export const scoreboardSlice = createSlice({
       state.upcomingCompetitors = action.payload.upcomingCompetitors
       state.results = action.payload.results
       state.division = action.payload.division
+      state.isSettingScoreboardMode = false
     }
   },
   extraReducers: builder => {
