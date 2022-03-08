@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text.Json.Serialization;
 using Api.Hubs;
 using Api.Services.Implementations;
 using Api.Services.Interfaces;
@@ -25,7 +26,13 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();
+        services
+            .AddControllers()
+            .AddJsonOptions(opts =>
+            {
+                var enumConverter = new JsonStringEnumConverter();
+                opts.JsonSerializerOptions.Converters.Add(enumConverter);
+            });
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo
@@ -48,10 +55,18 @@ public class Startup
             });
         });
 
-        services.AddSignalR();
+        services
+            .AddSignalR()
+            .AddJsonProtocol(options =>
+            {
+                var enumConverter = new JsonStringEnumConverter();
+                options.PayloadSerializerOptions.Converters.Add(enumConverter);
+            });
+        services.AddSingleton<ICompetitionDataAccess, CompetitionDataAccess>();
         services.AddSingleton<CompetitionService>();
         services.AddTransient<ICompetitionService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
         services.AddTransient<ICompetitionStatusService>(serviceProvider => serviceProvider.GetRequiredService<CompetitionService>());
+        services.AddSingleton<IScoreboardService, ScoreboardService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -83,6 +98,7 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapHub<CompetitionStatusHub>("/competition-hub");
+            endpoints.MapHub<ScoreboardHub>("/scoreboard-hub");
             endpoints.MapControllers();
         });
     }

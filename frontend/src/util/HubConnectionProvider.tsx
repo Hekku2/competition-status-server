@@ -1,8 +1,9 @@
 import { HubConnection, HubConnectionBuilder, IStreamSubscriber, ISubscription } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
-import { CurrentCompetitorEnvelopeModel, PerformanceResultsEnvelopeModel } from "../services/openapi";
+import { CurrentCompetitorEnvelopeModel, PerformanceResultsEnvelopeModel, ScoreboardStatusModel } from "../services/openapi";
 import { useAppDispatch } from "../store";
 import { setCurrentCompetitor, setLatestResults } from "../store/competition/competitionSlice";
+import { setScoreboardStatus } from "../store/scoreboard/scoreboardSlice";
 
 export interface HubConnectionProviderProps {
   baseUrl: string,
@@ -11,55 +12,82 @@ export interface HubConnectionProviderProps {
 
 export const HubConnectionProvider = ({ children, baseUrl }: HubConnectionProviderProps) => {
   const dispatch = useAppDispatch()
-  const [connection, setConnection] = useState<HubConnection | undefined>(undefined);
+  const [competitionHubConnection, setCompetitionHubConnection] = useState<HubConnection | undefined>(undefined);
+  const [scoreboardHubConnection, setScoreboardHubConnection] = useState<HubConnection | undefined>(undefined);
+
+  const handler = (handlerMethod: (value: any) => void) => {
+    return {
+      next: handlerMethod,
+      complete: () => { console.log('Finished') },
+      error: (error: any) => { console.error(error) }
+    }
+  }
 
   useEffect(() => {
-    const newConnection = new HubConnectionBuilder()
+    const competitionHub = new HubConnectionBuilder()
       .withUrl(`${baseUrl}/competition-hub`)
       .withAutomaticReconnect()
       .build();
+    setCompetitionHubConnection(competitionHub);
 
-    setConnection(newConnection);
+    const scoreboardHub = new HubConnectionBuilder()
+      .withUrl(`${baseUrl}/scoreboard-hub`)
+      .withAutomaticReconnect()
+      .build();
+    setScoreboardHubConnection(scoreboardHub);
+
     return () => {
-      newConnection.stop()
+      competitionHub.stop()
+      scoreboardHub.stop()
     }
   }, [baseUrl]);
 
   useEffect(() => {
-    const competitorHandler: IStreamSubscriber<CurrentCompetitorEnvelopeModel> = {
-      next: (value) => {
-        dispatch(setCurrentCompetitor(value.content))
+    const competitorHandler = handler((value: CurrentCompetitorEnvelopeModel) => {
+      dispatch(setCurrentCompetitor(value.content))
+    })
+    const performanceResultsHandler = handler((value: PerformanceResultsEnvelopeModel) => {
+      dispatch(setLatestResults(value.content))
+    })
+
+    const scoreboardStatusandler: IStreamSubscriber<ScoreboardStatusModel> = {
+      next: (value: ScoreboardStatusModel) => {
+        dispatch(setScoreboardStatus(value))
       },
       complete: () => { console.log('Finished') },
-      error: () => { console.log('Error') },
-      closed: false
-    }
-    const performanceResultsHandler: IStreamSubscriber<PerformanceResultsEnvelopeModel> = {
-      next: (value: PerformanceResultsEnvelopeModel) => {
-        dispatch(setLatestResults(value.content))
-      },
-      complete: () => { console.log('Finished') },
-      error: () => { console.log('Error') },
-      closed: false
+      error: (error) => { console.error(error) }
     }
 
     let currentCompetitorSub: ISubscription<CurrentCompetitorEnvelopeModel>;
     let performanceResultSub: ISubscription<PerformanceResultsEnvelopeModel>;
-    if (connection) {
-      connection.start()
+    let scoreboardStatusSub: ISubscription<ScoreboardStatusModel>;
+    if (competitionHubConnection) {
+      competitionHubConnection.start()
         .then(() => {
-          console.log('Connected!');
+          console.log('Connected to competition hub!');
 
-          currentCompetitorSub = connection.stream<CurrentCompetitorEnvelopeModel>('StreamCompetitors').subscribe(competitorHandler);
-          performanceResultSub = connection.stream<PerformanceResultsEnvelopeModel>('StreamPerformanceResults').subscribe(performanceResultsHandler);
+          currentCompetitorSub = competitionHubConnection.stream('StreamCompetitors').subscribe(competitorHandler);
+          performanceResultSub = competitionHubConnection.stream('StreamPerformanceResults').subscribe(performanceResultsHandler);
         })
         .catch((e: any) => console.log('Connection failed: ', e));
     }
+    if (scoreboardHubConnection) {
+      scoreboardHubConnection.start()
+        .then(() => {
+          console.log('Connected to scoreboard hub!');
+
+          scoreboardStatusSub = scoreboardHubConnection.stream('StreamScoreboardStatus').subscribe(scoreboardStatusandler);
+        })
+        .catch((e: any) => console.log('Connection failed: ', e));
+
+    }
+
     return () => {
       currentCompetitorSub?.dispose()
       performanceResultSub?.dispose()
+      scoreboardStatusSub?.dispose()
     }
-  }, [connection, dispatch]);
+  }, [competitionHubConnection, scoreboardHubConnection, dispatch]);
 
   return (
     <>

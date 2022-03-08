@@ -5,6 +5,7 @@ COPY Api/. ./Api/
 COPY Api.Models/. ./Api.Models/
 COPY DataAccess/. ./DataAccess/
 COPY AcceptanceTests/. ./AcceptanceTests/
+COPY Org.OpenAPITools/. ./Org.OpenAPITools/
 
 WORKDIR /source/
 

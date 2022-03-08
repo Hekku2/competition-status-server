@@ -43,4 +43,13 @@ public static class ModelMappingExtensions
         Name = model.Name,
         Team = model.Team
     };
+
+    public static ScoreboardMode ToScoreboardMode(this ScoreboardModeModel model) => model switch
+    {
+        ScoreboardModeModel.Unknown => ScoreboardMode.Unknown,
+        ScoreboardModeModel.DivisionStatus => ScoreboardMode.DivisionStatus,
+        ScoreboardModeModel.CompetitorResults => ScoreboardMode.CompetitorResults,
+        ScoreboardModeModel.UpcomingCompetitors => ScoreboardMode.UpcomingCompetitors,
+        _ => ScoreboardMode.Unknown,
+    };
 }

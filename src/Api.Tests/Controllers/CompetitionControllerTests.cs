@@ -12,6 +12,8 @@ public class CompetitionControllerTests
 {
     private ICompetitionStatusService _mockCompetitionStatusService;
     private ICompetitionService _mockCompetitionService;
+    private IScoreboardService _mockScoreboardService;
+    private ICompetitionDataAccess _mockCompetitionDataAccess;
 
     private CompetitionController _controller;
 
@@ -21,7 +23,9 @@ public class CompetitionControllerTests
         var logger = Substitute.For<ILogger<CompetitionController>>();
         _mockCompetitionStatusService = Substitute.For<ICompetitionStatusService>();
         _mockCompetitionService = Substitute.For<ICompetitionService>();
-        _controller = new CompetitionController(logger, _mockCompetitionStatusService, _mockCompetitionService);
+        _mockCompetitionDataAccess = Substitute.For<ICompetitionDataAccess>();
+        _mockScoreboardService = Substitute.For<IScoreboardService>();
+        _controller = new CompetitionController(logger, _mockCompetitionStatusService, _mockCompetitionService, _mockCompetitionDataAccess, _mockScoreboardService);
     }
 
     [Test]
@@ -128,7 +132,7 @@ public class CompetitionControllerTests
                 }
             }
         };
-        _mockCompetitionService.GetCurrentState().Returns(expectedCompetition);
+        _mockCompetitionDataAccess.GetCurrentState().Returns(expectedCompetition);
 
         var actualCompetitionEnvelope = _controller.GetCompetitionStatus();
         actualCompetitionEnvelope.Content.Divisions[0].Results[0].Id.Should().Be(45);
@@ -190,7 +194,7 @@ public class CompetitionControllerTests
                 }
             }
         };
-        _mockCompetitionService.GetCurrentState().Returns(expectedCompetition);
+        _mockCompetitionDataAccess.GetCurrentState().Returns(expectedCompetition);
 
         var actualCompetitionEnvelope = _controller.GetCompetitionStatus();
         actualCompetitionEnvelope.Content.Divisions[0].UpcomingCompetitorModels.Length.Should().Be(2);
@@ -247,7 +251,7 @@ public class CompetitionControllerTests
                 }
             }
         };
-        _mockCompetitionService.GetCurrentState().Returns(expectedCompetition);
+        _mockCompetitionDataAccess.GetCurrentState().Returns(expectedCompetition);
 
         var actualStatusEnvelope = _controller.GetCompetitionStatus();
 
@@ -348,6 +352,12 @@ public class CompetitionControllerTests
             Divisions = new[]
             {
                 expectedDivision
+            },
+            ScoreboardSettings = new ScoreboardSettingsFileModel
+            {
+                ActiveDivision = "Division 1",
+                ScoreboardMode = ScoreboardMode.CompetitorResults,
+                ActiveResult = 23
             }
         };
 
@@ -384,5 +394,9 @@ public class CompetitionControllerTests
         actualSecond.Result.DifficultyScore.Should().Be(expectedSecond.Results.DifficultyScore);
         actualSecond.Result.ExecutionScore.Should().Be(expectedSecond.Results.ExecutionScore);
         actualSecond.Result.HeadJudgePenalty.Should().Be(expectedSecond.Results.HeadJudgePenalty);
+
+        _mockScoreboardService.Received().SetActiveDivision(model.ScoreboardSettings.ActiveDivision);
+        _mockScoreboardService.Received().SetScoreboardMode(model.ScoreboardSettings.ScoreboardMode);
+        _mockScoreboardService.Received().SetResultsForShowing(model.ScoreboardSettings.ActiveResult);
     }
 }

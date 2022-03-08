@@ -16,12 +16,16 @@ namespace Api.Controllers
         private readonly ILogger<CompetitionController> _logger;
         private readonly ICompetitionStatusService _competitionStatusService;
         private readonly ICompetitionService _competitionService;
+        private readonly IScoreboardService _scoreboardService;
+        private readonly ICompetitionDataAccess _competitionDataAccess;
 
-        public CompetitionController(ILogger<CompetitionController> logger, ICompetitionStatusService competitionStatusService, ICompetitionService competitionService)
+        public CompetitionController(ILogger<CompetitionController> logger, ICompetitionStatusService competitionStatusService, ICompetitionService competitionService, ICompetitionDataAccess competitionDataAccess, IScoreboardService scoreboardService)
         {
             _logger = logger;
             _competitionStatusService = competitionStatusService;
             _competitionService = competitionService;
+            _competitionDataAccess = competitionDataAccess;
+            _scoreboardService = scoreboardService;
         }
 
         /// <summary>
@@ -71,12 +75,12 @@ namespace Api.Controllers
         [Route("set-result")]
         public void SetResult(CompetitorResultModel model)
         {
-            _logger.LogInformation("Setting results fro comeptitor #{Id}", model.Id);
+            _logger.LogInformation("Setting results for comeptitor #{Id}", model.Id);
             _competitionStatusService.UpdateResults(model.Id, model.Results?.ToPoleDanceResultEntity());
         }
 
         /// <summary>
-        /// Upload compettion data. This overrides all data
+        /// Upload competition data. This overrides all data
         /// </summary>
         /// <param name="fileModel">model representing the json file</param>
         [HttpPost]
@@ -91,6 +95,9 @@ namespace Api.Controllers
                 CurrentCompetitor = fileModel.CurrentCompetitor?.ToCurrentCompetitorsEntity()
             };
             _competitionService.UploadCompetition(entity);
+            _scoreboardService.SetActiveDivision(fileModel.ScoreboardSettings.ActiveDivision);
+            _scoreboardService.SetScoreboardMode(fileModel.ScoreboardSettings.ScoreboardMode);
+            _scoreboardService.SetResultsForShowing(fileModel.ScoreboardSettings.ActiveResult);
         }
 
         /// <summary>
@@ -101,7 +108,7 @@ namespace Api.Controllers
         [Route("competition-status")]
         public CompetitionStatusEnvelopeModel GetCompetitionStatus()
         {
-            var entity = _competitionService.GetCurrentState();
+            var entity = _competitionDataAccess.GetCurrentState();
             return new CompetitionStatusEnvelopeModel
             {
                 Content = entity?.ToCompetitionStatusContentModel()
@@ -116,7 +123,7 @@ namespace Api.Controllers
         [Route("download-competition")]
         public CompetitionFileModel DownloadCompetition()
         {
-            var entity = _competitionService.GetCurrentState() ?? throw new InvalidOperationException("No competition in progress");
+            var entity = _competitionDataAccess.GetCurrentState() ?? throw new InvalidOperationException("No competition in progress");
             return entity.ToCompetitionFileModel();
         }
 

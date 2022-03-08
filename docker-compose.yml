@@ -71,3 +71,11 @@ services:
       - 'api'
     volumes:
       - ./:/local
+
+  client-gen:
+    container_name: competition-status-csharp-client-generator
+    image: openapitools/openapi-generator-cli
+    depends_on:
+      - 'api'
+    volumes:
+      - ./:/local

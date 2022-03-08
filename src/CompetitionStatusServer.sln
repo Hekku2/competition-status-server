@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClient", "ConsoleCli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Models", "Api.Models\Api.Models.csproj", "{079ACABE-69B7-4C90-B40F-3891952FC4AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Org.OpenAPITools", "Org.OpenAPITools\Org.OpenAPITools.csproj", "{B84FF50B-6AA9-455E-BC26-574B2013127C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,5 +102,17 @@ Global
 		{079ACABE-69B7-4C90-B40F-3891952FC4AE}.Release|x64.Build.0 = Release|Any CPU
 		{079ACABE-69B7-4C90-B40F-3891952FC4AE}.Release|x86.ActiveCfg = Release|Any CPU
 		{079ACABE-69B7-4C90-B40F-3891952FC4AE}.Release|x86.Build.0 = Release|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Debug|x64.Build.0 = Debug|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Debug|x86.Build.0 = Debug|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Release|x64.ActiveCfg = Release|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Release|x64.Build.0 = Release|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Release|x86.ActiveCfg = Release|Any CPU
+		{B84FF50B-6AA9-455E-BC26-574B2013127C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

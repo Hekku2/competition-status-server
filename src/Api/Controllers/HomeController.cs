@@ -4,7 +4,7 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("")]
-    public class StatusController : ControllerBase
+    public class HomeController : ControllerBase
     {
         [HttpGet]
         [Route("")]

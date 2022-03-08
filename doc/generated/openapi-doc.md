@@ -139,8 +139,8 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[PerformanceResultsEnvelopeModel](#schemaperformanceresultsenvelopemodel)]|false|none|[Message containing performance results]|
-|» version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
-|» type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
+|» version|string|true|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|» type|string|true|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |» content|[PerformanceResultsContentModel](#schemaperformanceresultscontentmodel)|false|none|Describes a result for competitor(s) in for a single performance and what<br>place it did achieve, if any.|
 |»» division|string|true|none|Name of the division. Should match some division in currenlty active<br>competition.|
 |»» currentPlace|integer(int32)¦null|false|none|Placement that the competitor(s) received with this result. This is null<br>If current place couldn't be calculated.<br>Starts from 1.|
@@ -261,7 +261,7 @@ Content-Type: application/json
 
 `POST /Competition/upload-competition`
 
-*Upload compettion data. This overrides all data*
+*Upload competition data. This overrides all data*
 
 > Body parameter
 
@@ -300,6 +300,11 @@ Content-Type: application/json
         "team": "Team Pole Queens"
       }
     ]
+  },
+  "scoreboardSettings": {
+    "scoreboardMode": "Unknown",
+    "activeDivision": "Senior women",
+    "activeResult": 0
   }
 }
 ```
@@ -451,7 +456,7 @@ Accept: text/plain
 > 200 Response
 
 ```
-{"name":"National finals 2022","divisions":[{"name":"Senior Women","items":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"forfeit":true,"results":{"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}}]}],"currentCompetitor":{"id":25,"division":"Senior Women","competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}}
+{"name":"National finals 2022","divisions":[{"name":"Senior Women","items":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"forfeit":true,"results":{"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}}]}],"currentCompetitor":{"id":25,"division":"Senior Women","competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]},"scoreboardSettings":{"scoreboardMode":"Unknown","activeDivision":"Senior women","activeResult":0}}
 ```
 
 ```json
@@ -489,6 +494,11 @@ Accept: text/plain
         "team": "Team Pole Queens"
       }
     ]
+  },
+  "scoreboardSettings": {
+    "scoreboardMode": "Unknown",
+    "activeDivision": "Senior women",
+    "activeResult": 0
   }
 }
 ```
@@ -581,11 +591,63 @@ Status Code **200**
 This operation does not require authentication
 </aside>
 
-<h1 id="competition-status-api-status">Status</h1>
+<h1 id="competition-status-api-division">Division</h1>
 
-## StatusGetHealth
+## DivisionGetAll
 
-<a id="opIdStatusGetHealth"></a>
+<a id="opIdDivisionGetAll"></a>
+
+> Code samples
+
+```http
+GET /Division/all HTTP/1.1
+
+Accept: text/plain
+
+```
+
+`GET /Division/all`
+
+> Example responses
+
+> 200 Response
+
+```
+[{"name":"Senior Women"}]
+```
+
+```json
+[
+  {
+    "name": "Senior Women"
+  }
+]
+```
+
+<h3 id="divisiongetall-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+<h3 id="divisiongetall-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[DivisionListModel](#schemadivisionlistmodel)]|false|none|none|
+|» name|string|true|none|Name of the division.|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+<h1 id="competition-status-api-home">Home</h1>
+
+## HomeGetHealth
+
+<a id="opIdHomeGetHealth"></a>
 
 > Code samples
 
@@ -596,7 +658,7 @@ GET / HTTP/1.1
 
 `GET /`
 
-<h3 id="statusgethealth-responses">Responses</h3>
+<h3 id="homegethealth-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -606,45 +668,186 @@ GET / HTTP/1.1
 This operation does not require authentication
 </aside>
 
-<h1 id="competition-status-api-test">Test</h1>
+<h1 id="competition-status-api-scoreboard">Scoreboard</h1>
 
-## TestLoadPoleCompetitionData
+## ScoreboardGetStatus
 
-<a id="opIdTestLoadPoleCompetitionData"></a>
+<a id="opIdScoreboardGetStatus"></a>
 
 > Code samples
 
 ```http
-POST /Test/set-current-competitors HTTP/1.1
+GET /Scoreboard HTTP/1.1
 
-Content-Type: application/json
+Accept: text/plain
 
 ```
 
-`POST /Test/set-current-competitors`
+`GET /Scoreboard`
 
-> Body parameter
+> Example responses
+
+> 200 Response
+
+```
+{"latestUpdate":"2019-08-24T14:15:22Z","scoreboardMode":"Unknown","result":{"division":"Senior Women","currentPlace":1,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0}},"division":"string","upcomingCompetitors":[{"id":123,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}]}],"results":[{"id":0,"competitors":[{"name":"Matt Smith","team":"Team Pole Queens"}],"result":{"total":127.266,"artisticScore":59.266,"executionScore":70.333,"difficultyScore":12.8,"headJudgePenalty":0},"forfeit":true}]}
+```
 
 ```json
 {
-  "id": 0,
+  "latestUpdate": "2019-08-24T14:15:22Z",
+  "scoreboardMode": "Unknown",
+  "result": {
+    "division": "Senior Women",
+    "currentPlace": 1,
+    "competitors": [
+      {
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
+      }
+    ],
+    "result": {
+      "total": 127.266,
+      "artisticScore": 59.266,
+      "executionScore": 70.333,
+      "difficultyScore": 12.8,
+      "headJudgePenalty": 0
+    }
+  },
   "division": "string",
-  "competitors": [
+  "upcomingCompetitors": [
     {
-      "name": "string",
-      "team": "string"
+      "id": 123,
+      "competitors": [
+        {
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": 0,
+      "competitors": [
+        {
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
+        }
+      ],
+      "result": {
+        "total": 127.266,
+        "artisticScore": 59.266,
+        "executionScore": 70.333,
+        "difficultyScore": 12.8,
+        "headJudgePenalty": 0
+      },
+      "forfeit": true
     }
   ]
 }
 ```
 
-<h3 id="testloadpolecompetitiondata-parameters">Parameters</h3>
+<h3 id="scoreboardgetstatus-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|[ScoreboardStatusModel](#schemascoreboardstatusmodel)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## ScoreboardSetScoreboardMode
+
+<a id="opIdScoreboardSetScoreboardMode"></a>
+
+> Code samples
+
+```http
+PUT /Scoreboard/set-mode HTTP/1.1
+
+```
+
+`PUT /Scoreboard/set-mode`
+
+<h3 id="scoreboardsetscoreboardmode-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[CurrentCompetitorsEntity](#schemacurrentcompetitorsentity)|false|none|
+|mode|query|[ScoreboardModeModel](#schemascoreboardmodemodel)|false|none|
 
-<h3 id="testloadpolecompetitiondata-responses">Responses</h3>
+#### Enumerated Values
+
+|Parameter|Value|
+|---|---|
+|mode|Unknown|
+|mode|DivisionStatus|
+|mode|CompetitorResults|
+|mode|UpcomingCompetitors|
+
+<h3 id="scoreboardsetscoreboardmode-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## ScoreboardSelectResultForShowing
+
+<a id="opIdScoreboardSelectResultForShowing"></a>
+
+> Code samples
+
+```http
+PUT /Scoreboard/select-results HTTP/1.1
+
+```
+
+`PUT /Scoreboard/select-results`
+
+*Sets results that will be shown. Doesn't show the results yet.
+This is done with "set-mode"*
+
+<h3 id="scoreboardselectresultforshowing-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|id|query|integer(int32)|false|id|
+
+<h3 id="scoreboardselectresultforshowing-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## ScoreboardSetActiveDivision
+
+<a id="opIdScoreboardSetActiveDivision"></a>
+
+> Code samples
+
+```http
+PUT /Scoreboard/set-active-division HTTP/1.1
+
+```
+
+`PUT /Scoreboard/set-active-division`
+
+<h3 id="scoreboardsetactivedivision-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|name|query|string|false|none|
+
+<h3 id="scoreboardsetactivedivision-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -698,6 +901,11 @@ This operation does not require authentication
         "team": "Team Pole Queens"
       }
     ]
+  },
+  "scoreboardSettings": {
+    "scoreboardMode": "Unknown",
+    "activeDivision": "Senior women",
+    "activeResult": 0
   }
 }
 
@@ -714,6 +922,7 @@ that can be saved to file.
 |name|string|true|none|Name of the whole competition.|
 |divisions|[[DivisionFileModel](#schemadivisionfilemodel)]|true|none|Divisions for this competition.|
 |currentCompetitor|[CurrentCompetitorFileModel](#schemacurrentcompetitorfilemodel)|false|none|Represents file model of current competitor performing or performing next<br>when no other competitor is not active.|
+|scoreboardSettings|[ScoreboardSettingsFileModel](#schemascoreboardsettingsfilemodel)|true|none|none|
 
 <h2 id="tocS_CompetitionStatusContentModel">CompetitionStatusContentModel</h2>
 <!-- backwards compatibility -->
@@ -893,31 +1102,9 @@ If competition is not active, Content can be null.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
-|type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
+|version|string|true|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|type|string|true|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |content|[CompetitionStatusContentModel](#schemacompetitionstatuscontentmodel)|false|none|Current status of the competition.|
-
-<h2 id="tocS_CompetitorEntity">CompetitorEntity</h2>
-<!-- backwards compatibility -->
-<a id="schemacompetitorentity"></a>
-<a id="schema_CompetitorEntity"></a>
-<a id="tocScompetitorentity"></a>
-<a id="tocscompetitorentity"></a>
-
-```json
-{
-  "name": "string",
-  "team": "string"
-}
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string¦null|false|none|none|
-|team|string¦null|false|none|none|
 
 <h2 id="tocS_CompetitorFileModel">CompetitorFileModel</h2>
 <!-- backwards compatibility -->
@@ -1095,8 +1282,8 @@ is performing currently or is performing next, if no one is performing.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
-|type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
+|version|string|true|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|type|string|true|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |content|[CurrentCompetitorContentModel](#schemacurrentcompetitorcontentmodel)|false|none|Represents current competitor who is performing or performing next<br>when no other competitor is not active.|
 
 <h2 id="tocS_CurrentCompetitorFileModel">CurrentCompetitorFileModel</h2>
@@ -1130,35 +1317,6 @@ when no other competitor is not active.
 |id|integer(int32)¦null|false|none|ID of competitor. This might not be set if competitor is not listed.|
 |division|string|true|none|Division of competitor(s). This should match some division in<br>current competition.|
 |competitors|[[CompetitorFileModel](#schemacompetitorfilemodel)]|true|none|Competitor(s). This should have at least one value, but may have<br>multiple values if there are multiple persons performing for single<br>performance.|
-
-<h2 id="tocS_CurrentCompetitorsEntity">CurrentCompetitorsEntity</h2>
-<!-- backwards compatibility -->
-<a id="schemacurrentcompetitorsentity"></a>
-<a id="schema_CurrentCompetitorsEntity"></a>
-<a id="tocScurrentcompetitorsentity"></a>
-<a id="tocscurrentcompetitorsentity"></a>
-
-```json
-{
-  "id": 0,
-  "division": "string",
-  "competitors": [
-    {
-      "name": "string",
-      "team": "string"
-    }
-  ]
-}
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|id|integer(int32)¦null|false|none|none|
-|division|string¦null|false|none|none|
-|competitors|[[CompetitorEntity](#schemacompetitorentity)]¦null|false|none|none|
 
 <h2 id="tocS_CurrentCompetitorSetModel">CurrentCompetitorSetModel</h2>
 <!-- backwards compatibility -->
@@ -1222,6 +1380,26 @@ Describes division that is saved in file. User for JSON conversions.
 |---|---|---|---|---|
 |name|string|true|none|Name of the division.|
 |items|[[CompetitorPositionFileModel](#schemacompetitorpositionfilemodel)]|true|none|Competitors participating in this division.|
+
+<h2 id="tocS_DivisionListModel">DivisionListModel</h2>
+<!-- backwards compatibility -->
+<a id="schemadivisionlistmodel"></a>
+<a id="schema_DivisionListModel"></a>
+<a id="tocSdivisionlistmodel"></a>
+<a id="tocsdivisionlistmodel"></a>
+
+```json
+{
+  "name": "Senior Women"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|true|none|Name of the division.|
 
 <h2 id="tocS_DivisionStatusModel">DivisionStatusModel</h2>
 <!-- backwards compatibility -->
@@ -1458,8 +1636,8 @@ Message containing performance results
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|version|string¦null|false|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
-|type|string¦null|false|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
+|version|string|true|read-only|Envelope version number. Version can be discarded if no<br>functionality is specified for given version|
+|type|string|true|read-only|Type of the message. This and version can be used to identify<br>correct parser for this message.|
 |content|[PerformanceResultsContentModel](#schemaperformanceresultscontentmodel)|false|none|Describes a result for competitor(s) in for a single performance and what<br>place it did achieve, if any.|
 
 <h2 id="tocS_PoleResultFileModel">PoleResultFileModel</h2>
@@ -1519,6 +1697,162 @@ Represents a score in Pole Dance Sport series
 |executionScore|number(double)|true|none|Execution score (E)|
 |difficultyScore|number(double)|true|none|Difficulty score (D)|
 |headJudgePenalty|number(double)|true|none|Head judge penalty (HJ). This is subtracted from the total.|
+
+<h2 id="tocS_ScoreboardMode">ScoreboardMode</h2>
+<!-- backwards compatibility -->
+<a id="schemascoreboardmode"></a>
+<a id="schema_ScoreboardMode"></a>
+<a id="tocSscoreboardmode"></a>
+<a id="tocsscoreboardmode"></a>
+
+```json
+"Unknown"
+
+```
+
+This desribes the mode that the scoreboard should be in.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|This desribes the mode that the scoreboard should be in.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|*anonymous*|Unknown|
+|*anonymous*|DivisionStatus|
+|*anonymous*|CompetitorResults|
+|*anonymous*|UpcomingCompetitors|
+
+<h2 id="tocS_ScoreboardModeModel">ScoreboardModeModel</h2>
+<!-- backwards compatibility -->
+<a id="schemascoreboardmodemodel"></a>
+<a id="schema_ScoreboardModeModel"></a>
+<a id="tocSscoreboardmodemodel"></a>
+<a id="tocsscoreboardmodemodel"></a>
+
+```json
+"Unknown"
+
+```
+
+This desribes the mode that the scoreboard should be in.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|This desribes the mode that the scoreboard should be in.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|*anonymous*|Unknown|
+|*anonymous*|DivisionStatus|
+|*anonymous*|CompetitorResults|
+|*anonymous*|UpcomingCompetitors|
+
+<h2 id="tocS_ScoreboardSettingsFileModel">ScoreboardSettingsFileModel</h2>
+<!-- backwards compatibility -->
+<a id="schemascoreboardsettingsfilemodel"></a>
+<a id="schema_ScoreboardSettingsFileModel"></a>
+<a id="tocSscoreboardsettingsfilemodel"></a>
+<a id="tocsscoreboardsettingsfilemodel"></a>
+
+```json
+{
+  "scoreboardMode": "Unknown",
+  "activeDivision": "Senior women",
+  "activeResult": 0
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|scoreboardMode|[ScoreboardMode](#schemascoreboardmode)|false|none|This desribes the mode that the scoreboard should be in.|
+|activeDivision|string¦null|false|none|Name of the currently selected division|
+|activeResult|integer(int32)¦null|false|none|none|
+
+<h2 id="tocS_ScoreboardStatusModel">ScoreboardStatusModel</h2>
+<!-- backwards compatibility -->
+<a id="schemascoreboardstatusmodel"></a>
+<a id="schema_ScoreboardStatusModel"></a>
+<a id="tocSscoreboardstatusmodel"></a>
+<a id="tocsscoreboardstatusmodel"></a>
+
+```json
+{
+  "latestUpdate": "2019-08-24T14:15:22Z",
+  "scoreboardMode": "Unknown",
+  "result": {
+    "division": "Senior Women",
+    "currentPlace": 1,
+    "competitors": [
+      {
+        "name": "Matt Smith",
+        "team": "Team Pole Queens"
+      }
+    ],
+    "result": {
+      "total": 127.266,
+      "artisticScore": 59.266,
+      "executionScore": 70.333,
+      "difficultyScore": 12.8,
+      "headJudgePenalty": 0
+    }
+  },
+  "division": "string",
+  "upcomingCompetitors": [
+    {
+      "id": 123,
+      "competitors": [
+        {
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": 0,
+      "competitors": [
+        {
+          "name": "Matt Smith",
+          "team": "Team Pole Queens"
+        }
+      ],
+      "result": {
+        "total": 127.266,
+        "artisticScore": 59.266,
+        "executionScore": 70.333,
+        "difficultyScore": 12.8,
+        "headJudgePenalty": 0
+      },
+      "forfeit": true
+    }
+  ]
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|latestUpdate|string(date-time)|true|none|none|
+|scoreboardMode|[ScoreboardModeModel](#schemascoreboardmodemodel)|true|none|This desribes the mode that the scoreboard should be in.|
+|result|[PerformanceResultsContentModel](#schemaperformanceresultscontentmodel)|false|none|Describes a result for competitor(s) in for a single performance and what<br>place it did achieve, if any.|
+|division|string¦null|false|none|none|
+|upcomingCompetitors|[[UpcomingCompetitorModel](#schemaupcomingcompetitormodel)]|true|none|[Represents an upcoming competitor.]|
+|results|[[ParticipationRowModel](#schemaparticipationrowmodel)]|true|none|[This represents a finished or or otherwise resolved performance result.<br>Result might be missing, if performance has been finished but has not been<br>graded yet or if the competitor has forfeited.]|
 
 <h2 id="tocS_UpcomingCompetitorModel">UpcomingCompetitorModel</h2>
 <!-- backwards compatibility -->

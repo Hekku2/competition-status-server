@@ -1,2 +1,2 @@
 export * from './NavigationBar'
-export * from './TopNavLink'
+export * from './ScoreboardStatusBanner'

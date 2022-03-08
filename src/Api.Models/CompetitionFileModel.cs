@@ -26,5 +26,8 @@ namespace Api.Models
         /// Current competitor
         /// </summary>
         public CurrentCompetitorFileModel? CurrentCompetitor { get; set; }
+
+        [Required]
+        public ScoreboardSettingsFileModel ScoreboardSettings { get; set; } = null!;
     }
 }

@@ -61,17 +61,21 @@ public static class EntityMappingExtensions
             .CompetitionOrder)
             .Select(ToResultRowModel)
             .ToArray(),
-        UpcomingCompetitorModels = entity
-            .CompetitionOrder
-            .Where(item => !item.Forfeit && item.Result is null)
-            .Select(ToUpcomingCompetitorModel)
-            .ToArray(),
+        UpcomingCompetitorModels = entity.CompetitionOrder.ToUpcomingCompetitorModelArray(),
         Forfeited = entity
             .CompetitionOrder
             .Where(item => item.Forfeit)
             .Select(ToResultRowModel)
             .ToArray()
     };
+
+    public static UpcomingCompetitorModel[] ToUpcomingCompetitorModelArray(this CompetitionOrderEntity[] entities)
+    {
+        return entities
+            .Where(item => !item.Forfeit && item.Result is null)
+            .Select(ToUpcomingCompetitorModel)
+            .ToArray();
+    }
 
     public static UpcomingCompetitorModel ToUpcomingCompetitorModel(this CompetitionOrderEntity entity) => new()
     {
@@ -116,6 +120,15 @@ public static class EntityMappingExtensions
         CurrentPlace = entity.CurrentPlace,
         Competitors = entity.Competitors.Select(ToCompetitorModel).ToArray(),
         Result = entity.Result.ToPoleSportResultModel()
+    };
+
+    public static ScoreboardModeModel ToScoreboardModeModel(this ScoreboardMode entity) => entity switch
+    {
+        ScoreboardMode.Unknown => ScoreboardModeModel.Unknown,
+        ScoreboardMode.DivisionStatus => ScoreboardModeModel.DivisionStatus,
+        ScoreboardMode.CompetitorResults => ScoreboardModeModel.CompetitorResults,
+        ScoreboardMode.UpcomingCompetitors => ScoreboardModeModel.UpcomingCompetitors,
+        _ => ScoreboardModeModel.Unknown,
     };
 }
 

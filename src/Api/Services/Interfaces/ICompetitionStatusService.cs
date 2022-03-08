@@ -31,12 +31,6 @@ namespace Api.Services.Interfaces
         CurrentCompetitorsEntity? GetCurrentCompetitor();
 
         /// <summary>
-        /// Sets current competitors. Should only be used to override database.
-        /// </summary>
-        /// <param name="competitor">Current competitors</param>
-        void UpdateCurrentCompetitor(CurrentCompetitorsEntity? competitor);
-
-        /// <summary>
         /// Sets current competitor
         /// </summary>
         /// <param name="id">ID of current competitor</param>
@@ -48,5 +42,7 @@ namespace Api.Services.Interfaces
         /// <param name="id">ID of comeptitor</param>
         /// <param name="results">Results. If null, results are removed.</param>
         void UpdateResults(int id, PoleDanceResultEntity? results);
+
+        IObservable<DateTime> GetLatestUpdateTime();
     }
 }
